@@ -4,6 +4,7 @@ from functools import wraps
 from pathlib import Path
 from flask import Flask, request, jsonify, render_template_string, session, redirect, url_for
 from threading import Thread
+import requests
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(32)
@@ -16,11 +17,9 @@ _loop = None
 
 # ==================== LOAD HTML FILES ====================
 def load_html(filename):
-    """قراءة ملف HTML من نفس المجلد"""
     with open(filename, 'r', encoding='utf-8') as f:
         return f.read()
 
-# تحميل جميع ملفات HTML مسبقاً
 LOGIN_HTML = load_html('login.html')
 INDEX_HTML = load_html('index.html')
 ADMIN_HTML = load_html('admin.html')
@@ -63,6 +62,16 @@ def log_user_action(username, action, detail=""):
     with open(log_file, 'a') as f:
         f.write(f"[{datetime.now().isoformat()}] {action}: {detail}\n")
 
+# ==================== ASYNC HELPERS ====================
+def run_async(coro):
+    """تشغيل دالة غير متزامنة في الـ loop الرئيسي"""
+    global _loop
+    if _loop is None:
+        _loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(_loop)
+    future = asyncio.run_coroutine_threadsafe(coro, _loop)
+    return future.result(timeout=30)
+
 # ==================== ROUTES ====================
 @app.route('/login')
 def login_page():
@@ -97,9 +106,9 @@ def api_logout():
 @app.route('/')
 @login_required
 def index():
-    username = session['username']
-    role = session['role']
-    return render_template_string(INDEX_HTML, username=username, role=role)
+    return render_template_string(INDEX_HTML, 
+                                  username=session['username'], 
+                                  role=session['role'])
 
 # ==================== SPAM API ====================
 @app.route('/api/spam/start', methods=['POST'])
@@ -114,7 +123,6 @@ def spam_start():
     url = f"https://rooom-production.up.railway.app/spam?user_id={user_id}"
     
     try:
-        import requests
         response = requests.get(url, timeout=10)
         log_user_action(username, "SPAM_START", f"user_id:{user_id} | status:{response.status_code}")
         return jsonify({
@@ -138,7 +146,6 @@ def spam_stop():
     url = f"https://rooom-production.up.railway.app/stop?user_id={user_id}"
     
     try:
-        import requests
         response = requests.get(url, timeout=10)
         log_user_action(username, "SPAM_STOP", f"user_id:{user_id} | status:{response.status_code}")
         return jsonify({
@@ -151,6 +158,58 @@ def spam_stop():
         return jsonify({'error': f'Connection error: {str(e)}'}), 500
 
 # ==================== VIP BOT API ====================
+async def async_vip_add(username, uid, password, player_id):
+    """الدالة غير المتزامنة لإضافة VIP"""
+    url = f"https://jagwar-api-add-rem.vercel.app/add_friend?uid={uid}&password={password}&player_id={player_id}"
+    
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, timeout=15) as response:
+                if response.status == 200:
+                    # جدولة الحذف التلقائي بعد ساعتين
+                    async def schedule_remove():
+                        await asyncio.sleep(7200)
+                        try:
+                            remove_url = f"https://jagwar-api-add-rem.vercel.app/remove_friend?uid={uid}&password={password}&player_id={player_id}"
+                            async with aiohttp.ClientSession() as sess:
+                                async with sess.get(remove_url) as resp:
+                                    log_user_action(username, "VIP_AUTO_REMOVE", f"player_id:{player_id} | status:{resp.status}")
+                        except Exception as e:
+                            log_user_action(username, "VIP_AUTO_REMOVE_ERROR", f"player_id:{player_id} | error:{str(e)[:50]}")
+                        finally:
+                            async with VIP_LOCK:
+                                if username in VIP_ACCOUNTS:
+                                    VIP_ACCOUNTS[username] = [v for v in VIP_ACCOUNTS[username] if v.get('player_id') != player_id]
+                    
+                    task = asyncio.create_task(schedule_remove())
+                    
+                    async with VIP_LOCK:
+                        if username not in VIP_ACCOUNTS:
+                            VIP_ACCOUNTS[username] = []
+                        VIP_ACCOUNTS[username].append({
+                            'uid': uid,
+                            'pwd': password,
+                            'player_id': player_id,
+                            'added_at': datetime.now().isoformat(),
+                            'task': task
+                        })
+                    
+                    log_user_action(username, "VIP_ADD", f"player_id:{player_id}")
+                    return {
+                        'status': 'success',
+                        'player_id': player_id,
+                        'message': '✅ تم إضافة البوت VIP وسيتم حذفه تلقائياً بعد ساعتين'
+                    }
+                else:
+                    return {
+                        'status': 'error',
+                        'player_id': player_id,
+                        'message': f'⚠️ فشل الإضافة: {response.status}'
+                    }
+    except Exception as e:
+        log_user_action(username, "VIP_ADD_ERROR", f"player_id:{player_id} | error:{str(e)[:50]}")
+        return {'error': f'Connection error: {str(e)}'}
+
 @app.route('/api/vip/add', methods=['POST'])
 @login_required
 def vip_add():
@@ -163,55 +222,35 @@ def vip_add():
         return jsonify({'error': 'uid, password and player_id required'}), 400
     
     username = session['username']
-    url = f"https://jagwar-api-add-rem.vercel.app/add_friend?uid={uid}&password={password}&player_id={player_id}"
+    result = run_async(async_vip_add(username, uid, password, player_id))
+    
+    if 'error' in result:
+        return jsonify({'error': result['error']}), 500
+    return jsonify(result)
+
+async def async_vip_remove(username, uid, password, player_id):
+    """الدالة غير المتزامنة لحذف VIP"""
+    url = f"https://jagwar-api-add-rem.vercel.app/remove_friend?uid={uid}&password={password}&player_id={player_id}"
     
     try:
-        import requests
-        response = requests.get(url, timeout=15)
-        
-        if response.status_code == 200:
-            async def schedule_remove():
-                await asyncio.sleep(7200)
-                try:
-                    remove_url = f"https://jagwar-api-add-rem.vercel.app/remove_friend?uid={uid}&password={password}&player_id={player_id}"
-                    async with aiohttp.ClientSession() as sess:
-                        async with sess.get(remove_url) as resp:
-                            log_user_action(username, "VIP_AUTO_REMOVE", f"player_id:{player_id} | status:{resp.status}")
-                except Exception as e:
-                    log_user_action(username, "VIP_AUTO_REMOVE_ERROR", f"player_id:{player_id} | error:{str(e)[:50]}")
-                finally:
-                    async with VIP_LOCK:
-                        if username in VIP_ACCOUNTS:
-                            VIP_ACCOUNTS[username] = [v for v in VIP_ACCOUNTS[username] if v.get('player_id') != player_id]
-            
-            task = asyncio.create_task(schedule_remove())
-            
-            async with VIP_LOCK:
-                if username not in VIP_ACCOUNTS:
-                    VIP_ACCOUNTS[username] = []
-                VIP_ACCOUNTS[username].append({
-                    'uid': uid,
-                    'pwd': password,
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, timeout=15) as response:
+                async with VIP_LOCK:
+                    if username in VIP_ACCOUNTS:
+                        for v in VIP_ACCOUNTS[username]:
+                            if v.get('player_id') == player_id and 'task' in v and not v['task'].done():
+                                v['task'].cancel()
+                        VIP_ACCOUNTS[username] = [v for v in VIP_ACCOUNTS[username] if v.get('player_id') != player_id]
+                
+                log_user_action(username, "VIP_REMOVE", f"player_id:{player_id} | status:{response.status}")
+                return {
+                    'status': 'success' if response.status == 200 else 'error',
                     'player_id': player_id,
-                    'added_at': datetime.now().isoformat(),
-                    'task': task
-                })
-            
-            log_user_action(username, "VIP_ADD", f"player_id:{player_id}")
-            return jsonify({
-                'status': 'success',
-                'player_id': player_id,
-                'message': '✅ تم إضافة البوت VIP وسيتم حذفه تلقائياً بعد ساعتين'
-            })
-        else:
-            return jsonify({
-                'status': 'error',
-                'player_id': player_id,
-                'message': f'⚠️ فشل الإضافة: {response.status_code}'
-            }), 400
+                    'message': '✅ تم حذف البوت' if response.status == 200 else f'⚠️ فشل: {response.status}'
+                }
     except Exception as e:
-        log_user_action(username, "VIP_ADD_ERROR", f"player_id:{player_id} | error:{str(e)[:50]}")
-        return jsonify({'error': f'Connection error: {str(e)}'}), 500
+        log_user_action(username, "VIP_REMOVE_ERROR", f"player_id:{player_id} | error:{str(e)[:50]}")
+        return {'error': f'Connection error: {str(e)}'}
 
 @app.route('/api/vip/remove', methods=['POST'])
 @login_required
@@ -225,43 +264,25 @@ def vip_remove():
         return jsonify({'error': 'uid, password and player_id required'}), 400
     
     username = session['username']
-    url = f"https://jagwar-api-add-rem.vercel.app/remove_friend?uid={uid}&password={password}&player_id={player_id}"
+    result = run_async(async_vip_remove(username, uid, password, player_id))
     
-    try:
-        import requests
-        response = requests.get(url, timeout=15)
-        
-        async with VIP_LOCK:
-            if username in VIP_ACCOUNTS:
-                for v in VIP_ACCOUNTS[username]:
-                    if v.get('player_id') == player_id and 'task' in v and not v['task'].done():
-                        v['task'].cancel()
-                VIP_ACCOUNTS[username] = [v for v in VIP_ACCOUNTS[username] if v.get('player_id') != player_id]
-        
-        log_user_action(username, "VIP_REMOVE", f"player_id:{player_id} | status:{response.status_code}")
-        return jsonify({
-            'status': 'success' if response.status_code == 200 else 'error',
-            'player_id': player_id,
-            'message': '✅ تم حذف البوت' if response.status_code == 200 else f'⚠️ فشل: {response.status_code}'
-        })
-    except Exception as e:
-        log_user_action(username, "VIP_REMOVE_ERROR", f"player_id:{player_id} | error:{str(e)[:50]}")
-        return jsonify({'error': f'Connection error: {str(e)}'}), 500
+    if 'error' in result:
+        return jsonify({'error': result['error']}), 500
+    return jsonify(result)
 
 @app.route('/api/vip/list', methods=['GET'])
 @login_required
 def vip_list():
     username = session['username']
-    async with VIP_LOCK:
-        vips = VIP_ACCOUNTS.get(username, [])
-        return jsonify({
-            'count': len(vips),
-            'vips': [{
-                'player_id': v.get('player_id'),
-                'uid': v.get('uid'),
-                'added_at': v.get('added_at')
-            } for v in vips]
-        })
+    vips = VIP_ACCOUNTS.get(username, [])
+    return jsonify({
+        'count': len(vips),
+        'vips': [{
+            'player_id': v.get('player_id'),
+            'uid': v.get('uid'),
+            'added_at': v.get('added_at')
+        } for v in vips]
+    })
 
 # ==================== PLAYER INFO API ====================
 @app.route('/api/info', methods=['GET'])
@@ -275,7 +296,6 @@ def player_info():
     url = f"http://api-of-info-ob54-shappno.vercel.app/info?uid={uid}"
     
     try:
-        import requests
         response = requests.get(url, timeout=10)
         log_user_action(username, "PLAYER_INFO", f"uid:{uid} | status:{response.status_code}")
         
@@ -297,7 +317,9 @@ def player_info():
 @admin_required
 def admin_panel():
     users = load_users()
-    return render_template_string(ADMIN_HTML, users=users, current_user=session['username'])
+    return render_template_string(ADMIN_HTML, 
+                                  users=users, 
+                                  current_user=session['username'])
 
 @app.route('/api/admin/create_user', methods=['POST'])
 @login_required
@@ -360,6 +382,7 @@ def user_get_logs():
 # ==================== MAIN ====================
 if __name__ == '__main__':
     from threading import Thread
+    
     _loop = asyncio.new_event_loop()
     asyncio.set_event_loop(_loop)
     

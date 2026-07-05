@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F7M Bot Manager</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Orbitron', monospace;
+            background: #0a0618;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(ellipse at 10% 20%, rgba(70, 0, 200, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 80%, rgba(0, 100, 255, 0.10) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(100, 0, 200, 0.04) 0%, transparent 70%);
+        }
+        .container { max-width: 1300px; margin:0 auto; padding:20px; }
+        
+        /* HEADER */
+        .header {
+            display:flex; justify-content:space-between; align-items:center;
+            padding:18px 30px; background:rgba(10,6,30,0.7);
+            border:1px solid rgba(120,80,255,0.08); border-radius:18px;
+            backdrop-filter:blur(20px); margin-bottom:30px;
+        }
+        .header .logo {
+            font-size:20px; font-weight:900;
+            background:linear-gradient(135deg,#a78bfa,#6366f1,#3b82f6);
+            -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+        }
+        .header .logo span { font-weight:400; -webkit-text-fill-color:rgba(167,139,250,0.15); font-size:11px; }
+        .header .user-actions { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+        .header .user-actions .username { font-size:11px; color:rgba(167,139,250,0.3); }
+        
+        .btn {
+            padding:10px 20px; border:1px solid rgba(120,80,255,0.12);
+            border-radius:12px; background:rgba(120,80,255,0.03);
+            color:#a78bfa; font-family:'Orbitron',monospace; font-size:11px;
+            cursor:pointer; transition:all 0.3s ease; text-decoration:none;
+            display:inline-block; text-align:center;
+        }
+        .btn:hover { background:rgba(120,80,255,0.08); box-shadow:0 0 40px rgba(100,50,255,0.04); }
+        .btn-danger { border-color:rgba(255,0,80,0.15); color:#f472b6; }
+        .btn-danger:hover { background:rgba(255,0,80,0.06); }
+        .btn-primary { border-color:rgba(120,80,255,0.2); background:rgba(120,80,255,0.06); }
+        .btn-primary:hover { background:rgba(120,80,255,0.12); }
+        .btn-success { border-color:rgba(0,255,180,0.15); color:#6ee7b7; }
+        .btn-success:hover { background:rgba(0,255,180,0.04); }
+        .btn-purple { border-color:rgba(180,0,255,0.15); color:#c084fc; }
+        .btn-purple:hover { background:rgba(180,0,255,0.04); }
+
+        /* GRID */
+        .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:25px; }
+        .card {
+            background:rgba(10,6,30,0.5); border:1px solid rgba(120,80,255,0.05);
+            border-radius:18px; padding:25px; backdrop-filter:blur(10px);
+            transition:all 0.4s ease; position:relative; overflow:hidden;
+        }
+        .card:hover { border-color:rgba(120,80,255,0.12); }
+        .card h3 {
+            font-size:12px; color:rgba(167,139,250,0.25);
+            letter-spacing:2px; text-transform:uppercase; margin-bottom:15px;
+        }
+        .input-field {
+            width:100%; padding:14px 16px;
+            background:rgba(20,10,50,0.4); border:1px solid rgba(120,80,255,0.06);
+            border-radius:12px; color:#c4b5fd; font-family:'Orbitron',monospace;
+            font-size:12px; transition:all 0.3s; margin-top:6px;
+        }
+        .input-field:focus { outline:none; border-color:rgba(120,80,255,0.2); }
+        .input-field::placeholder { color:rgba(167,139,250,0.1); }
+        .flex-row { display:flex; gap:12px; flex-wrap:wrap; margin-top:10px; }
+        .flex-row .btn { flex:1; min-width:70px; text-align:center; }
+
+        /* ===== LARGE TOAST ===== */
+        .toast-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 99999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            animation: fadeInOverlay 0.3s ease;
+        }
+        .toast-overlay.show { display: flex; }
+        @keyframes fadeInOverlay {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        .toast-box {
+            background: rgba(10, 6, 30, 0.95);
+            border: 1px solid rgba(120, 80, 255, 0.15);
+            border-radius: 24px;
+            padding: 45px 55px;
+            max-width: 480px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+            animation: popIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .toast-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(100, 50, 255, 0.03), transparent, rgba(0, 150, 255, 0.03), transparent);
+            animation: spinGlow 15s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+        @keyframes spinGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.85) translateY(20px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .toast-box .toast-icon { font-size: 48px; margin-bottom: 15px; display: block; }
+        .toast-box .toast-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 22px;
+            font-weight: 700;
+            color: #c4b5fd;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        .toast-box .toast-message {
+            font-family: 'Orbitron', monospace;
+            font-size: 16px;
+            color: rgba(167, 139, 250, 0.6);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        .toast-box .toast-btn {
+            padding: 12px 40px;
+            background: rgba(120, 80, 255, 0.08);
+            border: 1px solid rgba(120, 80, 255, 0.15);
+            border-radius: 14px;
+            color: #a78bfa;
+            font-family: 'Orbitron', monospace;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 2px;
+            min-width: 120px;
+        }
+        .toast-box .toast-btn:hover {
+            background: rgba(120, 80, 255, 0.15);
+            box-shadow: 0 0 40px rgba(100, 50, 255, 0.05);
+            transform: scale(1.02);
+        }
+        .toast-box.success .toast-title { color: #6ee7b7; }
+        .toast-box.success .toast-icon { filter: drop-shadow(0 0 30px rgba(0, 255, 180, 0.15)); }
+        .toast-box.error .toast-title { color: #f472b6; }
+        .toast-box.error .toast-icon { filter: drop-shadow(0 0 30px rgba(255, 0, 80, 0.15)); }
+        .toast-box.info .toast-title { color: #a78bfa; }
+        .toast-box.info .toast-icon { filter: drop-shadow(0 0 30px rgba(120, 80, 255, 0.15)); }
+
+        .logs-box {
+            max-height:120px; overflow-y:auto; margin-top:10px;
+            background:rgba(0,0,0,0.3); border-radius:12px; padding:12px;
+            font-size:10px; color:rgba(167,139,250,0.25); font-family:monospace;
+            line-height:1.8;
+        }
+        .logs-box .log-line { border-bottom:1px solid rgba(120,80,255,0.02); padding:2px 0; }
+        .logs-box .log-line .time { color:rgba(167,139,250,0.1); }
+        .logs-box .log-line .highlight { color:rgba(167,139,250,0.4); }
+
+        .vip-list { max-height:100px; overflow-y:auto; margin-top:10px; }
+        .vip-list .item {
+            display:flex; justify-content:space-between; align-items:center;
+            padding:6px 0; border-bottom:1px solid rgba(120,80,255,0.03);
+            font-size:11px; color:rgba(167,139,250,0.3);
+        }
+        .vip-list .item .id { color:rgba(167,139,250,0.5); }
+        .vip-list .item .del { color:rgba(255,0,80,0.2); cursor:pointer; }
+        .vip-list .item .del:hover { color:#f472b6; }
+
+        .footer-links {
+            display:flex; justify-content:center; gap:12px;
+            margin-top:30px; padding:15px;
+            border-top:1px solid rgba(120,80,255,0.03);
+            flex-wrap:wrap;
+        }
+        .footer-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid transparent;
+            color: rgba(167, 139, 250, 0.15);
+            text-decoration: none;
+            font-size: 10px;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+        .footer-links a:hover {
+            color: rgba(167, 139, 250, 0.5);
+        }
+        .footer-links a .platform-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+        }
+        .footer-links a .platform-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+        .footer-links .link-youtube:hover {
+            border-color: rgba(255, 0, 0, 0.15);
+            background: rgba(255, 0, 0, 0.04);
+            color: #ff6b6b;
+        }
+        .footer-links .link-telegram:hover {
+            border-color: rgba(0, 136, 204, 0.15);
+            background: rgba(0, 136, 204, 0.04);
+            color: #4fc3f7;
+        }
+
+        @media (max-width:850px) {
+            .grid-2 { grid-template-columns:1fr; }
+            .header { flex-direction:column; gap:12px; text-align:center; }
+            .header .user-actions { justify-content:center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <div class="logo">STTAVEX x AMINE <span>Bot Manager · v.ω.16</span></div>
+            <div class="user-actions">
+                <span class="username">👤 {{ username }}</span>
+                {% if role == 'admin' %}
+                <a href="/admin" class="btn btn-primary">👑 ADMIN</a>
+                {% endif %}
+                <button class="btn btn-danger" onclick="logout()">🚪</button>
+            </div>
+        </div>
+
+        <!-- ROW 1: SPAM -->
+        <div class="grid-2">
+            <div class="card">
+                <h3>محرك السبام</h3>
+                <div>
+                    <label style="font-size:11px; color:rgba(167,139,250,0.15);">UID الهدف</label>
+                    <input type="text" id="targetUid" class="input-field" placeholder="مثال: 5364803546">
+                </div>
+                <div class="flex-row">
+                    <button class="btn btn-primary" onclick="spamStart()">▶ START</button>
+                    <button class="btn btn-danger" onclick="spamStop()">⏹ STOP</button>
+                </div>
+                <div id="spamStatus" style="margin-top:12px; font-size:11px; color:rgba(167,139,250,0.2);">⚪ جاهز</div>
+            </div>
+
+            <!-- VIP BOT -->
+            <div class="card">
+                <h3>👑 VIP Bot</h3>
+                <div class="flex-row">
+                    <input type="text" id="vipUid" class="input-field" placeholder="UID" style="flex:1;">
+                    <input type="text" id="vipPwd" class="input-field" placeholder="Password" style="flex:1;">
+                </div>
+                <div class="flex-row">
+                    <input type="text" id="vipPlayerId" class="input-field" placeholder="Player ID" style="flex:1;">
+                </div>
+                <div class="flex-row">
+                    <button class="btn btn-success" onclick="vipAdd()">➕ إضافة</button>
+                    <button class="btn btn-danger" onclick="vipRemove()">➖ حذف</button>
+                    <button class="btn" onclick="vipList()">📋 قائمة</button>
+                </div>
+                <div id="vipStatus" style="margin-top:12px; font-size:11px; color:rgba(167,139,250,0.2);"></div>
+                <div class="vip-list" id="vipListContainer"></div>
+            </div>
+        </div>
+
+        <!-- ROW 2: INFO -->
+        <div class="grid-2" style="margin-top:25px;">
+            <div class="card">
+                <h3>📊 معلومات اللاعب</h3>
+                <div class="flex-row">
+                    <input type="text" id="infoUid" class="input-field" placeholder="UID" style="flex:1;">
+                    <button class="btn btn-purple" onclick="getInfo()">🔍 بحث</button>
+                </div>
+                <div id="infoResult" style="margin-top:12px; font-size:11px; color:rgba(167,139,250,0.3); max-height:150px; overflow-y:auto; background:rgba(0,0,0,0.2); border-radius:10px; padding:12px; line-height:1.6;"></div>
+            </div>
+
+            <!-- LOGS -->
+            <div class="card">
+                <h3>📜 السجلات</h3>
+                <div style="display:flex; gap:12px; align-items:center; margin-bottom:10px;">
+                    <button class="btn" onclick="loadLogs()">🔄 تحديث</button>
+                </div>
+                <div class="logs-box" id="logsContent">
+                    <div class="log-line"><span class="time">[System]</span> <span class="highlight">جاري التحميل...</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER LINKS -->
+        <div class="footer-links">
+            <a href="https://youtube.com/@stravexgm?si=JfbKlk1iBUGhR4l4" target="_blank" class="link-youtube">
+                <span class="platform-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z" fill="#FF0000"/>
+                        <path d="M9.545 15.568V8.432L15.818 12l-6.273 3.568z" fill="white"/>
+                    </svg>
+                </span>
+                STRAVEX GM
+            </a>
+            <a href="https://t.me/xAMiNE_Core" target="_blank" class="link-telegram">
+                <span class="platform-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" fill="#0088cc"/>
+                    </svg>
+                </span>
+                AMINE Core
+            </a>
+            <a href="https://t.me/stravex_oficiel" target="_blank" class="link-telegram">
+                <span class="platform-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" fill="#0088cc"/>
+                    </svg>
+                </span>
+                STRAVEX Official
+            </a>
+        </div>
+    </div>
+
+    <!-- TOAST OVERLAY -->
+    <div class="toast-overlay" id="toastOverlay">
+        <div class="toast-box" id="toastBox">
+            <span class="toast-icon" id="toastIcon">ℹ️</span>
+            <div class="toast-title" id="toastTitle">تنبيه</div>
+            <div class="toast-message" id="toastMessage">رسالة</div>
+            <button class="toast-btn" onclick="closeToast()">OK</button>
+        </div>
+    </div>
+
+    <script>
+        // ===== LARGE TOAST =====
+        function showToast(message, type = 'info', title = '') {
+            const overlay = document.getElementById('toastOverlay');
+            const icon = document.getElementById('toastIcon');
+            const titleEl = document.getElementById('toastTitle');
+            const msgEl = document.getElementById('toastMessage');
+            const box = document.getElementById('toastBox');
+
+            const icons = { success: '✅', error: '❌', info: 'ℹ️' };
+            const titles = { success: title || 'نجاح', error: title || 'فشل', info: title || 'تنبيه' };
+
+            icon.textContent = icons[type] || 'ℹ️';
+            titleEl.textContent = titles[type] || 'تنبيه';
+            msgEl.textContent = message;
+            box.className = 'toast-box ' + type;
+
+            overlay.classList.add('show');
+        }
+
+        function closeToast() {
+            document.getElementById('toastOverlay').classList.remove('show');
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeToast();
+        });
+
+        // ========== SPAM ==========
+        async function spamStart() {
+            const uid = document.getElementById('targetUid').value.trim();
+            if (!uid) { showToast('أدخل UID الهدف', 'error', '⚠️ تنبيه'); return; }
+            try {
+                const res = await fetch('/api/spam/start', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: uid })
+                });
+                const data = await res.json();
+                if (data.status === 'success') {
+                    showToast(`تم بدء السبام على ${uid}`, 'success', '✅ تم التنفيذ');
+                    document.getElementById('spamStatus').textContent = `🟢 جاري السبام على ${uid}`;
+                } else {
+                    showToast(data.message || 'فشل', 'error', '❌ فشل');
+                }
+            } catch { showToast('خطأ في الاتصال', 'error', '❌ فشل'); }
+        }
+
+        async function spamStop() {
+            const uid = document.getElementById('targetUid').value.trim();
+            if (!uid) { showToast('أدخل UID', 'error', '⚠️ تنبيه'); return; }
+            try {
+                const res = await fetch('/api/spam/stop', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: uid })
+                });
+                const data = await res.json();
+                if (data.status === 'success') {
+                    showToast(`تم إيقاف السبام على ${uid}`, 'info', '⏹ تم الإيقاف');
+                    document.getElementById('spamStatus').textContent = `⚪ متوقف`;
+                } else {
+                    showToast(data.message || 'فشل', 'error', '❌ فشل');
+                }
+            } catch { showToast('خطأ في الاتصال', 'error', '❌ فشل'); }
+        }
+
+        // ========== VIP ==========
+        async function vipAdd() {
+            const uid = document.getElementById('vipUid').value.trim();
+            const pwd = document.getElementById('vipPwd').value.trim();
+            const playerId = document.getElementById('vipPlayerId').value.trim();
+            if (!uid || !pwd || !playerId) { showToast('املأ جميع الحقول', 'error', '⚠️ تنبيه'); return; }
+            try {
+                const res = await fetch('/api/vip/add', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ uid, password: pwd, player_id: playerId })
+                });
+                const data = await res.json();
+                if (data.status === 'success') {
+                    showToast(data.message, 'success', '✅ تم التنفيذ');
+                    document.getElementById('vipStatus').textContent = `✅ تم إضافة ${playerId}`;
+                    vipList();
+                } else {
+                    showToast(data.message || 'فشل', 'error', '❌ فشل');
+                }
+            } catch { showToast('خطأ في الاتصال', 'error', '❌ فشل'); }
+        }
+
+        async function vipRemove() {
+            const uid = document.getElementById('vipUid').value.trim();
+            const pwd = document.getElementById('vipPwd').value.trim();
+            const playerId = document.getElementById('vipPlayerId').value.trim();
+            if (!uid || !pwd || !playerId) { showToast('املأ جميع الحقول', 'error', '⚠️ تنبيه'); return; }
+            try {
+                const res = await fetch('/api/vip/remove', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ uid, password: pwd, player_id: playerId })
+                });
+                const data = await res.json();
+                if (data.status === 'success') {
+                    showToast(data.message, 'info', '✅ تم التنفيذ');
+                    document.getElementById('vipStatus').textContent = `✅ تم حذف ${playerId}`;
+                    vipList();
+                } else {
+                    showToast(data.message || 'فشل', 'error', '❌ فشل');
+                }
+            } catch { showToast('خطأ في الاتصال', 'error', '❌ فشل'); }
+        }
+
+        async function vipList() {
+            try {
+                const res = await fetch('/api/vip/list');
+                const data = await res.json();
+                const container = document.getElementById('vipListContainer');
+                if (data.count === 0) {
+                    container.innerHTML = '<div style="color:rgba(167,139,250,0.1); font-size:11px;">لا يوجد بوتات VIP</div>';
+                    return;
+                }
+                container.innerHTML = data.vips.map(v => 
+                    `<div class="item"><span class="id">👑 ${v.player_id}</span><span style="font-size:9px; color:rgba(167,139,250,0.15);">${v.uid}</span></div>`
+                ).join('');
+                showToast(`${data.count} بوت VIP نشط`, 'info', '📋 قائمة');
+            } catch { showToast('خطأ في جلب القائمة', 'error', '❌ فشل'); }
+        }
+
+        // ========== INFO ==========
+        async function getInfo() {
+            const uid = document.getElementById('infoUid').value.trim();
+            if (!uid) { showToast('أدخل UID', 'error', '⚠️ تنبيه'); return; }
+            try {
+                const res = await fetch(`/api/info?uid=${uid}`);
+                const data = await res.json();
+                const container = document.getElementById('infoResult');
+                if (data.status === 'success') {
+                    container.innerHTML = `<pre style="color:rgba(167,139,250,0.6); font-size:10px;">${JSON.stringify(data.data, null, 2)}</pre>`;
+                    showToast(`تم جلب معلومات ${uid}`, 'success', '✅ نجاح');
+                } else {
+                    container.innerHTML = `<span style="color:#f472b6;">⚠️ ${data.message || 'فشل'}</span>`;
+                    showToast(data.message || 'فشل', 'error', '❌ فشل');
+                }
+            } catch { showToast('خطأ في الاتصال', 'error', '❌ فشل'); }
+        }
+
+        // ========== LOGS ==========
+        async function loadLogs() {
+            const container = document.getElementById('logsContent');
+            try {
+                const res = await fetch('/api/user/logs');
+                const data = await res.json();
+                if (data.logs && data.logs.length > 0) {
+                    container.innerHTML = data.logs.map(l => `<div class="log-line">${l}</div>`).join('');
+                } else {
+                    container.innerHTML = `<div class="log-line"><span class="time">[System]</span> <span class="highlight">لا توجد سجلات</span></div>`;
+                }
+            } catch {
+                container.innerHTML = `<div class="log-line"><span class="time">[Error]</span> فشل التحميل</div>`;
+            }
+        }
+
+        // ========== LOGOUT ==========
+        async function logout() {
+            await fetch('/api/logout', { method: 'POST' });
+            window.location.href = '/login';
+        }
+
+        // ========== INIT ==========
+        loadLogs();
+        vipList();
+        setInterval(loadLogs, 30000);
+    </script>
+</body>
+</html>

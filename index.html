@@ -9,43 +9,44 @@
         * { margin:0; padding:0; box-sizing:border-box; }
         body {
             font-family: 'Orbitron', monospace;
-            background: #0a0618;
+            background: #0f0a2a;
             min-height: 100vh;
             background-image: 
-                radial-gradient(ellipse at 10% 20%, rgba(70, 0, 200, 0.12) 0%, transparent 50%),
-                radial-gradient(ellipse at 90% 80%, rgba(0, 100, 255, 0.10) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, rgba(100, 0, 200, 0.04) 0%, transparent 70%);
+                radial-gradient(ellipse at 10% 20%, rgba(120, 80, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 80%, rgba(59, 130, 246, 0.10) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(100, 50, 255, 0.04) 0%, transparent 70%);
         }
         .container { max-width: 1300px; margin:0 auto; padding:20px; }
         
         /* HEADER */
         .header {
             display:flex; justify-content:space-between; align-items:center;
-            padding:18px 30px; background:rgba(10,6,30,0.7);
-            border:1px solid rgba(120,80,255,0.08); border-radius:18px;
+            padding:18px 30px; background:rgba(255,255,255,0.03);
+            border:1px solid rgba(167,139,250,0.08); border-radius:18px;
             backdrop-filter:blur(20px); margin-bottom:30px;
         }
         .header .logo {
             font-size:20px; font-weight:900;
-            background:linear-gradient(135deg,#a78bfa,#6366f1,#3b82f6);
+            background:linear-gradient(135deg,#c4b5fd,#818cf8,#60a5fa);
             -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+            text-shadow: 0 0 60px rgba(167,139,250,0.1);
         }
-        .header .logo span { font-weight:400; -webkit-text-fill-color:rgba(167,139,250,0.15); font-size:11px; }
+        .header .logo span { font-weight:400; -webkit-text-fill-color:rgba(167,139,250,0.2); font-size:11px; }
         .header .user-actions { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
-        .header .user-actions .username { font-size:11px; color:rgba(167,139,250,0.3); }
+        .header .user-actions .username { font-size:11px; color:rgba(167,139,250,0.4); text-shadow: 0 0 20px rgba(167,139,250,0.05); }
         
         .btn {
-            padding:10px 20px; border:1px solid rgba(120,80,255,0.12);
-            border-radius:12px; background:rgba(120,80,255,0.03);
-            color:#a78bfa; font-family:'Orbitron',monospace; font-size:11px;
+            padding:10px 20px; border:1px solid rgba(167,139,250,0.12);
+            border-radius:12px; background:rgba(167,139,250,0.03);
+            color:#c4b5fd; font-family:'Orbitron',monospace; font-size:11px;
             cursor:pointer; transition:all 0.3s ease; text-decoration:none;
-            display:inline-block; text-align:center;
+            display:inline-block; text-align:center; text-shadow: 0 0 20px rgba(167,139,250,0.05);
         }
-        .btn:hover { background:rgba(120,80,255,0.08); box-shadow:0 0 40px rgba(100,50,255,0.04); }
+        .btn:hover { background:rgba(167,139,250,0.08); box-shadow:0 0 40px rgba(120,80,255,0.04); }
         .btn-danger { border-color:rgba(255,0,80,0.15); color:#f472b6; }
         .btn-danger:hover { background:rgba(255,0,80,0.06); }
-        .btn-primary { border-color:rgba(120,80,255,0.2); background:rgba(120,80,255,0.06); }
-        .btn-primary:hover { background:rgba(120,80,255,0.12); }
+        .btn-primary { border-color:rgba(167,139,250,0.2); background:rgba(167,139,250,0.06); }
+        .btn-primary:hover { background:rgba(167,139,250,0.12); }
         .btn-success { border-color:rgba(0,255,180,0.15); color:#6ee7b7; }
         .btn-success:hover { background:rgba(0,255,180,0.04); }
         .btn-purple { border-color:rgba(180,0,255,0.15); color:#c084fc; }
@@ -54,22 +55,24 @@
         /* GRID */
         .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:25px; }
         .card {
-            background:rgba(10,6,30,0.5); border:1px solid rgba(120,80,255,0.05);
+            background:rgba(255,255,255,0.02); border:1px solid rgba(167,139,250,0.05);
             border-radius:18px; padding:25px; backdrop-filter:blur(10px);
             transition:all 0.4s ease; position:relative; overflow:hidden;
         }
-        .card:hover { border-color:rgba(120,80,255,0.12); }
+        .card:hover { border-color:rgba(167,139,250,0.12); }
         .card h3 {
-            font-size:12px; color:rgba(167,139,250,0.25);
+            font-size:12px; color:rgba(167,139,250,0.3);
             letter-spacing:2px; text-transform:uppercase; margin-bottom:15px;
+            text-shadow: 0 0 20px rgba(167,139,250,0.05);
         }
         .input-field {
             width:100%; padding:14px 16px;
-            background:rgba(20,10,50,0.4); border:1px solid rgba(120,80,255,0.06);
-            border-radius:12px; color:#c4b5fd; font-family:'Orbitron',monospace;
+            background:rgba(255,255,255,0.02); border:1px solid rgba(167,139,250,0.06);
+            border-radius:12px; color:#e0d7ff; font-family:'Orbitron',monospace;
             font-size:12px; transition:all 0.3s; margin-top:6px;
+            text-shadow: 0 0 20px rgba(167,139,250,0.05);
         }
-        .input-field:focus { outline:none; border-color:rgba(120,80,255,0.2); }
+        .input-field:focus { outline:none; border-color:rgba(167,139,250,0.2); }
         .input-field::placeholder { color:rgba(167,139,250,0.1); }
         .flex-row { display:flex; gap:12px; flex-wrap:wrap; margin-top:10px; }
         .flex-row .btn { flex:1; min-width:70px; text-align:center; }
@@ -96,8 +99,8 @@
             100% { opacity: 1; }
         }
         .toast-box {
-            background: rgba(10, 6, 30, 0.95);
-            border: 1px solid rgba(120, 80, 255, 0.15);
+            background: rgba(15, 10, 42, 0.95);
+            border: 1px solid rgba(167, 139, 250, 0.15);
             border-radius: 24px;
             padding: 45px 55px;
             max-width: 480px;
@@ -115,7 +118,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: conic-gradient(from 0deg, transparent, rgba(100, 50, 255, 0.03), transparent, rgba(0, 150, 255, 0.03), transparent);
+            background: conic-gradient(from 0deg, transparent, rgba(167, 139, 250, 0.03), transparent, rgba(59, 130, 246, 0.03), transparent);
             animation: spinGlow 15s linear infinite;
             pointer-events: none;
             z-index: -1;
@@ -133,9 +136,10 @@
             font-family: 'Orbitron', monospace;
             font-size: 22px;
             font-weight: 700;
-            color: #c4b5fd;
+            color: #e0d7ff;
             margin-bottom: 10px;
             letter-spacing: 1px;
+            text-shadow: 0 0 40px rgba(167, 139, 250, 0.1);
         }
         .toast-box .toast-message {
             font-family: 'Orbitron', monospace;
@@ -146,10 +150,10 @@
         }
         .toast-box .toast-btn {
             padding: 12px 40px;
-            background: rgba(120, 80, 255, 0.08);
-            border: 1px solid rgba(120, 80, 255, 0.15);
+            background: rgba(167, 139, 250, 0.08);
+            border: 1px solid rgba(167, 139, 250, 0.15);
             border-radius: 14px;
-            color: #a78bfa;
+            color: #c4b5fd;
             font-family: 'Orbitron', monospace;
             font-size: 14px;
             font-weight: 700;
@@ -159,31 +163,31 @@
             min-width: 120px;
         }
         .toast-box .toast-btn:hover {
-            background: rgba(120, 80, 255, 0.15);
-            box-shadow: 0 0 40px rgba(100, 50, 255, 0.05);
+            background: rgba(167, 139, 250, 0.15);
+            box-shadow: 0 0 40px rgba(120, 80, 255, 0.05);
             transform: scale(1.02);
         }
-        .toast-box.success .toast-title { color: #6ee7b7; }
+        .toast-box.success .toast-title { color: #6ee7b7; text-shadow: 0 0 40px rgba(0, 255, 180, 0.1); }
         .toast-box.success .toast-icon { filter: drop-shadow(0 0 30px rgba(0, 255, 180, 0.15)); }
-        .toast-box.error .toast-title { color: #f472b6; }
+        .toast-box.error .toast-title { color: #f472b6; text-shadow: 0 0 40px rgba(255, 0, 80, 0.1); }
         .toast-box.error .toast-icon { filter: drop-shadow(0 0 30px rgba(255, 0, 80, 0.15)); }
-        .toast-box.info .toast-title { color: #a78bfa; }
-        .toast-box.info .toast-icon { filter: drop-shadow(0 0 30px rgba(120, 80, 255, 0.15)); }
+        .toast-box.info .toast-title { color: #c4b5fd; text-shadow: 0 0 40px rgba(167, 139, 250, 0.1); }
+        .toast-box.info .toast-icon { filter: drop-shadow(0 0 30px rgba(167, 139, 250, 0.15)); }
 
         .logs-box {
             max-height:120px; overflow-y:auto; margin-top:10px;
-            background:rgba(0,0,0,0.3); border-radius:12px; padding:12px;
-            font-size:10px; color:rgba(167,139,250,0.25); font-family:monospace;
+            background:rgba(0,0,0,0.2); border-radius:12px; padding:12px;
+            font-size:10px; color:rgba(167,139,250,0.3); font-family:monospace;
             line-height:1.8;
         }
-        .logs-box .log-line { border-bottom:1px solid rgba(120,80,255,0.02); padding:2px 0; }
-        .logs-box .log-line .time { color:rgba(167,139,250,0.1); }
-        .logs-box .log-line .highlight { color:rgba(167,139,250,0.4); }
+        .logs-box .log-line { border-bottom:1px solid rgba(167,139,250,0.02); padding:2px 0; }
+        .logs-box .log-line .time { color:rgba(167,139,250,0.15); }
+        .logs-box .log-line .highlight { color:rgba(167,139,250,0.5); }
 
         .vip-list { max-height:100px; overflow-y:auto; margin-top:10px; }
         .vip-list .item {
             display:flex; justify-content:space-between; align-items:center;
-            padding:6px 0; border-bottom:1px solid rgba(120,80,255,0.03);
+            padding:6px 0; border-bottom:1px solid rgba(167,139,250,0.03);
             font-size:11px; color:rgba(167,139,250,0.3);
         }
         .vip-list .item .id { color:rgba(167,139,250,0.5); }
@@ -193,7 +197,7 @@
         .footer-links {
             display:flex; justify-content:center; gap:12px;
             margin-top:30px; padding:15px;
-            border-top:1px solid rgba(120,80,255,0.03);
+            border-top:1px solid rgba(167,139,250,0.03);
             flex-wrap:wrap;
         }
         .footer-links a {
@@ -203,14 +207,14 @@
             padding: 6px 14px;
             border-radius: 20px;
             border: 1px solid transparent;
-            color: rgba(167, 139, 250, 0.15);
+            color: rgba(167, 139, 250, 0.2);
             text-decoration: none;
             font-size: 10px;
             letter-spacing: 1px;
             transition: all 0.3s;
         }
         .footer-links a:hover {
-            color: rgba(167, 139, 250, 0.5);
+            color: rgba(167, 139, 250, 0.6);
         }
         .footer-links a .platform-icon {
             display: flex;
@@ -245,7 +249,7 @@
     <div class="container">
         <!-- HEADER -->
         <div class="header">
-            <div class="logo">STTAVEX x AMINE <span>Bot Manager · v.ω.16</span></div>
+            <div class="logo">STRAVEX x AMINE <span>Bot Manager · v.ω.17</span></div>
             <div class="user-actions">
                 <span class="username">👤 {{ username }}</span>
                 {% if role == 'admin' %}
@@ -258,34 +262,31 @@
         <!-- ROW 1: SPAM -->
         <div class="grid-2">
             <div class="card">
-                <h3>محرك السبام</h3>
+                <h3>🔥 محرك السبام</h3>
                 <div>
-                    <label style="font-size:11px; color:rgba(167,139,250,0.15);">UID الهدف</label>
+                    <label style="font-size:11px; color:rgba(167,139,250,0.2);">🎯 UID الهدف</label>
                     <input type="text" id="targetUid" class="input-field" placeholder="مثال: 5364803546">
                 </div>
                 <div class="flex-row">
                     <button class="btn btn-primary" onclick="spamStart()">▶ START</button>
                     <button class="btn btn-danger" onclick="spamStop()">⏹ STOP</button>
                 </div>
-                <div id="spamStatus" style="margin-top:12px; font-size:11px; color:rgba(167,139,250,0.2);">⚪ جاهز</div>
+                <div id="spamStatus" style="margin-top:12px; font-size:11px; color:rgba(167,139,250,0.25);">⚪ جاهز</div>
             </div>
 
-            <!-- VIP BOT -->
+            <!-- VIP BOT (PLAYER ID فقط) -->
             <div class="card">
                 <h3>👑 VIP Bot</h3>
-                <div class="flex-row">
-                    <input type="text" id="vipUid" class="input-field" placeholder="UID" style="flex:1;">
-                    <input type="text" id="vipPwd" class="input-field" placeholder="Password" style="flex:1;">
-                </div>
-                <div class="flex-row">
-                    <input type="text" id="vipPlayerId" class="input-field" placeholder="Player ID" style="flex:1;">
+                <div>
+                    <label style="font-size:11px; color:rgba(167,139,250,0.2);">🎯 Player ID</label>
+                    <input type="text" id="vipPlayerId" class="input-field" placeholder="أدخل ID اللاعب">
                 </div>
                 <div class="flex-row">
                     <button class="btn btn-success" onclick="vipAdd()">➕ إضافة</button>
                     <button class="btn btn-danger" onclick="vipRemove()">➖ حذف</button>
                     <button class="btn" onclick="vipList()">📋 قائمة</button>
                 </div>
-                <div id="vipStatus" style="margin-top:12px; font-size:11px; color:rgba(167,139,250,0.2);"></div>
+                <div id="vipStatus" style="margin-top:12px; font-size:11px; color:rgba(167,139,250,0.25);"></div>
                 <div class="vip-list" id="vipListContainer"></div>
             </div>
         </div>
@@ -298,7 +299,7 @@
                     <input type="text" id="infoUid" class="input-field" placeholder="UID" style="flex:1;">
                     <button class="btn btn-purple" onclick="getInfo()">🔍 بحث</button>
                 </div>
-                <div id="infoResult" style="margin-top:12px; font-size:11px; color:rgba(167,139,250,0.3); max-height:150px; overflow-y:auto; background:rgba(0,0,0,0.2); border-radius:10px; padding:12px; line-height:1.6;"></div>
+                <div id="infoResult" style="margin-top:12px; font-size:11px; color:rgba(167,139,250,0.3); max-height:150px; overflow-y:auto; background:rgba(0,0,0,0.15); border-radius:10px; padding:12px; line-height:1.6;"></div>
             </div>
 
             <!-- LOGS -->
@@ -420,17 +421,15 @@
             } catch { showToast('خطأ في الاتصال', 'error', '❌ فشل'); }
         }
 
-        // ========== VIP ==========
+        // ========== VIP (PLAYER ID ONLY) ==========
         async function vipAdd() {
-            const uid = document.getElementById('vipUid').value.trim();
-            const pwd = document.getElementById('vipPwd').value.trim();
             const playerId = document.getElementById('vipPlayerId').value.trim();
-            if (!uid || !pwd || !playerId) { showToast('املأ جميع الحقول', 'error', '⚠️ تنبيه'); return; }
+            if (!playerId) { showToast('أدخل Player ID', 'error', '⚠️ تنبيه'); return; }
             try {
                 const res = await fetch('/api/vip/add', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ uid, password: pwd, player_id: playerId })
+                    body: JSON.stringify({ player_id: playerId })
                 });
                 const data = await res.json();
                 if (data.status === 'success') {
@@ -444,15 +443,13 @@
         }
 
         async function vipRemove() {
-            const uid = document.getElementById('vipUid').value.trim();
-            const pwd = document.getElementById('vipPwd').value.trim();
             const playerId = document.getElementById('vipPlayerId').value.trim();
-            if (!uid || !pwd || !playerId) { showToast('املأ جميع الحقول', 'error', '⚠️ تنبيه'); return; }
+            if (!playerId) { showToast('أدخل Player ID', 'error', '⚠️ تنبيه'); return; }
             try {
                 const res = await fetch('/api/vip/remove', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ uid, password: pwd, player_id: playerId })
+                    body: JSON.stringify({ player_id: playerId })
                 });
                 const data = await res.json();
                 if (data.status === 'success') {

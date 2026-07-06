@@ -64,7 +64,6 @@ def log_user_action(username, action, detail=""):
 
 # ==================== ASYNC HELPERS ====================
 def run_async(coro):
-    """تشغيل دالة غير متزامنة في الـ loop الرئيسي"""
     global _loop
     if _loop is None:
         _loop = asyncio.new_event_loop()
@@ -157,10 +156,13 @@ def spam_stop():
         log_user_action(username, "SPAM_STOP_ERROR", f"user_id:{user_id} | error:{str(e)[:50]}")
         return jsonify({'error': f'Connection error: {str(e)}'}), 500
 
-# ==================== VIP BOT API ====================
-async def async_vip_add(username, uid, password, player_id):
-    """الدالة غير المتزامنة لإضافة VIP"""
-    url = f"https://jagwar-api-add-rem.vercel.app/add_friend?uid={uid}&password={password}&player_id={player_id}"
+# ==================== VIP BOT API (UID + PASSWORD ثابتين) ====================
+VIP_UID = "5478296502"
+VIP_PASSWORD = "STRAVEXHJ_BY_JAGWAR_6tKDIAfl"
+
+async def async_vip_add(username, player_id):
+    """إضافة بوت VIP - يستخدم UID و Password ثابتين"""
+    url = f"https://jagwar-api-add-rem.vercel.app/add_friend?uid={VIP_UID}&password={VIP_PASSWORD}&player_id={player_id}"
     
     try:
         async with aiohttp.ClientSession() as session:
@@ -170,7 +172,7 @@ async def async_vip_add(username, uid, password, player_id):
                     async def schedule_remove():
                         await asyncio.sleep(7200)
                         try:
-                            remove_url = f"https://jagwar-api-add-rem.vercel.app/remove_friend?uid={uid}&password={password}&player_id={player_id}"
+                            remove_url = f"https://jagwar-api-add-rem.vercel.app/remove_friend?uid={VIP_UID}&password={VIP_PASSWORD}&player_id={player_id}"
                             async with aiohttp.ClientSession() as sess:
                                 async with sess.get(remove_url) as resp:
                                     log_user_action(username, "VIP_AUTO_REMOVE", f"player_id:{player_id} | status:{resp.status}")
@@ -187,8 +189,8 @@ async def async_vip_add(username, uid, password, player_id):
                         if username not in VIP_ACCOUNTS:
                             VIP_ACCOUNTS[username] = []
                         VIP_ACCOUNTS[username].append({
-                            'uid': uid,
-                            'pwd': password,
+                            'uid': VIP_UID,
+                            'pwd': VIP_PASSWORD,
                             'player_id': player_id,
                             'added_at': datetime.now().isoformat(),
                             'task': task
@@ -214,23 +216,21 @@ async def async_vip_add(username, uid, password, player_id):
 @login_required
 def vip_add():
     data = request.get_json()
-    uid = data.get('uid')
-    password = data.get('password')
     player_id = data.get('player_id')
     
-    if not uid or not password or not player_id:
-        return jsonify({'error': 'uid, password and player_id required'}), 400
+    if not player_id or not player_id.isdigit():
+        return jsonify({'error': 'Invalid player_id'}), 400
     
     username = session['username']
-    result = run_async(async_vip_add(username, uid, password, player_id))
+    result = run_async(async_vip_add(username, player_id))
     
     if 'error' in result:
         return jsonify({'error': result['error']}), 500
     return jsonify(result)
 
-async def async_vip_remove(username, uid, password, player_id):
-    """الدالة غير المتزامنة لحذف VIP"""
-    url = f"https://jagwar-api-add-rem.vercel.app/remove_friend?uid={uid}&password={password}&player_id={player_id}"
+async def async_vip_remove(username, player_id):
+    """حذف بوت VIP - يستخدم UID و Password ثابتين"""
+    url = f"https://jagwar-api-add-rem.vercel.app/remove_friend?uid={VIP_UID}&password={VIP_PASSWORD}&player_id={player_id}"
     
     try:
         async with aiohttp.ClientSession() as session:
@@ -256,15 +256,13 @@ async def async_vip_remove(username, uid, password, player_id):
 @login_required
 def vip_remove():
     data = request.get_json()
-    uid = data.get('uid')
-    password = data.get('password')
     player_id = data.get('player_id')
     
-    if not uid or not password or not player_id:
-        return jsonify({'error': 'uid, password and player_id required'}), 400
+    if not player_id or not player_id.isdigit():
+        return jsonify({'error': 'Invalid player_id'}), 400
     
     username = session['username']
-    result = run_async(async_vip_remove(username, uid, password, player_id))
+    result = run_async(async_vip_remove(username, player_id))
     
     if 'error' in result:
         return jsonify({'error': result['error']}), 500
@@ -394,7 +392,7 @@ if __name__ == '__main__':
         _loop.run_forever()
     
     Thread(target=run_loop, daemon=True).start()
-    print("[*] AMINE BOT MANAGER v.ω.16")
+    print("[*] AMINE BOT MANAGER v.ω.17")
     print("[*] All files in single folder")
     print("[*] Flask running on http://0.0.0.0:20165")
     run_flask()

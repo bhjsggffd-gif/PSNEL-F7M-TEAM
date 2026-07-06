@@ -13,7 +13,6 @@
             min-height: 100vh;
             overflow-x: hidden;
         }
-        /* Floating Orbs */
         .orb {
             position: fixed;
             border-radius: 50%;
@@ -23,19 +22,19 @@
         }
         .orb-1 {
             width: 400px; height: 400px;
-            background: rgba(0, 240, 255, 0.06);
+            background: rgba(0, 100, 255, 0.08);
             top: -100px; left: -100px;
             animation: orbFloat 20s ease-in-out infinite alternate;
         }
         .orb-2 {
             width: 500px; height: 500px;
-            background: rgba(255, 34, 255, 0.04);
+            background: rgba(255, 50, 80, 0.05);
             bottom: -150px; right: -150px;
             animation: orbFloat 25s ease-in-out infinite alternate-reverse;
         }
         .orb-3 {
             width: 300px; height: 300px;
-            background: rgba(0, 255, 136, 0.03);
+            background: rgba(0, 50, 200, 0.04);
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             animation: orbFloat 30s ease-in-out infinite alternate;
@@ -63,22 +62,22 @@
         .header {
             display: flex; justify-content: space-between; align-items: center;
             padding: 18px 30px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(0, 240, 255, 0.06);
+            background: rgba(10, 10, 30, 0.6);
+            border: 1px solid rgba(0, 150, 255, 0.06);
             border-radius: 18px;
             backdrop-filter: blur(20px);
             margin-bottom: 30px;
         }
         .header .logo {
             font-size: 20px; font-weight: 900;
-            background: linear-gradient(135deg, #00f0ff, #0066ff);
+            background: linear-gradient(135deg, #ff6b8a, #00d4ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 60px rgba(0, 240, 255, 0.06);
+            text-shadow: 0 0 60px rgba(0, 200, 255, 0.04);
         }
         .header .logo span {
             font-weight: 400;
-            -webkit-text-fill-color: rgba(0, 240, 255, 0.12);
+            -webkit-text-fill-color: rgba(0, 200, 255, 0.10);
             font-size: 11px;
         }
         .header .user-actions {
@@ -86,16 +85,17 @@
         }
         .header .user-actions .username {
             font-size: 11px;
-            color: rgba(0, 240, 255, 0.25);
-            text-shadow: 0 0 20px rgba(0, 240, 255, 0.04);
+            color: rgba(0, 200, 255, 0.25);
+            text-shadow: 0 0 20px rgba(0, 200, 255, 0.04);
+            font-weight: 700;
         }
         
         .btn {
             padding: 10px 20px;
-            border: 1px solid rgba(0, 240, 255, 0.08);
+            border: 1px solid rgba(0, 150, 255, 0.06);
             border-radius: 12px;
-            background: rgba(0, 240, 255, 0.02);
-            color: #00f0ff;
+            background: rgba(10, 10, 30, 0.4);
+            color: #00d4ff;
             font-family: 'Orbitron', monospace;
             font-size: 11px;
             cursor: pointer;
@@ -103,35 +103,36 @@
             text-decoration: none;
             display: inline-block;
             text-align: center;
-            text-shadow: 0 0 20px rgba(0, 240, 255, 0.04);
+            text-shadow: 0 0 20px rgba(0, 200, 255, 0.04);
+            font-weight: 700;
         }
         .btn:hover {
-            background: rgba(0, 240, 255, 0.06);
-            box-shadow: 0 0 40px rgba(0, 240, 255, 0.02);
+            background: rgba(0, 100, 255, 0.06);
+            box-shadow: 0 0 40px rgba(0, 100, 255, 0.02);
         }
         .btn-danger {
-            border-color: rgba(255, 0, 80, 0.08);
-            color: #f472b6;
+            border-color: rgba(255, 50, 80, 0.08);
+            color: #ff6b8a;
         }
         .btn-danger:hover {
-            background: rgba(255, 0, 80, 0.04);
+            background: rgba(255, 50, 80, 0.04);
         }
         .btn-primary {
-            border-color: rgba(0, 240, 255, 0.12);
-            background: rgba(0, 240, 255, 0.04);
+            border-color: rgba(0, 150, 255, 0.10);
+            background: rgba(0, 100, 255, 0.04);
         }
         .btn-primary:hover {
-            background: rgba(0, 240, 255, 0.08);
+            background: rgba(0, 100, 255, 0.08);
         }
         .btn-success {
-            border-color: rgba(0, 255, 180, 0.08);
+            border-color: rgba(0, 255, 180, 0.06);
             color: #6ee7b7;
         }
         .btn-success:hover {
             background: rgba(0, 255, 180, 0.03);
         }
         .btn-purple {
-            border-color: rgba(180, 0, 255, 0.08);
+            border-color: rgba(180, 0, 255, 0.06);
             color: #c084fc;
         }
         .btn-purple:hover {
@@ -144,43 +145,45 @@
             gap: 25px;
         }
         .card {
-            background: rgba(255, 255, 255, 0.015);
-            border: 1px solid rgba(0, 240, 255, 0.04);
+            background: rgba(10, 10, 30, 0.5);
+            border: 1px solid rgba(0, 150, 255, 0.04);
             border-radius: 18px;
             padding: 25px;
             backdrop-filter: blur(10px);
             transition: all 0.4s ease;
         }
         .card:hover {
-            border-color: rgba(0, 240, 255, 0.07);
+            border-color: rgba(0, 150, 255, 0.07);
         }
         .card h3 {
             font-size: 12px;
-            color: rgba(0, 240, 255, 0.25);
+            color: #ff6b8a;
             letter-spacing: 2px;
             text-transform: uppercase;
             margin-bottom: 15px;
-            text-shadow: 0 0 20px rgba(0, 240, 255, 0.06);
+            text-shadow: 0 0 20px rgba(255, 50, 100, 0.04);
+            font-weight: 700;
         }
         .input-field {
             width: 100%;
             padding: 14px 16px;
-            background: rgba(255, 255, 255, 0.015);
-            border: 1px solid rgba(0, 240, 255, 0.04);
+            background: rgba(10, 10, 30, 0.4);
+            border: 1px solid rgba(0, 150, 255, 0.04);
             border-radius: 12px;
-            color: #b0f0ff;
+            color: #7ec8e3;
             font-family: 'Orbitron', monospace;
             font-size: 12px;
             transition: all 0.3s;
             margin-top: 6px;
-            text-shadow: 0 0 20px rgba(0, 240, 255, 0.04);
+            text-shadow: 0 0 20px rgba(0, 200, 255, 0.04);
+            font-weight: 700;
         }
         .input-field:focus {
             outline: none;
-            border-color: rgba(0, 240, 255, 0.12);
+            border-color: rgba(0, 200, 255, 0.12);
         }
         .input-field::placeholder {
-            color: rgba(0, 240, 255, 0.06);
+            color: rgba(0, 200, 255, 0.06);
         }
         .flex-row {
             display: flex;
@@ -194,48 +197,52 @@
             text-align: center;
         }
 
-        /* PLAYER INFO CARD */
+        /* PLAYER INFO CARD - HIGH CONTRAST */
         .info-card {
-            background: rgba(0, 240, 255, 0.03);
-            border: 1px solid rgba(0, 240, 255, 0.06);
+            background: linear-gradient(145deg, rgba(0, 20, 50, 0.85), rgba(10, 5, 20, 0.9));
+            border: 1px solid rgba(0, 150, 255, 0.12);
             border-radius: 14px;
             padding: 20px;
             margin-top: 12px;
+            box-shadow: 0 0 40px rgba(0, 100, 255, 0.04), inset 0 0 60px rgba(0, 50, 150, 0.02);
         }
         .info-card .info-row {
             display: flex;
             justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(0, 240, 255, 0.03);
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0, 150, 255, 0.06);
         }
         .info-card .info-row:last-child {
             border-bottom: none;
         }
         .info-card .info-label {
-            color: rgba(0, 240, 255, 0.35);
-            font-size: 11px;
+            color: #ff6b8a;
+            font-size: 12px;
+            font-weight: 700;
             letter-spacing: 1px;
-            text-shadow: 0 0 20px rgba(0, 240, 255, 0.04);
+            text-shadow: 0 0 30px rgba(255, 50, 100, 0.08);
         }
         .info-card .info-value {
-            color: #b0f0ff;
+            color: #7ec8e3;
             font-size: 13px;
-            font-weight: 700;
-            text-shadow: 0 0 20px rgba(0, 240, 255, 0.06);
+            font-weight: 900;
+            text-shadow: 0 0 30px rgba(0, 180, 255, 0.06);
+            letter-spacing: 0.5px;
         }
         .info-card .info-value.highlight {
-            color: #00f0ff;
-            text-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
+            color: #00d4ff;
+            text-shadow: 0 0 40px rgba(0, 200, 255, 0.12);
         }
         .info-card .info-value.gold {
-            color: #fcd34d;
-            text-shadow: 0 0 30px rgba(252, 211, 77, 0.10);
+            color: #ffd700;
+            text-shadow: 0 0 40px rgba(255, 215, 0, 0.08);
         }
         .info-empty {
-            color: rgba(0, 240, 255, 0.12);
+            color: rgba(0, 200, 255, 0.12);
             font-size: 12px;
             text-align: center;
             padding: 30px 0;
+            font-weight: 700;
         }
 
         /* LOGS */
@@ -243,23 +250,23 @@
             max-height: 120px;
             overflow-y: auto;
             margin-top: 10px;
-            background: rgba(0, 0, 0, 0.15);
+            background: rgba(0, 0, 0, 0.2);
             border-radius: 12px;
             padding: 12px;
             font-size: 10px;
-            color: rgba(0, 240, 255, 0.15);
+            color: rgba(0, 200, 255, 0.15);
             font-family: monospace;
             line-height: 1.8;
         }
         .logs-box .log-line {
-            border-bottom: 1px solid rgba(0, 240, 255, 0.02);
+            border-bottom: 1px solid rgba(0, 150, 255, 0.02);
             padding: 2px 0;
         }
         .logs-box .log-line .time {
-            color: rgba(0, 240, 255, 0.08);
+            color: rgba(0, 200, 255, 0.06);
         }
         .logs-box .log-line .highlight {
-            color: rgba(0, 240, 255, 0.30);
+            color: rgba(0, 200, 255, 0.30);
         }
 
         .vip-list {
@@ -272,30 +279,30 @@
             justify-content: space-between;
             align-items: center;
             padding: 6px 0;
-            border-bottom: 1px solid rgba(0, 240, 255, 0.02);
+            border-bottom: 1px solid rgba(0, 150, 255, 0.02);
             font-size: 11px;
-            color: rgba(0, 240, 255, 0.15);
+            color: rgba(0, 200, 255, 0.15);
         }
         .vip-list .item .id {
-            color: rgba(0, 240, 255, 0.40);
+            color: rgba(0, 200, 255, 0.40);
         }
         .vip-list .item .del {
-            color: rgba(255, 0, 80, 0.12);
+            color: rgba(255, 50, 80, 0.12);
             cursor: pointer;
         }
         .vip-list .item .del:hover {
-            color: #f472b6;
+            color: #ff6b8a;
         }
 
         #spamStatus {
             margin-top: 12px;
             font-size: 11px;
-            color: rgba(0, 240, 255, 0.12);
+            color: rgba(0, 200, 255, 0.12);
         }
         #vipStatus {
             margin-top: 12px;
             font-size: 11px;
-            color: rgba(0, 240, 255, 0.12);
+            color: rgba(0, 200, 255, 0.12);
         }
 
         /* FOOTER */
@@ -305,7 +312,7 @@
             gap: 12px;
             margin-top: 30px;
             padding: 15px;
-            border-top: 1px solid rgba(0, 240, 255, 0.02);
+            border-top: 1px solid rgba(0, 150, 255, 0.02);
             flex-wrap: wrap;
         }
         .footer-links a {
@@ -315,14 +322,15 @@
             padding: 6px 14px;
             border-radius: 20px;
             border: 1px solid transparent;
-            color: rgba(0, 240, 255, 0.10);
+            color: rgba(0, 200, 255, 0.10);
             text-decoration: none;
             font-size: 10px;
             letter-spacing: 1px;
             transition: all 0.3s;
+            font-weight: 700;
         }
         .footer-links a:hover {
-            color: rgba(0, 240, 255, 0.35);
+            color: rgba(255, 100, 130, 0.40);
         }
         .footer-links a .platform-icon {
             display: flex;
@@ -363,8 +371,8 @@
         }
         .toast-overlay.show { display: flex; }
         .toast-box {
-            background: rgba(10, 22, 40, 0.95);
-            border: 1px solid rgba(0, 240, 255, 0.10);
+            background: rgba(10, 10, 30, 0.95);
+            border: 1px solid rgba(0, 150, 255, 0.08);
             border-radius: 24px;
             padding: 45px 55px;
             max-width: 480px;
@@ -382,7 +390,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: conic-gradient(from 0deg, transparent, rgba(0, 240, 255, 0.03), transparent, rgba(0, 102, 255, 0.03), transparent);
+            background: conic-gradient(from 0deg, transparent, rgba(0, 100, 255, 0.03), transparent, rgba(255, 50, 80, 0.03), transparent);
             animation: spinGlow 15s linear infinite;
             pointer-events: none;
             z-index: -1;
@@ -400,24 +408,24 @@
             font-family: 'Orbitron', monospace;
             font-size: 22px;
             font-weight: 700;
-            color: #b0f0ff;
+            color: #7ec8e3;
             margin-bottom: 10px;
             letter-spacing: 1px;
-            text-shadow: 0 0 40px rgba(0, 240, 255, 0.06);
+            text-shadow: 0 0 40px rgba(0, 200, 255, 0.06);
         }
         .toast-box .toast-message {
             font-family: 'Orbitron', monospace;
             font-size: 16px;
-            color: rgba(0, 240, 255, 0.5);
+            color: rgba(0, 200, 255, 0.5);
             margin-bottom: 25px;
             line-height: 1.6;
         }
         .toast-box .toast-btn {
             padding: 12px 40px;
-            background: rgba(0, 240, 255, 0.08);
-            border: 1px solid rgba(0, 240, 255, 0.08);
+            background: rgba(0, 100, 255, 0.08);
+            border: 1px solid rgba(0, 150, 255, 0.06);
             border-radius: 14px;
-            color: #00f0ff;
+            color: #00d4ff;
             font-family: 'Orbitron', monospace;
             font-size: 14px;
             font-weight: 700;
@@ -427,8 +435,8 @@
             min-width: 120px;
         }
         .toast-box .toast-btn:hover {
-            background: rgba(0, 240, 255, 0.12);
-            box-shadow: 0 0 40px rgba(0, 240, 255, 0.03);
+            background: rgba(0, 100, 255, 0.12);
+            box-shadow: 0 0 40px rgba(0, 100, 255, 0.03);
             transform: scale(1.02);
         }
         .toast-box.loading .toast-icon {
@@ -440,7 +448,7 @@
         }
         .toast-box.success .toast-title { color: #6ee7b7; }
         .toast-box.error .toast-title { color: #f472b6; }
-        .toast-box.info .toast-title { color: #00f0ff; }
+        .toast-box.info .toast-title { color: #00d4ff; }
 
         @media (max-width:850px) {
             .grid-2 { grid-template-columns:1fr; }
@@ -450,7 +458,6 @@
     </style>
 </head>
 <body>
-    <!-- Floating Orbs -->
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
     <div class="orb orb-3"></div>
@@ -459,7 +466,7 @@
     <div class="container">
         <!-- HEADER -->
         <div class="header">
-            <div class="logo">⚡ F7M TEAM <span>Bot Manager · v.ω.19</span></div>
+            <div class="logo">F7M TEAM <span>Bot Manager · v.ω.20</span></div>
             <div class="user-actions">
                 <span class="username">👤 {{ username }}</span>
                 {% if role == 'admin' %}
@@ -474,7 +481,7 @@
             <!-- SPAM -->
             <div class="card">
                 <h3>🔥 محرك السبام</h3>
-                <label style="font-size:11px; color:rgba(0,240,255,0.12);">🎯 UID الهدف</label>
+                <label style="font-size:11px; color:rgba(0,200,255,0.12); font-weight:700;">🎯 UID الهدف</label>
                 <input type="text" id="targetUid" class="input-field" placeholder="مثال: 5364803546">
                 <div class="flex-row">
                     <button class="btn btn-primary" onclick="spamStart()">▶ START</button>
@@ -486,7 +493,7 @@
             <!-- VIP -->
             <div class="card">
                 <h3>👑 VIP Bot</h3>
-                <label style="font-size:11px; color:rgba(0,240,255,0.12);">🎯 Player ID</label>
+                <label style="font-size:11px; color:rgba(0,200,255,0.12); font-weight:700;">🎯 Player ID</label>
                 <input type="text" id="vipPlayerId" class="input-field" placeholder="أدخل ID اللاعب">
                 <div class="flex-row">
                     <button class="btn btn-success" onclick="vipAdd()">➕ إضافة</button>
@@ -563,7 +570,7 @@
             function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
             window.addEventListener('resize', resize);
             resize();
-            var accent = '#00f0ff';
+            var accent = '#00d4ff';
             function hexToRgba(hex, alpha) {
                 var r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
                 return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
@@ -737,16 +744,16 @@
                 var data = await res.json();
                 var container = document.getElementById('vipListContainer');
                 if (data.count === 0) {
-                    container.innerHTML = '<div style="color:rgba(0,240,255,0.06); font-size:11px;">لا يوجد بوتات VIP</div>';
+                    container.innerHTML = '<div style="color:rgba(0,200,255,0.06); font-size:11px;">لا يوجد بوتات VIP</div>';
                     return;
                 }
                 container.innerHTML = data.vips.map(function(v) {
-                    return '<div class="item"><span class="id">👑 ' + v.player_id + '</span><span style="font-size:9px; color:rgba(0,240,255,0.08);">' + v.uid + '</span></div>';
+                    return '<div class="item"><span class="id">👑 ' + v.player_id + '</span><span style="font-size:9px; color:rgba(0,200,255,0.06);">' + v.uid + '</span></div>';
                 }).join('');
             } catch (e) { /* silent */ }
         }
 
-        // ===== INFO (ALL DATA - WITH FALLBACK) =====
+        // ===== INFO (ALL DATA - FULL & ORGANIZED) =====
         async function getInfo() {
             var uid = document.getElementById('infoUid').value.trim();
             var container = document.getElementById('infoResult');
@@ -762,60 +769,101 @@
                 if (data.status === 'success' && data.data) {
                     var d = data.data;
                     
-                    // دالة مساعدة للبحث عن قيمة في عدة أسماء محتملة
-                    function findValue(keys) {
+                    // استخراج البيانات من جميع الأقسام
+                    var account = d.AccountInfo || {};
+                    var guild = d.GuildInfo || {};
+                    var captain = d.captainBasicInfo || {};
+                    var credit = d.creditScoreInfo || {};
+                    var pet = d.petInfo || {};
+                    var social = d.socialinfo || {};
+                    var profile = d.AccountProfileInfo || {};
+                    var outfit = d.OutfitInfo || {};
+                    
+                    // دالة مساعدة للبحث عن قيمة
+                    function getVal(obj, keys, defaultVal) {
+                        defaultVal = defaultVal || 'N/A';
                         for (var i = 0; i < keys.length; i++) {
                             var key = keys[i];
-                            if (d[key] !== undefined && d[key] !== null && d[key] !== '') {
-                                return d[key];
-                            }
-                            // بحث في حالة الأحرف الصغيرة/الكبيرة
-                            for (var k in d) {
-                                if (k.toLowerCase() === key.toLowerCase()) {
-                                    return d[k];
-                                }
+                            if (obj[key] !== undefined && obj[key] !== null && obj[key] !== '') {
+                                return obj[key];
                             }
                         }
-                        return null;
+                        return defaultVal;
                     }
                     
-                    // استخراج جميع البيانات الممكنة
-                    var playerData = {
-                        '🆔 UID': findValue(['uid', 'UID', 'player_id', 'playerId', 'id', 'ID']) || uid,
-                        '👤 الاسم': findValue(['name', 'username', 'nickname', 'displayName', 'player_name', 'fullName']) || 'غير معروف',
-                        '⭐ المستوى': findValue(['level', 'lv', 'Level', 'LV', 'player_level', 'rank_level']) || 'N/A',
-                        '📊 الخبرة': findValue(['exp', 'experience', 'Exp', 'EXp', 'XP', 'xp', 'player_exp']) || 'N/A',
-                        '🏆 الرتبة': findValue(['rank', 'tier', 'Rank', 'Tier', 'division', 'player_rank']) || 'غير محدد',
-                        '🌍 السيرفر': findValue(['server', 'region', 'Server', 'Region', 'area', 'zone']) || 'N/A',
-                        '🏴 العشيرة': findValue(['clan', 'guild', 'team', 'Clan', 'Guild', 'Team', 'clan_name']) || 'لا يوجد',
-                        '💀 القتلى': findValue(['kills', 'Kills', 'total_kills', 'kill_count']) || 0,
-                        '🏅 الانتصارات': findValue(['wins', 'Wins', 'total_wins', 'win_count', 'victories']) || 0,
-                        '💔 الخسائر': findValue(['losses', 'Losses', 'total_losses', 'loss_count', 'defeats']) || 0,
-                        '🎯 الدقة': findValue(['accuracy', 'Accuracy', 'acc', 'hit_rate', 'precision']) || 'N/A',
-                        '🕒 آخر ظهور': findValue(['last_seen', 'lastSeen', 'LastSeen', 'lastActive', 'last_active', 'last_online']) || 'N/A',
-                        '📅 تاريخ التسجيل': findValue(['registered', 'created_at', 'CreatedAt', 'join_date', 'registration_date', 'created']) || 'N/A',
-                        '📱 الجهاز': findValue(['device', 'Device', 'platform', 'os', 'mobile']) || 'N/A',
-                        '🌐 البلد': findValue(['country', 'Country', 'nation', 'location', 'region_code']) || 'N/A',
-                    };
+                    // تجميع جميع البيانات
+                    var playerData = [
+                        { label: '🆔 UID', value: getVal(captain, ['accountId']) || getVal(account, ['AccountId']) || uid, highlight: true },
+                        { label: '👤 الاسم', value: getVal(captain, ['nickname']) || getVal(account, ['AccountName']) || 'غير معروف', highlight: true },
+                        { label: '⭐ المستوى', value: getVal(captain, ['level']) || getVal(account, ['AccountLevel']) || 'N/A', gold: true },
+                        { label: '📊 الخبرة', value: getVal(captain, ['exp']) || getVal(account, ['AccountEXP']) || 'N/A' },
+                        { label: '🏆 الرتبة (BR)', value: getVal(captain, ['rank']) || getVal(account, ['BrMaxRank']) || 'N/A', gold: true },
+                        { label: '🎯 نقاط BR', value: getVal(captain, ['rankingPoints']) || getVal(account, ['BrRankPoint']) || 'N/A' },
+                        { label: '🏅 الرتبة (CS)', value: getVal(captain, ['csRank']) || getVal(account, ['CsMaxRank']) || 'N/A', gold: true },
+                        { label: '🎯 نقاط CS', value: getVal(captain, ['csRankingPoints']) || getVal(account, ['CsRankPoint']) || 'N/A' },
+                        { label: '🌍 السيرفر', value: getVal(captain, ['region']) || getVal(account, ['AccountRegion']) || 'N/A', highlight: true },
+                        { label: '📱 الإصدار', value: getVal(captain, ['releaseVersion']) || getVal(account, ['ReleaseVersion']) || 'N/A' },
+                        { label: '📅 الموسم', value: getVal(captain, ['seasonId']) || getVal(account, ['AccountSeasonId']) || 'N/A' },
+                        { label: '❤️ الإعجابات', value: getVal(captain, ['liked']) || getVal(account, ['AccountLikes']) || 0 },
+                        { label: '📛 البادجات', value: getVal(captain, ['badgeCnt']) || getVal(account, ['AccountBPBadges']) || 0 },
+                        { label: '🏴 العشيرة', value: getVal(guild, ['GuildName']) || 'لا يوجد', highlight: true },
+                        { label: '👥 أعضاء العشيرة', value: getVal(guild, ['GuildMember']) || 'N/A' },
+                        { label: '🔰 مستوى العشيرة', value: getVal(guild, ['GuildLevel']) || 'N/A' },
+                        { label: '💳 رصيد الائتمان', value: getVal(credit, ['creditScore']) || 'N/A', gold: true },
+                        { label: '🐾 اسم البت', value: getVal(pet, ['id']) ? 'ID: ' + pet.id : 'لا يوجد' },
+                        { label: '🐾 مستوى البت', value: getVal(pet, ['level']) || 'N/A' },
+                        { label: '🌐 اللغة', value: getVal(social, ['language']) || 'N/A' },
+                        { label: '📅 تاريخ الإنشاء', value: getVal(captain, ['createAt']) ? new Date(parseInt(getVal(captain, ['createAt'])) * 1000).toLocaleDateString('ar') : getVal(account, ['AccountCreateTime']) ? new Date(parseInt(getVal(account, ['AccountCreateTime'])) * 1000).toLocaleDateString('ar') : 'N/A' },
+                        { label: '🕒 آخر ظهور', value: getVal(captain, ['lastLoginAt']) ? new Date(parseInt(getVal(captain, ['lastLoginAt'])) * 1000).toLocaleDateString('ar') + ' ' + new Date(parseInt(getVal(captain, ['lastLoginAt'])) * 1000).toLocaleTimeString('ar') : getVal(account, ['AccountLastLogin']) ? new Date(parseInt(getVal(account, ['AccountLastLogin'])) * 1000).toLocaleDateString('ar') : 'N/A' },
+                    ];
                     
                     var html = '<div class="info-card">';
                     var hasData = false;
                     
-                    for (var key in playerData) {
-                        var value = playerData[key];
-                        if (value !== undefined && value !== null && value !== '' && value !== 'N/A' && value !== 'غير معروف' && value !== 'غير محدد' && value !== 'لا يوجد') {
+                    for (var i = 0; i < playerData.length; i++) {
+                        var item = playerData[i];
+                        if (item.value !== undefined && item.value !== null && item.value !== '' && item.value !== 'N/A' && item.value !== 'غير معروف' && item.value !== 'غير محدد' && item.value !== 'لا يوجد') {
                             var cls = 'info-value';
-                            if (key.includes('UID') || key.includes('السيرفر')) cls += ' highlight';
-                            if (key.includes('المستوى') || key.includes('الرتبة')) cls += ' gold';
+                            if (item.highlight) cls += ' highlight';
+                            if (item.gold) cls += ' gold';
                             html += '<div class="info-row">';
-                            html += '<span class="info-label">' + key + '</span>';
-                            html += '<span class="' + cls + '">' + value + '</span>';
+                            html += '<span class="info-label">' + item.label + '</span>';
+                            html += '<span class="' + cls + '">' + item.value + '</span>';
                             html += '</div>';
                             hasData = true;
                         }
                     }
                     
-                    // إذا لم يتم العثور على بيانات، عرض البيانات الخام
+                    // عرض المعدات إذا وجدت
+                    if (profile.EquippedOutfit && profile.EquippedOutfit.length > 0) {
+                        html += '<div class="info-row"><span class="info-label">🎽 المعدات</span><span class="info-value">' + profile.EquippedOutfit.join(', ') + '</span></div>';
+                        hasData = true;
+                    }
+                    
+                    // عرض المهارات إذا وجدت
+                    if (profile.EquippedSkills && profile.EquippedSkills.length > 0) {
+                        var skills = [];
+                        for (var s = 0; s < profile.EquippedSkills.length; s += 3) {
+                            if (s + 2 < profile.EquippedSkills.length) {
+                                skills.push('Slot' + profile.EquippedSkills[s+1] + ': ' + profile.EquippedSkills[s]);
+                            }
+                        }
+                        if (skills.length > 0) {
+                            html += '<div class="info-row"><span class="info-label">⚔️ المهارات</span><span class="info-value">' + skills.join(' | ') + '</span></div>';
+                            hasData = true;
+                        }
+                    }
+                    
+                    // عرض البنر والأفاتار
+                    var banner = getVal(captain, ['bannerId']) || getVal(account, ['AccountBannerId']);
+                    var avatar = getVal(captain, ['headPic']) || getVal(account, ['AccountAvatarId']);
+                    if (banner !== 'N/A' || avatar !== 'N/A') {
+                        html += '<div class="info-row"><span class="info-label">🖼️ البنر</span><span class="info-value">' + banner + '</span></div>';
+                        html += '<div class="info-row"><span class="info-label">🖼️ الأفاتار</span><span class="info-value">' + avatar + '</span></div>';
+                        hasData = true;
+                    }
+                    
+                    // عرض البيانات الخام إذا لم يتم العثور على شيء
                     if (!hasData) {
                         html += '<div class="info-row"><span class="info-label">📦 البيانات الخام</span></div>';
                         for (var k in d) {

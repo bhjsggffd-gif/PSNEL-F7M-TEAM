@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>F7M Bot Manager · Login</title>
+    <title>AMINE Bot Manager · Login</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
@@ -13,25 +13,24 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: #0f0a2a;
+            background: #0a1628;
             background-image: 
-                radial-gradient(ellipse at 20% 30%, rgba(120, 80, 255, 0.2) 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 70%, rgba(59, 130, 246, 0.15) 0%, transparent 60%),
-                radial-gradient(ellipse at 50% 100%, rgba(100, 50, 255, 0.1) 0%, transparent 50%);
+                radial-gradient(ellipse at 20% 30%, rgba(59, 130, 246, 0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 70%, rgba(99, 102, 241, 0.10) 0%, transparent 60%);
             position: relative;
             overflow: hidden;
         }
-        /* جسيمات متحركة */
+        /* الخلفية المتحركة */
         body::before {
             content: '';
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             background-image: 
-                radial-gradient(2px 2px at 20px 30px, rgba(167, 139, 250, 0.3), transparent),
-                radial-gradient(2px 2px at 40px 70px, rgba(0, 150, 255, 0.2), transparent),
-                radial-gradient(2px 2px at 50px 160px, rgba(150, 50, 255, 0.25), transparent),
-                radial-gradient(2px 2px at 90px 40px, rgba(0, 200, 255, 0.15), transparent),
-                radial-gradient(2px 2px at 130px 80px, rgba(100, 50, 255, 0.2), transparent);
+                radial-gradient(2px 2px at 20px 30px, rgba(96, 165, 250, 0.2), transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(99, 102, 241, 0.15), transparent),
+                radial-gradient(2px 2px at 50px 160px, rgba(59, 130, 246, 0.18), transparent),
+                radial-gradient(2px 2px at 90px 40px, rgba(96, 165, 250, 0.12), transparent),
+                radial-gradient(2px 2px at 130px 80px, rgba(99, 102, 241, 0.15), transparent);
             background-size: 200px 200px;
             background-repeat: repeat;
             animation: floatParticles 30s linear infinite;
@@ -51,13 +50,13 @@
             z-index: 1;
         }
         .login-box {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(167, 139, 250, 0.15);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(96, 165, 250, 0.12);
             border-radius: 24px;
             padding: 45px 40px;
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), 0 0 60px rgba(120, 80, 255, 0.05);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), 0 0 60px rgba(59, 130, 246, 0.05);
             position: relative;
             overflow: hidden;
         }
@@ -68,7 +67,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: conic-gradient(from 0deg, transparent, rgba(167, 139, 250, 0.03), transparent, rgba(59, 130, 246, 0.03), transparent);
+            background: conic-gradient(from 0deg, transparent, rgba(59, 130, 246, 0.03), transparent, rgba(99, 102, 241, 0.03), transparent);
             animation: spinGlow 25s linear infinite;
             pointer-events: none;
             z-index: -1;
@@ -84,22 +83,22 @@
         .login-box .logo h1 {
             font-size: 28px;
             font-weight: 900;
-            background: linear-gradient(135deg, #c4b5fd, #818cf8, #60a5fa);
+            background: linear-gradient(135deg, #93c5fd, #818cf8, #60a5fa);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: 2px;
-            text-shadow: 0 0 60px rgba(167, 139, 250, 0.2);
+            text-shadow: 0 0 60px rgba(96, 165, 250, 0.15);
         }
         .login-box .logo .sub {
             font-size: 11px;
-            color: rgba(167, 139, 250, 0.3);
+            color: rgba(147, 197, 253, 0.25);
             letter-spacing: 4px;
             margin-top: 8px;
             text-transform: uppercase;
-            text-shadow: 0 0 20px rgba(167, 139, 250, 0.1);
+            text-shadow: 0 0 20px rgba(96, 165, 250, 0.05);
         }
         .login-box .logo .sub span {
-            color: rgba(167, 139, 250, 0.4);
+            color: rgba(147, 197, 253, 0.35);
         }
         .form-group {
             margin-bottom: 22px;
@@ -107,40 +106,40 @@
         .form-group label {
             display: block;
             font-size: 11px;
-            color: rgba(167, 139, 250, 0.4);
+            color: rgba(147, 197, 253, 0.35);
             letter-spacing: 2px;
             margin-bottom: 8px;
             text-transform: uppercase;
-            text-shadow: 0 0 20px rgba(167, 139, 250, 0.05);
+            text-shadow: 0 0 20px rgba(96, 165, 250, 0.05);
         }
         .form-group input {
             width: 100%;
             padding: 16px 18px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(167, 139, 250, 0.08);
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(96, 165, 250, 0.08);
             border-radius: 14px;
-            color: #e0d7ff;
+            color: #bfdbfe;
             font-family: 'Orbitron', monospace;
             font-size: 14px;
             transition: all 0.4s ease;
             outline: none;
-            text-shadow: 0 0 20px rgba(167, 139, 250, 0.05);
+            text-shadow: 0 0 20px rgba(96, 165, 250, 0.05);
         }
         .form-group input:focus {
-            border-color: rgba(167, 139, 250, 0.3);
-            box-shadow: 0 0 60px rgba(120, 80, 255, 0.05), inset 0 0 60px rgba(120, 80, 255, 0.02);
+            border-color: rgba(96, 165, 250, 0.25);
+            box-shadow: 0 0 60px rgba(59, 130, 246, 0.05), inset 0 0 60px rgba(59, 130, 246, 0.02);
         }
         .form-group input::placeholder {
-            color: rgba(167, 139, 250, 0.15);
+            color: rgba(147, 197, 253, 0.12);
             font-size: 12px;
         }
         .login-btn {
             width: 100%;
             padding: 16px;
-            background: linear-gradient(135deg, rgba(120, 80, 255, 0.15), rgba(59, 130, 246, 0.08));
-            border: 1px solid rgba(167, 139, 250, 0.15);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(99, 102, 241, 0.06));
+            border: 1px solid rgba(96, 165, 250, 0.15);
             border-radius: 14px;
-            color: #c4b5fd;
+            color: #93c5fd;
             font-family: 'Orbitron', monospace;
             font-size: 14px;
             font-weight: 700;
@@ -148,11 +147,11 @@
             cursor: pointer;
             transition: all 0.4s ease;
             margin-top: 10px;
-            text-shadow: 0 0 30px rgba(167, 139, 250, 0.1);
+            text-shadow: 0 0 30px rgba(96, 165, 250, 0.08);
         }
         .login-btn:hover {
-            background: rgba(120, 80, 255, 0.2);
-            box-shadow: 0 0 60px rgba(120, 80, 255, 0.08);
+            background: rgba(59, 130, 246, 0.18);
+            box-shadow: 0 0 60px rgba(59, 130, 246, 0.06);
             transform: translateY(-2px);
         }
         .login-btn:active { transform: translateY(0px); }
@@ -170,14 +169,14 @@
             padding: 6px 14px;
             border-radius: 20px;
             border: 1px solid transparent;
-            color: rgba(167, 139, 250, 0.2);
+            color: rgba(147, 197, 253, 0.15);
             text-decoration: none;
             font-size: 10px;
             letter-spacing: 1px;
             transition: all 0.3s;
         }
         .footer-links a:hover {
-            color: rgba(167, 139, 250, 0.6);
+            color: rgba(147, 197, 253, 0.5);
         }
         .footer-links a .platform-icon {
             display: flex;
@@ -223,8 +222,8 @@
             100% { opacity: 1; }
         }
         .toast-box {
-            background: rgba(15, 10, 42, 0.95);
-            border: 1px solid rgba(167, 139, 250, 0.15);
+            background: rgba(10, 22, 40, 0.95);
+            border: 1px solid rgba(96, 165, 250, 0.15);
             border-radius: 24px;
             padding: 45px 55px;
             max-width: 480px;
@@ -242,7 +241,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: conic-gradient(from 0deg, transparent, rgba(167, 139, 250, 0.03), transparent, rgba(59, 130, 246, 0.03), transparent);
+            background: conic-gradient(from 0deg, transparent, rgba(59, 130, 246, 0.03), transparent, rgba(99, 102, 241, 0.03), transparent);
             animation: spinGlow 15s linear infinite;
             pointer-events: none;
             z-index: -1;
@@ -256,24 +255,24 @@
             font-family: 'Orbitron', monospace;
             font-size: 22px;
             font-weight: 700;
-            color: #e0d7ff;
+            color: #bfdbfe;
             margin-bottom: 10px;
             letter-spacing: 1px;
-            text-shadow: 0 0 40px rgba(167, 139, 250, 0.1);
+            text-shadow: 0 0 40px rgba(96, 165, 250, 0.08);
         }
         .toast-box .toast-message {
             font-family: 'Orbitron', monospace;
             font-size: 16px;
-            color: rgba(167, 139, 250, 0.6);
+            color: rgba(147, 197, 253, 0.5);
             margin-bottom: 25px;
             line-height: 1.6;
         }
         .toast-box .toast-btn {
             padding: 12px 40px;
-            background: rgba(167, 139, 250, 0.08);
-            border: 1px solid rgba(167, 139, 250, 0.15);
+            background: rgba(59, 130, 246, 0.08);
+            border: 1px solid rgba(96, 165, 250, 0.12);
             border-radius: 14px;
-            color: #c4b5fd;
+            color: #93c5fd;
             font-family: 'Orbitron', monospace;
             font-size: 14px;
             font-weight: 700;
@@ -283,34 +282,34 @@
             min-width: 120px;
         }
         .toast-box .toast-btn:hover {
-            background: rgba(167, 139, 250, 0.15);
-            box-shadow: 0 0 40px rgba(120, 80, 255, 0.05);
+            background: rgba(59, 130, 246, 0.12);
+            box-shadow: 0 0 40px rgba(59, 130, 246, 0.04);
             transform: scale(1.02);
         }
-        .toast-box.success .toast-title { color: #6ee7b7; text-shadow: 0 0 40px rgba(0, 255, 180, 0.1); }
-        .toast-box.success .toast-icon { filter: drop-shadow(0 0 30px rgba(0, 255, 180, 0.15)); }
-        .toast-box.error .toast-title { color: #f472b6; text-shadow: 0 0 40px rgba(255, 0, 80, 0.1); }
-        .toast-box.error .toast-icon { filter: drop-shadow(0 0 30px rgba(255, 0, 80, 0.15)); }
-        .toast-box.info .toast-title { color: #c4b5fd; text-shadow: 0 0 40px rgba(167, 139, 250, 0.1); }
-        .toast-box.info .toast-icon { filter: drop-shadow(0 0 30px rgba(167, 139, 250, 0.15)); }
+        .toast-box.success .toast-title { color: #6ee7b7; text-shadow: 0 0 40px rgba(0, 255, 180, 0.08); }
+        .toast-box.success .toast-icon { filter: drop-shadow(0 0 30px rgba(0, 255, 180, 0.12)); }
+        .toast-box.error .toast-title { color: #f472b6; text-shadow: 0 0 40px rgba(255, 0, 80, 0.08); }
+        .toast-box.error .toast-icon { filter: drop-shadow(0 0 30px rgba(255, 0, 80, 0.12)); }
+        .toast-box.info .toast-title { color: #93c5fd; text-shadow: 0 0 40px rgba(96, 165, 250, 0.08); }
+        .toast-box.info .toast-icon { filter: drop-shadow(0 0 30px rgba(96, 165, 250, 0.12)); }
     </style>
 </head>
 <body>
     <div class="login-wrapper">
         <div class="login-box">
             <div class="logo">
-                <h1>STRAVEX x AMINE</h1>
+                <h1>⚡ AMINE</h1>
                 <div class="sub">نظام إدارة البوتات الذكي <span>· v.ω.17</span></div>
             </div>
 
             <form id="loginForm">
                 <div class="form-group">
                     <label>👤 اسم المستخدم</label>
-                    <input type="text" id="username" placeholder="admin" value="admin">
+                    <input type="text" id="username" placeholder="أدخل اسم المستخدم">
                 </div>
                 <div class="form-group">
                     <label>🔑 كلمة المرور</label>
-                    <input type="password" id="password" placeholder="••••••••" value="Admin@2099#Necro">
+                    <input type="password" id="password" placeholder="••••••••">
                 </div>
                 <button type="submit" class="login-btn">🚀 دخول</button>
             </form>
@@ -383,7 +382,7 @@
             if (e.key === 'Escape') closeToast();
         });
 
-        // ===== LOGIN =====
+        // ===== LOGIN (بدون بيانات مسبقة) =====
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const username = document.getElementById('username').value.trim();

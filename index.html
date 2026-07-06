@@ -3,77 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>F7M Bot Manager</title>
+    <title>AMINE Bot Manager</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
         body {
             font-family: 'Orbitron', monospace;
-            background: #0f0a2a;
+            background: #0a1628;
             min-height: 100vh;
             background-image: 
-                radial-gradient(ellipse at 10% 20%, rgba(120, 80, 255, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 90% 80%, rgba(59, 130, 246, 0.10) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, rgba(100, 50, 255, 0.04) 0%, transparent 70%);
+                radial-gradient(ellipse at 10% 20%, rgba(59, 130, 246, 0.10) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 80%, rgba(99, 102, 241, 0.08) 0%, transparent 50%);
         }
         .container { max-width: 1300px; margin:0 auto; padding:20px; }
         
         /* HEADER */
         .header {
             display:flex; justify-content:space-between; align-items:center;
-            padding:18px 30px; background:rgba(255,255,255,0.03);
-            border:1px solid rgba(167,139,250,0.08); border-radius:18px;
+            padding:18px 30px; background:rgba(255,255,255,0.02);
+            border:1px solid rgba(96,165,250,0.06); border-radius:18px;
             backdrop-filter:blur(20px); margin-bottom:30px;
         }
         .header .logo {
             font-size:20px; font-weight:900;
-            background:linear-gradient(135deg,#c4b5fd,#818cf8,#60a5fa);
+            background:linear-gradient(135deg,#93c5fd,#818cf8,#60a5fa);
             -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-            text-shadow: 0 0 60px rgba(167,139,250,0.1);
+            text-shadow: 0 0 60px rgba(96,165,250,0.08);
         }
-        .header .logo span { font-weight:400; -webkit-text-fill-color:rgba(167,139,250,0.2); font-size:11px; }
+        .header .logo span { font-weight:400; -webkit-text-fill-color:rgba(147,197,253,0.15); font-size:11px; }
         .header .user-actions { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
-        .header .user-actions .username { font-size:11px; color:rgba(167,139,250,0.4); text-shadow: 0 0 20px rgba(167,139,250,0.05); }
+        .header .user-actions .username { font-size:11px; color:rgba(147,197,253,0.3); text-shadow: 0 0 20px rgba(96,165,250,0.05); }
         
         .btn {
-            padding:10px 20px; border:1px solid rgba(167,139,250,0.12);
-            border-radius:12px; background:rgba(167,139,250,0.03);
-            color:#c4b5fd; font-family:'Orbitron',monospace; font-size:11px;
+            padding:10px 20px; border:1px solid rgba(96,165,250,0.10);
+            border-radius:12px; background:rgba(96,165,250,0.02);
+            color:#93c5fd; font-family:'Orbitron',monospace; font-size:11px;
             cursor:pointer; transition:all 0.3s ease; text-decoration:none;
-            display:inline-block; text-align:center; text-shadow: 0 0 20px rgba(167,139,250,0.05);
+            display:inline-block; text-align:center; text-shadow: 0 0 20px rgba(96,165,250,0.05);
         }
-        .btn:hover { background:rgba(167,139,250,0.08); box-shadow:0 0 40px rgba(120,80,255,0.04); }
-        .btn-danger { border-color:rgba(255,0,80,0.15); color:#f472b6; }
-        .btn-danger:hover { background:rgba(255,0,80,0.06); }
-        .btn-primary { border-color:rgba(167,139,250,0.2); background:rgba(167,139,250,0.06); }
-        .btn-primary:hover { background:rgba(167,139,250,0.12); }
-        .btn-success { border-color:rgba(0,255,180,0.15); color:#6ee7b7; }
-        .btn-success:hover { background:rgba(0,255,180,0.04); }
-        .btn-purple { border-color:rgba(180,0,255,0.15); color:#c084fc; }
-        .btn-purple:hover { background:rgba(180,0,255,0.04); }
+        .btn:hover { background:rgba(96,165,250,0.06); box-shadow:0 0 40px rgba(59,130,246,0.03); }
+        .btn-danger { border-color:rgba(255,0,80,0.12); color:#f472b6; }
+        .btn-danger:hover { background:rgba(255,0,80,0.04); }
+        .btn-primary { border-color:rgba(96,165,250,0.15); background:rgba(96,165,250,0.04); }
+        .btn-primary:hover { background:rgba(96,165,250,0.08); }
+        .btn-success { border-color:rgba(0,255,180,0.12); color:#6ee7b7; }
+        .btn-success:hover { background:rgba(0,255,180,0.03); }
+        .btn-purple { border-color:rgba(180,0,255,0.12); color:#c084fc; }
+        .btn-purple:hover { background:rgba(180,0,255,0.03); }
 
         /* GRID */
         .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:25px; }
         .card {
-            background:rgba(255,255,255,0.02); border:1px solid rgba(167,139,250,0.05);
+            background:rgba(255,255,255,0.015); border:1px solid rgba(96,165,250,0.04);
             border-radius:18px; padding:25px; backdrop-filter:blur(10px);
             transition:all 0.4s ease; position:relative; overflow:hidden;
         }
-        .card:hover { border-color:rgba(167,139,250,0.12); }
+        .card:hover { border-color:rgba(96,165,250,0.08); }
         .card h3 {
-            font-size:12px; color:rgba(167,139,250,0.3);
+            font-size:12px; color:rgba(147,197,253,0.25);
             letter-spacing:2px; text-transform:uppercase; margin-bottom:15px;
-            text-shadow: 0 0 20px rgba(167,139,250,0.05);
+            text-shadow: 0 0 20px rgba(96,165,250,0.05);
         }
         .input-field {
             width:100%; padding:14px 16px;
-            background:rgba(255,255,255,0.02); border:1px solid rgba(167,139,250,0.06);
-            border-radius:12px; color:#e0d7ff; font-family:'Orbitron',monospace;
+            background:rgba(255,255,255,0.015); border:1px solid rgba(96,165,250,0.05);
+            border-radius:12px; color:#bfdbfe; font-family:'Orbitron',monospace;
             font-size:12px; transition:all 0.3s; margin-top:6px;
-            text-shadow: 0 0 20px rgba(167,139,250,0.05);
+            text-shadow: 0 0 20px rgba(96,165,250,0.05);
         }
-        .input-field:focus { outline:none; border-color:rgba(167,139,250,0.2); }
-        .input-field::placeholder { color:rgba(167,139,250,0.1); }
+        .input-field:focus { outline:none; border-color:rgba(96,165,250,0.15); }
+        .input-field::placeholder { color:rgba(147,197,253,0.08); }
         .flex-row { display:flex; gap:12px; flex-wrap:wrap; margin-top:10px; }
         .flex-row .btn { flex:1; min-width:70px; text-align:center; }
 
@@ -99,8 +98,8 @@
             100% { opacity: 1; }
         }
         .toast-box {
-            background: rgba(15, 10, 42, 0.95);
-            border: 1px solid rgba(167, 139, 250, 0.15);
+            background: rgba(10, 22, 40, 0.95);
+            border: 1px solid rgba(96, 165, 250, 0.15);
             border-radius: 24px;
             padding: 45px 55px;
             max-width: 480px;
@@ -118,7 +117,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: conic-gradient(from 0deg, transparent, rgba(167, 139, 250, 0.03), transparent, rgba(59, 130, 246, 0.03), transparent);
+            background: conic-gradient(from 0deg, transparent, rgba(59, 130, 246, 0.03), transparent, rgba(99, 102, 241, 0.03), transparent);
             animation: spinGlow 15s linear infinite;
             pointer-events: none;
             z-index: -1;
@@ -136,24 +135,24 @@
             font-family: 'Orbitron', monospace;
             font-size: 22px;
             font-weight: 700;
-            color: #e0d7ff;
+            color: #bfdbfe;
             margin-bottom: 10px;
             letter-spacing: 1px;
-            text-shadow: 0 0 40px rgba(167, 139, 250, 0.1);
+            text-shadow: 0 0 40px rgba(96, 165, 250, 0.08);
         }
         .toast-box .toast-message {
             font-family: 'Orbitron', monospace;
             font-size: 16px;
-            color: rgba(167, 139, 250, 0.6);
+            color: rgba(147, 197, 253, 0.5);
             margin-bottom: 25px;
             line-height: 1.6;
         }
         .toast-box .toast-btn {
             padding: 12px 40px;
-            background: rgba(167, 139, 250, 0.08);
-            border: 1px solid rgba(167, 139, 250, 0.15);
+            background: rgba(59, 130, 246, 0.08);
+            border: 1px solid rgba(96, 165, 250, 0.12);
             border-radius: 14px;
-            color: #c4b5fd;
+            color: #93c5fd;
             font-family: 'Orbitron', monospace;
             font-size: 14px;
             font-weight: 700;
@@ -163,41 +162,41 @@
             min-width: 120px;
         }
         .toast-box .toast-btn:hover {
-            background: rgba(167, 139, 250, 0.15);
-            box-shadow: 0 0 40px rgba(120, 80, 255, 0.05);
+            background: rgba(59, 130, 246, 0.12);
+            box-shadow: 0 0 40px rgba(59, 130, 246, 0.04);
             transform: scale(1.02);
         }
-        .toast-box.success .toast-title { color: #6ee7b7; text-shadow: 0 0 40px rgba(0, 255, 180, 0.1); }
-        .toast-box.success .toast-icon { filter: drop-shadow(0 0 30px rgba(0, 255, 180, 0.15)); }
-        .toast-box.error .toast-title { color: #f472b6; text-shadow: 0 0 40px rgba(255, 0, 80, 0.1); }
-        .toast-box.error .toast-icon { filter: drop-shadow(0 0 30px rgba(255, 0, 80, 0.15)); }
-        .toast-box.info .toast-title { color: #c4b5fd; text-shadow: 0 0 40px rgba(167, 139, 250, 0.1); }
-        .toast-box.info .toast-icon { filter: drop-shadow(0 0 30px rgba(167, 139, 250, 0.15)); }
+        .toast-box.success .toast-title { color: #6ee7b7; text-shadow: 0 0 40px rgba(0, 255, 180, 0.08); }
+        .toast-box.success .toast-icon { filter: drop-shadow(0 0 30px rgba(0, 255, 180, 0.12)); }
+        .toast-box.error .toast-title { color: #f472b6; text-shadow: 0 0 40px rgba(255, 0, 80, 0.08); }
+        .toast-box.error .toast-icon { filter: drop-shadow(0 0 30px rgba(255, 0, 80, 0.12)); }
+        .toast-box.info .toast-title { color: #93c5fd; text-shadow: 0 0 40px rgba(96, 165, 250, 0.08); }
+        .toast-box.info .toast-icon { filter: drop-shadow(0 0 30px rgba(96, 165, 250, 0.12)); }
 
         .logs-box {
             max-height:120px; overflow-y:auto; margin-top:10px;
-            background:rgba(0,0,0,0.2); border-radius:12px; padding:12px;
-            font-size:10px; color:rgba(167,139,250,0.3); font-family:monospace;
+            background:rgba(0,0,0,0.15); border-radius:12px; padding:12px;
+            font-size:10px; color:rgba(147,197,253,0.2); font-family:monospace;
             line-height:1.8;
         }
-        .logs-box .log-line { border-bottom:1px solid rgba(167,139,250,0.02); padding:2px 0; }
-        .logs-box .log-line .time { color:rgba(167,139,250,0.15); }
-        .logs-box .log-line .highlight { color:rgba(167,139,250,0.5); }
+        .logs-box .log-line { border-bottom:1px solid rgba(96,165,250,0.02); padding:2px 0; }
+        .logs-box .log-line .time { color:rgba(147,197,253,0.10); }
+        .logs-box .log-line .highlight { color:rgba(147,197,253,0.35); }
 
         .vip-list { max-height:100px; overflow-y:auto; margin-top:10px; }
         .vip-list .item {
             display:flex; justify-content:space-between; align-items:center;
-            padding:6px 0; border-bottom:1px solid rgba(167,139,250,0.03);
-            font-size:11px; color:rgba(167,139,250,0.3);
+            padding:6px 0; border-bottom:1px solid rgba(96,165,250,0.02);
+            font-size:11px; color:rgba(147,197,253,0.2);
         }
-        .vip-list .item .id { color:rgba(167,139,250,0.5); }
-        .vip-list .item .del { color:rgba(255,0,80,0.2); cursor:pointer; }
+        .vip-list .item .id { color:rgba(147,197,253,0.4); }
+        .vip-list .item .del { color:rgba(255,0,80,0.15); cursor:pointer; }
         .vip-list .item .del:hover { color:#f472b6; }
 
         .footer-links {
             display:flex; justify-content:center; gap:12px;
             margin-top:30px; padding:15px;
-            border-top:1px solid rgba(167,139,250,0.03);
+            border-top:1px solid rgba(96,165,250,0.02);
             flex-wrap:wrap;
         }
         .footer-links a {
@@ -207,14 +206,14 @@
             padding: 6px 14px;
             border-radius: 20px;
             border: 1px solid transparent;
-            color: rgba(167, 139, 250, 0.2);
+            color: rgba(147, 197, 253, 0.12);
             text-decoration: none;
             font-size: 10px;
             letter-spacing: 1px;
             transition: all 0.3s;
         }
         .footer-links a:hover {
-            color: rgba(167, 139, 250, 0.6);
+            color: rgba(147, 197, 253, 0.4);
         }
         .footer-links a .platform-icon {
             display: flex;
@@ -228,13 +227,13 @@
             height: 100%;
         }
         .footer-links .link-youtube:hover {
-            border-color: rgba(255, 0, 0, 0.15);
-            background: rgba(255, 0, 0, 0.04);
+            border-color: rgba(255, 0, 0, 0.12);
+            background: rgba(255, 0, 0, 0.03);
             color: #ff6b6b;
         }
         .footer-links .link-telegram:hover {
-            border-color: rgba(0, 136, 204, 0.15);
-            background: rgba(0, 136, 204, 0.04);
+            border-color: rgba(0, 136, 204, 0.12);
+            background: rgba(0, 136, 204, 0.03);
             color: #4fc3f7;
         }
 
@@ -249,7 +248,7 @@
     <div class="container">
         <!-- HEADER -->
         <div class="header">
-            <div class="logo">STRAVEX x AMINE <span>Bot Manager · v.ω.17</span></div>
+            <div class="logo">⚡ AMINE <span>Bot Manager · v.ω.17</span></div>
             <div class="user-actions">
                 <span class="username">👤 {{ username }}</span>
                 {% if role == 'admin' %}
@@ -264,21 +263,21 @@
             <div class="card">
                 <h3>🔥 محرك السبام</h3>
                 <div>
-                    <label style="font-size:11px; color:rgba(167,139,250,0.2);">🎯 UID الهدف</label>
+                    <label style="font-size:11px; color:rgba(147,197,253,0.15);">🎯 UID الهدف</label>
                     <input type="text" id="targetUid" class="input-field" placeholder="مثال: 5364803546">
                 </div>
                 <div class="flex-row">
                     <button class="btn btn-primary" onclick="spamStart()">▶ START</button>
                     <button class="btn btn-danger" onclick="spamStop()">⏹ STOP</button>
                 </div>
-                <div id="spamStatus" style="margin-top:12px; font-size:11px; color:rgba(167,139,250,0.25);">⚪ جاهز</div>
+                <div id="spamStatus" style="margin-top:12px; font-size:11px; color:rgba(147,197,253,0.15);">⚪ جاهز</div>
             </div>
 
-            <!-- VIP BOT (PLAYER ID فقط) -->
+            <!-- VIP BOT -->
             <div class="card">
                 <h3>👑 VIP Bot</h3>
                 <div>
-                    <label style="font-size:11px; color:rgba(167,139,250,0.2);">🎯 Player ID</label>
+                    <label style="font-size:11px; color:rgba(147,197,253,0.15);">🎯 Player ID</label>
                     <input type="text" id="vipPlayerId" class="input-field" placeholder="أدخل ID اللاعب">
                 </div>
                 <div class="flex-row">
@@ -286,7 +285,7 @@
                     <button class="btn btn-danger" onclick="vipRemove()">➖ حذف</button>
                     <button class="btn" onclick="vipList()">📋 قائمة</button>
                 </div>
-                <div id="vipStatus" style="margin-top:12px; font-size:11px; color:rgba(167,139,250,0.25);"></div>
+                <div id="vipStatus" style="margin-top:12px; font-size:11px; color:rgba(147,197,253,0.15);"></div>
                 <div class="vip-list" id="vipListContainer"></div>
             </div>
         </div>
@@ -299,7 +298,7 @@
                     <input type="text" id="infoUid" class="input-field" placeholder="UID" style="flex:1;">
                     <button class="btn btn-purple" onclick="getInfo()">🔍 بحث</button>
                 </div>
-                <div id="infoResult" style="margin-top:12px; font-size:11px; color:rgba(167,139,250,0.3); max-height:150px; overflow-y:auto; background:rgba(0,0,0,0.15); border-radius:10px; padding:12px; line-height:1.6;"></div>
+                <div id="infoResult" style="margin-top:12px; font-size:11px; color:rgba(147,197,253,0.2); max-height:150px; overflow-y:auto; background:rgba(0,0,0,0.10); border-radius:10px; padding:12px; line-height:1.6;"></div>
             </div>
 
             <!-- LOGS -->
@@ -421,7 +420,7 @@
             } catch { showToast('خطأ في الاتصال', 'error', '❌ فشل'); }
         }
 
-        // ========== VIP (PLAYER ID ONLY) ==========
+        // ========== VIP ==========
         async function vipAdd() {
             const playerId = document.getElementById('vipPlayerId').value.trim();
             if (!playerId) { showToast('أدخل Player ID', 'error', '⚠️ تنبيه'); return; }
@@ -468,11 +467,11 @@
                 const data = await res.json();
                 const container = document.getElementById('vipListContainer');
                 if (data.count === 0) {
-                    container.innerHTML = '<div style="color:rgba(167,139,250,0.1); font-size:11px;">لا يوجد بوتات VIP</div>';
+                    container.innerHTML = '<div style="color:rgba(147,197,253,0.08); font-size:11px;">لا يوجد بوتات VIP</div>';
                     return;
                 }
                 container.innerHTML = data.vips.map(v => 
-                    `<div class="item"><span class="id">👑 ${v.player_id}</span><span style="font-size:9px; color:rgba(167,139,250,0.15);">${v.uid}</span></div>`
+                    `<div class="item"><span class="id">👑 ${v.player_id}</span><span style="font-size:9px; color:rgba(147,197,253,0.10);">${v.uid}</span></div>`
                 ).join('');
                 showToast(`${data.count} بوت VIP نشط`, 'info', '📋 قائمة');
             } catch { showToast('خطأ في جلب القائمة', 'error', '❌ فشل'); }
@@ -487,7 +486,7 @@
                 const data = await res.json();
                 const container = document.getElementById('infoResult');
                 if (data.status === 'success') {
-                    container.innerHTML = `<pre style="color:rgba(167,139,250,0.6); font-size:10px;">${JSON.stringify(data.data, null, 2)}</pre>`;
+                    container.innerHTML = `<pre style="color:rgba(147,197,253,0.5); font-size:10px;">${JSON.stringify(data.data, null, 2)}</pre>`;
                     showToast(`تم جلب معلومات ${uid}`, 'success', '✅ نجاح');
                 } else {
                     container.innerHTML = `<span style="color:#f472b6;">⚠️ ${data.message || 'فشل'}</span>`;

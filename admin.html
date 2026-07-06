@@ -9,197 +9,125 @@
         * { margin:0; padding:0; box-sizing:border-box; }
         body {
             font-family: 'Orbitron', monospace;
-            background: #0a1628;
+            background: #f0f4f9;
             min-height: 100vh;
-            background-image: 
-                radial-gradient(ellipse at 20% 30%, rgba(59, 130, 246, 0.10) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 70%, rgba(99, 102, 241, 0.08) 0%, transparent 50%);
         }
         .container { max-width:1100px; margin:0 auto; padding:25px; }
         
         /* HEADER */
         .header {
             display:flex; justify-content:space-between; align-items:center;
-            padding:20px 30px; background:rgba(255,255,255,0.02);
-            border:1px solid rgba(96,165,250,0.06); border-radius:18px;
-            backdrop-filter:blur(20px); margin-bottom:30px;
+            padding:20px 30px; background:#ffffff;
+            border-radius:16px; box-shadow:0 2px 12px rgba(0,0,0,0.04);
+            margin-bottom:25px;
         }
         .header h1 {
-            font-size:22px;
-            background:linear-gradient(135deg,#f472b6,#93c5fd);
-            -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-            text-shadow: 0 0 40px rgba(147,197,253,0.08);
+            font-size:22px; color:#1a2a4a;
+            letter-spacing:1px;
         }
+        .header h1 span { color:#3b82f6; }
         .header .actions { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
-        .header .actions .user { font-size:11px; color:rgba(147,197,253,0.3); }
+        .header .actions .user { font-size:11px; color:#64748b; font-weight:700; }
         
         .btn {
-            padding:10px 22px; border:1px solid rgba(96,165,250,0.10);
-            border-radius:12px; background:rgba(96,165,250,0.02);
-            color:#93c5fd; font-family:'Orbitron',monospace; font-size:11px;
-            cursor:pointer; transition:all 0.3s; text-decoration:none;
-            display:inline-block;
+            padding:10px 22px; border:2px solid #e2e8f0; border-radius:12px;
+            background:#ffffff; color:#1a2a4a; font-family:'Orbitron',monospace;
+            font-size:11px; cursor:pointer; transition:all 0.3s;
+            text-decoration:none; display:inline-block; font-weight:700;
         }
-        .btn:hover { background:rgba(96,165,250,0.06); box-shadow:0 0 40px rgba(59,130,246,0.03); }
-        .btn-danger { border-color:rgba(255,0,80,0.12); color:#f472b6; }
-        .btn-danger:hover { background:rgba(255,0,80,0.04); }
-        .btn-success { border-color:rgba(0,255,180,0.12); color:#6ee7b7; }
-        .btn-success:hover { background:rgba(0,255,180,0.03); }
+        .btn:hover { border-color:#3b82f6; background:#f8fafc; }
+        .btn-danger { border-color:#fca5a5; color:#dc2626; }
+        .btn-danger:hover { border-color:#dc2626; background:#fef2f2; }
+        .btn-success { border-color:#86efac; color:#16a34a; }
+        .btn-success:hover { background:#16a34a; color:#fff; border-color:#16a34a; }
+        .btn-sm { padding:4px 15px; font-size:10px; }
         
+        /* CARDS */
         .card {
-            background:rgba(255,255,255,0.015); border:1px solid rgba(96,165,250,0.04);
-            border-radius:18px; padding:25px; backdrop-filter:blur(10px);
+            background:#ffffff; border-radius:16px; padding:25px;
+            box-shadow:0 2px 12px rgba(0,0,0,0.04);
+            border:1px solid rgba(0,0,0,0.03);
             margin-bottom:25px;
         }
         .card h3 {
-            font-size:12px; color:rgba(147,197,253,0.25);
-            letter-spacing:2px; text-transform:uppercase; margin-bottom:15px;
-            text-shadow: 0 0 20px rgba(96,165,250,0.05);
+            font-size:12px; color:#94a3b8; letter-spacing:2px;
+            text-transform:uppercase; margin-bottom:18px; font-weight:700;
         }
         .input-field {
-            padding:14px 16px; background:rgba(255,255,255,0.015);
-            border:1px solid rgba(96,165,250,0.05); border-radius:12px;
-            color:#bfdbfe; font-family:'Orbitron',monospace; font-size:12px;
-            transition:all 0.3s; flex:1; min-width:150px;
-            text-shadow: 0 0 20px rgba(96,165,250,0.05);
+            padding:14px 16px; background:#f8fafc; border:2px solid #e2e8f0;
+            border-radius:12px; color:#1a2a4a; font-family:'Orbitron',monospace;
+            font-size:12px; transition:all 0.3s; flex:1; min-width:150px;
         }
-        .input-field:focus { outline:none; border-color:rgba(96,165,250,0.15); }
-        .input-field::placeholder { color:rgba(147,197,253,0.08); }
+        .input-field:focus { outline:none; border-color:#3b82f6; box-shadow:0 0 0 4px rgba(59,130,246,0.06); }
+        .input-field::placeholder { color:#94a3b8; font-size:11px; }
         .flex-row { display:flex; gap:15px; flex-wrap:wrap; align-items:center; }
         
+        /* TABLE */
         .users-table { width:100%; border-collapse:collapse; }
-        .users-table th { text-align:right; padding:12px; color:rgba(147,197,253,0.12); font-size:10px; letter-spacing:1px; border-bottom:1px solid rgba(96,165,250,0.02); }
-        .users-table td { padding:12px; border-bottom:1px solid rgba(96,165,250,0.015); font-size:12px; color:rgba(147,197,253,0.3); }
-        .users-table .admin-user { color:rgba(147,197,253,0.5); }
-        .users-table .user-role { color:rgba(147,197,253,0.12); font-size:10px; }
-        .users-table .user-date { color:rgba(147,197,253,0.08); font-size:10px; }
-        .users-table .btn-sm { padding:4px 15px; font-size:10px; }
-        
-        .msg { margin-top:12px; font-size:12px; color:rgba(147,197,253,0.15); }
-        .msg.success { color:#6ee7b7; }
-        .msg.error { color:#f472b6; }
+        .users-table th {
+            text-align:right; padding:14px 12px;
+            color:#94a3b8; font-size:10px; letter-spacing:1px;
+            border-bottom:2px solid #f1f5f9; font-weight:700;
+        }
+        .users-table td {
+            padding:14px 12px; border-bottom:1px solid #f1f5f9;
+            font-size:12px; color:#1a2a4a;
+        }
+        .users-table .admin-user { color:#3b82f6; font-weight:700; }
+        .users-table .user-role { color:#94a3b8; font-size:10px; }
+        .users-table .user-date { color:#94a3b8; font-size:10px; }
+        .users-table tr:hover { background:#f8fafc; }
 
+        .msg { margin-top:14px; font-size:12px; font-weight:700; padding:10px 16px; border-radius:10px; }
+        .msg.success { color:#16a34a; background:#f0fdf4; border:1px solid #86efac; }
+        .msg.error { color:#dc2626; background:#fef2f2; border:1px solid #fca5a5; }
+
+        /* FOOTER */
         .footer-links {
-            display:flex; justify-content:center; gap:12px;
+            display:flex; justify-content:center; gap:15px;
             margin-top:30px; padding:15px;
-            border-top:1px solid rgba(96,165,250,0.02);
+            border-top:1px solid #e2e8f0;
             flex-wrap:wrap;
         }
         .footer-links a {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 14px;
-            border-radius: 20px;
-            border: 1px solid transparent;
-            color: rgba(147, 197, 253, 0.12);
-            text-decoration: none;
-            font-size: 10px;
-            letter-spacing: 1px;
-            transition: all 0.3s;
+            display:inline-flex; align-items:center; gap:6px;
+            padding:5px 12px; border-radius:20px;
+            color:#94a3b8; text-decoration:none; font-size:10px;
+            letter-spacing:1px; transition:all 0.3s; font-weight:700;
         }
-        .footer-links a:hover { color: rgba(147, 197, 253, 0.4); }
-        .footer-links a .platform-icon { display:flex; align-items:center; justify-content:center; width:18px; height:18px; }
+        .footer-links a:hover { color:#1a2a4a; }
+        .footer-links a .platform-icon { display:flex; align-items:center; justify-content:center; width:16px; height:16px; }
         .footer-links a .platform-icon svg { width:100%; height:100%; }
-        .footer-links .link-youtube:hover { border-color:rgba(255,0,0,0.12); background:rgba(255,0,0,0.03); color:#ff6b6b; }
-        .footer-links .link-telegram:hover { border-color:rgba(0,136,204,0.12); background:rgba(0,136,204,0.03); color:#4fc3f7; }
 
-        /* ===== LARGE TOAST ===== */
+        /* TOAST */
         .toast-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            z-index: 99999;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            animation: fadeInOverlay 0.3s ease;
+            position:fixed; top:0; left:0; right:0; bottom:0;
+            background:rgba(0,0,0,0.5); backdrop-filter:blur(6px);
+            z-index:99999; display:none; justify-content:center; align-items:center;
         }
-        .toast-overlay.show { display: flex; }
-        @keyframes fadeInOverlay {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
+        .toast-overlay.show { display:flex; }
         .toast-box {
-            background: rgba(10, 22, 40, 0.95);
-            border: 1px solid rgba(96, 165, 250, 0.15);
-            border-radius: 24px;
-            padding: 45px 55px;
-            max-width: 480px;
-            width: 90%;
-            text-align: center;
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
-            animation: popIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-            overflow: hidden;
-        }
-        .toast-box::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(from 0deg, transparent, rgba(59, 130, 246, 0.03), transparent, rgba(99, 102, 241, 0.03), transparent);
-            animation: spinGlow 15s linear infinite;
-            pointer-events: none;
-            z-index: -1;
-        }
-        @keyframes spinGlow {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            background:#ffffff; border-radius:20px; padding:40px 50px;
+            max-width:420px; width:90%; text-align:center;
+            box-shadow:0 30px 80px rgba(0,0,0,0.15);
+            animation:popIn 0.3s ease;
         }
         @keyframes popIn {
-            0% { opacity: 0; transform: scale(0.85) translateY(20px); }
-            100% { opacity: 1; transform: scale(1) translateY(0); }
+            0% { opacity:0; transform:scale(0.9) translateY(10px); }
+            100% { opacity:1; transform:scale(1) translateY(0); }
         }
-        .toast-box .toast-icon { font-size: 48px; margin-bottom: 15px; display: block; }
-        .toast-box .toast-title {
-            font-family: 'Orbitron', monospace;
-            font-size: 22px;
-            font-weight: 700;
-            color: #bfdbfe;
-            margin-bottom: 10px;
-            letter-spacing: 1px;
-            text-shadow: 0 0 40px rgba(96, 165, 250, 0.08);
-        }
-        .toast-box .toast-message {
-            font-family: 'Orbitron', monospace;
-            font-size: 16px;
-            color: rgba(147, 197, 253, 0.5);
-            margin-bottom: 25px;
-            line-height: 1.6;
-        }
+        .toast-box .toast-icon { font-size:44px; margin-bottom:12px; display:block; }
+        .toast-box .toast-title { font-size:20px; font-weight:700; color:#1a2a4a; margin-bottom:8px; }
+        .toast-box .toast-message { font-size:15px; color:#64748b; margin-bottom:20px; line-height:1.6; }
         .toast-box .toast-btn {
-            padding: 12px 40px;
-            background: rgba(59, 130, 246, 0.08);
-            border: 1px solid rgba(96, 165, 250, 0.12);
-            border-radius: 14px;
-            color: #93c5fd;
-            font-family: 'Orbitron', monospace;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            letter-spacing: 2px;
-            min-width: 120px;
+            padding:10px 40px; background:#3b82f6; border:none; border-radius:12px;
+            color:#fff; font-family:'Orbitron',monospace; font-size:13px; font-weight:700;
+            cursor:pointer; transition:all 0.3s; letter-spacing:1px;
         }
-        .toast-box .toast-btn:hover {
-            background: rgba(59, 130, 246, 0.12);
-            box-shadow: 0 0 40px rgba(59, 130, 246, 0.04);
-            transform: scale(1.02);
-        }
-        .toast-box.success .toast-title { color: #6ee7b7; text-shadow: 0 0 40px rgba(0, 255, 180, 0.08); }
-        .toast-box.success .toast-icon { filter: drop-shadow(0 0 30px rgba(0, 255, 180, 0.12)); }
-        .toast-box.error .toast-title { color: #f472b6; text-shadow: 0 0 40px rgba(255, 0, 80, 0.08); }
-        .toast-box.error .toast-icon { filter: drop-shadow(0 0 30px rgba(255, 0, 80, 0.12)); }
-        .toast-box.info .toast-title { color: #93c5fd; text-shadow: 0 0 40px rgba(96, 165, 250, 0.08); }
-        .toast-box.info .toast-icon { filter: drop-shadow(0 0 30px rgba(96, 165, 250, 0.12)); }
+        .toast-box .toast-btn:hover { background:#2563eb; }
+        .toast-box.success .toast-title { color:#16a34a; }
+        .toast-box.error .toast-title { color:#dc2626; }
+        .toast-box.info .toast-title { color:#3b82f6; }
 
         @media (max-width:650px) {
             .header { flex-direction:column; gap:12px; text-align:center; }
@@ -207,6 +135,8 @@
             .flex-row { flex-direction:column; }
             .flex-row .input-field { width:100%; }
             .flex-row .btn { width:100%; }
+            .users-table { font-size:11px; }
+            .users-table th, .users-table td { padding:10px 6px; }
         }
     </style>
 </head>
@@ -214,7 +144,7 @@
     <div class="container">
         <!-- HEADER -->
         <div class="header">
-            <h1>👑 ADMIN PANEL</h1>
+            <h1>👑 <span>ADMIN</span> PANEL</h1>
             <div class="actions">
                 <span class="user">👤 {{ current_user }}</span>
                 <button class="btn btn-danger" onclick="logout()">🚪</button>
@@ -230,7 +160,7 @@
                 <input type="text" id="newPassword" class="input-field" placeholder="كلمة المرور">
                 <button class="btn btn-success" onclick="createUser()">CREATE</button>
             </div>
-            <div id="adminMsg" class="msg"></div>
+            <div id="adminMsg" class="msg" style="display:none;"></div>
         </div>
 
         <!-- USERS LIST -->
@@ -257,7 +187,7 @@
                             {% if u != 'admin' %}
                             <button class="btn btn-danger btn-sm" onclick="deleteUser('{{ u }}')">🗑</button>
                             {% else %}
-                            <span style="color:rgba(147,197,253,0.04); font-size:10px;">—</span>
+                            <span style="color:#e2e8f0; font-size:10px;">—</span>
                             {% endif %}
                         </td>
                     </tr>
@@ -266,37 +196,24 @@
             </table>
         </div>
 
-        <!-- FOOTER LINKS -->
+        <!-- FOOTER -->
         <div class="footer-links">
-            <a href="https://youtube.com/@stravexgm?si=JfbKlk1iBUGhR4l4" target="_blank" class="link-youtube">
-                <span class="platform-icon">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z" fill="#FF0000"/>
-                        <path d="M9.545 15.568V8.432L15.818 12l-6.273 3.568z" fill="white"/>
-                    </svg>
-                </span>
+            <a href="https://youtube.com/@stravexgm?si=JfbKlk1iBUGhR4l4" target="_blank">
+                <span class="platform-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z" fill="#FF0000"/><path d="M9.545 15.568V8.432L15.818 12l-6.273 3.568z" fill="white"/></svg></span>
                 STRAVEX GM
             </a>
-            <a href="https://t.me/xAMiNE_Core" target="_blank" class="link-telegram">
-                <span class="platform-icon">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" fill="#0088cc"/>
-                    </svg>
-                </span>
+            <a href="https://t.me/xAMiNE_Core" target="_blank">
+                <span class="platform-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" fill="#0088cc"/></svg></span>
                 AMINE Core
             </a>
-            <a href="https://t.me/stravex_oficiel" target="_blank" class="link-telegram">
-                <span class="platform-icon">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" fill="#0088cc"/>
-                    </svg>
-                </span>
+            <a href="https://t.me/stravex_oficiel" target="_blank">
+                <span class="platform-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" fill="#0088cc"/></svg></span>
                 STRAVEX Official
             </a>
         </div>
     </div>
 
-    <!-- TOAST OVERLAY -->
+    <!-- TOAST -->
     <div class="toast-overlay" id="toastOverlay">
         <div class="toast-box" id="toastBox">
             <span class="toast-icon" id="toastIcon">ℹ️</span>
@@ -307,8 +224,8 @@
     </div>
 
     <script>
-        // ===== LARGE TOAST =====
-        function showToast(message, type = 'info', title = '') {
+        // ===== TOAST =====
+        function showToast(message, type='info', title='') {
             const overlay = document.getElementById('toastOverlay');
             const icon = document.getElementById('toastIcon');
             const titleEl = document.getElementById('toastTitle');
@@ -322,7 +239,6 @@
             titleEl.textContent = titles[type] || 'تنبيه';
             msgEl.textContent = message;
             box.className = 'toast-box ' + type;
-
             overlay.classList.add('show');
         }
 
@@ -334,7 +250,7 @@
             if (e.key === 'Escape') closeToast();
         });
 
-        // ===== ADMIN FUNCTIONS =====
+        // ===== CREATE USER =====
         async function createUser() {
             const username = document.getElementById('newUsername').value.trim();
             const password = document.getElementById('newPassword').value.trim();
@@ -342,6 +258,7 @@
 
             if (!username || !password) {
                 showToast('املأ جميع الحقول', 'error', '⚠️ تنبيه');
+                msg.style.display = 'block';
                 msg.className = 'msg error';
                 msg.textContent = '⚠️ املأ جميع الحقول';
                 return;
@@ -357,6 +274,7 @@
 
                 if (res.ok) {
                     showToast(data.status, 'success', '✅ تم التنفيذ');
+                    msg.style.display = 'block';
                     msg.className = 'msg success';
                     msg.textContent = '✅ ' + data.status;
                     document.getElementById('newUsername').value = '';
@@ -364,16 +282,19 @@
                     setTimeout(() => location.reload(), 1500);
                 } else {
                     showToast(data.error || 'فشل', 'error', '❌ فشل');
+                    msg.style.display = 'block';
                     msg.className = 'msg error';
                     msg.textContent = '❌ ' + (data.error || 'فشل');
                 }
             } catch (e) {
                 showToast('خطأ في الاتصال', 'error', '❌ فشل');
+                msg.style.display = 'block';
                 msg.className = 'msg error';
                 msg.textContent = '❌ خطأ في الاتصال';
             }
         }
 
+        // ===== DELETE USER =====
         async function deleteUser(username) {
             if (!confirm(`⚠️ حذف المستخدم "${username}" وجميع بياناته؟`)) return;
 
@@ -396,6 +317,7 @@
             }
         }
 
+        // ===== LOGOUT =====
         async function logout() {
             await fetch('/api/logout', { method: 'POST' });
             window.location.href = '/login';

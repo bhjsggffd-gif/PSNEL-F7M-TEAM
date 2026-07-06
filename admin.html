@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>F7M · Admin Panel</title>
+    <title>F7M TEAM · Admin Panel</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
@@ -13,7 +13,6 @@
             min-height: 100vh;
             overflow-x: hidden;
         }
-        /* Floating Orbs */
         .orb {
             position: fixed;
             border-radius: 50%;
@@ -29,13 +28,13 @@
         }
         .orb-2 {
             width: 500px; height: 500px;
-            background: rgba(255, 34, 255, 0.04);
+            background: rgba(0, 150, 255, 0.04);
             bottom: -150px; right: -150px;
             animation: orbFloat 25s ease-in-out infinite alternate-reverse;
         }
         .orb-3 {
             width: 300px; height: 300px;
-            background: rgba(0, 255, 136, 0.03);
+            background: rgba(0, 100, 255, 0.03);
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             animation: orbFloat 30s ease-in-out infinite alternate;
@@ -81,6 +80,7 @@
         .header .actions .user {
             font-size: 11px;
             color: rgba(0, 240, 255, 0.25);
+            text-shadow: 0 0 20px rgba(0, 240, 255, 0.04);
         }
 
         .btn {
@@ -95,6 +95,7 @@
             transition: all 0.3s;
             text-decoration: none;
             display: inline-block;
+            text-shadow: 0 0 20px rgba(0, 240, 255, 0.04);
         }
         .btn:hover {
             background: rgba(0, 240, 255, 0.06);
@@ -129,11 +130,11 @@
         }
         .card h3 {
             font-size: 12px;
-            color: rgba(0, 240, 255, 0.2);
+            color: rgba(0, 240, 255, 0.25);
             letter-spacing: 2px;
             text-transform: uppercase;
             margin-bottom: 15px;
-            text-shadow: 0 0 20px rgba(0, 240, 255, 0.04);
+            text-shadow: 0 0 20px rgba(0, 240, 255, 0.06);
         }
         .input-field {
             padding: 14px 16px;
@@ -169,7 +170,7 @@
         .users-table th {
             text-align: right;
             padding: 12px;
-            color: rgba(0, 240, 255, 0.10);
+            color: rgba(0, 240, 255, 0.12);
             font-size: 10px;
             letter-spacing: 1px;
             border-bottom: 1px solid rgba(0, 240, 255, 0.02);
@@ -203,7 +204,6 @@
             color: #f472b6;
         }
 
-        /* FOOTER */
         .footer-links {
             display: flex;
             justify-content: center;
@@ -357,7 +357,6 @@
     </style>
 </head>
 <body>
-    <!-- Floating Orbs -->
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
     <div class="orb orb-3"></div>
@@ -431,7 +430,6 @@
         </div>
     </div>
 
-    <!-- TOAST -->
     <div class="toast-overlay" id="toastOverlay">
         <div class="toast-box" id="toastBox">
             <span class="toast-icon" id="toastIcon">ℹ️</span>
@@ -498,7 +496,10 @@
         })();
 
         // ===== TOAST =====
-        function showToast(message, type = 'info', title = '', showOk = true) {
+        function showToast(message, type, title, showOk) {
+            type = type || 'info';
+            title = title || '';
+            showOk = (showOk !== undefined) ? showOk : true;
             var overlay = document.getElementById('toastOverlay');
             var icon = document.getElementById('toastIcon');
             var titleEl = document.getElementById('toastTitle');

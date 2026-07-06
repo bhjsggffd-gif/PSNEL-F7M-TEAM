@@ -156,11 +156,11 @@
         }
         .card h3 {
             font-size: 12px;
-            color: rgba(0, 240, 255, 0.2);
+            color: rgba(0, 240, 255, 0.25);
             letter-spacing: 2px;
             text-transform: uppercase;
             margin-bottom: 15px;
-            text-shadow: 0 0 20px rgba(0, 240, 255, 0.04);
+            text-shadow: 0 0 20px rgba(0, 240, 255, 0.06);
         }
         .input-field {
             width: 100%;
@@ -212,24 +212,27 @@
             border-bottom: none;
         }
         .info-card .info-label {
-            color: rgba(0, 240, 255, 0.3);
+            color: rgba(0, 240, 255, 0.35);
             font-size: 11px;
             letter-spacing: 1px;
+            text-shadow: 0 0 20px rgba(0, 240, 255, 0.04);
         }
         .info-card .info-value {
             color: #b0f0ff;
             font-size: 13px;
             font-weight: 700;
-            text-shadow: 0 0 20px rgba(0, 240, 255, 0.04);
+            text-shadow: 0 0 20px rgba(0, 240, 255, 0.06);
         }
         .info-card .info-value.highlight {
             color: #00f0ff;
+            text-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
         }
         .info-card .info-value.gold {
-            color: #fbbf24;
+            color: #fcd34d;
+            text-shadow: 0 0 30px rgba(252, 211, 77, 0.10);
         }
         .info-empty {
-            color: rgba(0, 240, 255, 0.15);
+            color: rgba(0, 240, 255, 0.12);
             font-size: 12px;
             text-align: center;
             padding: 30px 0;
@@ -256,7 +259,7 @@
             color: rgba(0, 240, 255, 0.08);
         }
         .logs-box .log-line .highlight {
-            color: rgba(0, 240, 255, 0.3);
+            color: rgba(0, 240, 255, 0.30);
         }
 
         .vip-list {
@@ -274,7 +277,7 @@
             color: rgba(0, 240, 255, 0.15);
         }
         .vip-list .item .id {
-            color: rgba(0, 240, 255, 0.4);
+            color: rgba(0, 240, 255, 0.40);
         }
         .vip-list .item .del {
             color: rgba(255, 0, 80, 0.12);
@@ -282,6 +285,17 @@
         }
         .vip-list .item .del:hover {
             color: #f472b6;
+        }
+
+        #spamStatus {
+            margin-top: 12px;
+            font-size: 11px;
+            color: rgba(0, 240, 255, 0.12);
+        }
+        #vipStatus {
+            margin-top: 12px;
+            font-size: 11px;
+            color: rgba(0, 240, 255, 0.12);
         }
 
         /* FOOTER */
@@ -466,7 +480,7 @@
                     <button class="btn btn-primary" onclick="spamStart()">▶ START</button>
                     <button class="btn btn-danger" onclick="spamStop()">⏹ STOP</button>
                 </div>
-                <div id="spamStatus" style="margin-top:12px; font-size:11px; color:rgba(0,240,255,0.12);">⚪ جاهز</div>
+                <div id="spamStatus">⚪ جاهز</div>
             </div>
 
             <!-- VIP -->
@@ -479,7 +493,7 @@
                     <button class="btn btn-danger" onclick="vipRemove()">➖ حذف</button>
                     <button class="btn" onclick="vipList()">📋 قائمة</button>
                 </div>
-                <div id="vipStatus" style="margin-top:12px; font-size:11px; color:rgba(0,240,255,0.12);"></div>
+                <div id="vipStatus"></div>
                 <div class="vip-list" id="vipListContainer"></div>
             </div>
         </div>
@@ -594,7 +608,10 @@
         })();
 
         // ===== TOAST =====
-        function showToast(message, type = 'info', title = '', showOk = true) {
+        function showToast(message, type, title, showOk) {
+            type = type || 'info';
+            title = title || '';
+            showOk = (showOk !== undefined) ? showOk : true;
             var overlay = document.getElementById('toastOverlay');
             var icon = document.getElementById('toastIcon');
             var titleEl = document.getElementById('toastTitle');
@@ -729,7 +746,7 @@
             } catch (e) { /* silent */ }
         }
 
-        // ===== INFO (ALL DATA - CLEAN & ORGANIZED) =====
+        // ===== INFO (ALL DATA - WITH FALLBACK) =====
         async function getInfo() {
             var uid = document.getElementById('infoUid').value.trim();
             var container = document.getElementById('infoResult');
@@ -744,29 +761,49 @@
                 
                 if (data.status === 'success' && data.data) {
                     var d = data.data;
-                    var html = '<div class="info-card">';
                     
-                    // عرض جميع الحقول الموجودة في الـ API
-                    var fields = {
-                        '🆔 UID': d.uid || uid,
-                        '👤 الاسم': d.name || d.nickname || d.username || 'غير معروف',
-                        '⭐ المستوى': d.level || d.lv || d.Level || 'N/A',
-                        '📊 الخبرة': d.exp || d.experience || d.Exp || 'N/A',
-                        '🏆 الرتبة': d.rank || d.tier || d.Rank || 'غير محدد',
-                        '🌍 السيرفر': d.server || d.region || d.Server || 'N/A',
-                        '🏴 العشيرة': d.clan || d.Clan || 'لا يوجد',
-                        '💀 القتلى': d.kills || d.Kills || 0,
-                        '🏅 الانتصارات': d.wins || d.Wins || 0,
-                        '💔 الخسائر': d.losses || d.Losses || 0,
-                        '🎯 الدقة': d.accuracy || d.Accuracy || 'N/A',
-                        '🕒 آخر ظهور': d.last_seen || d.lastSeen || d.LastSeen || 'N/A',
-                        '📅 تاريخ التسجيل': d.registered || d.created_at || d.CreatedAt || 'N/A',
+                    // دالة مساعدة للبحث عن قيمة في عدة أسماء محتملة
+                    function findValue(keys) {
+                        for (var i = 0; i < keys.length; i++) {
+                            var key = keys[i];
+                            if (d[key] !== undefined && d[key] !== null && d[key] !== '') {
+                                return d[key];
+                            }
+                            // بحث في حالة الأحرف الصغيرة/الكبيرة
+                            for (var k in d) {
+                                if (k.toLowerCase() === key.toLowerCase()) {
+                                    return d[k];
+                                }
+                            }
+                        }
+                        return null;
+                    }
+                    
+                    // استخراج جميع البيانات الممكنة
+                    var playerData = {
+                        '🆔 UID': findValue(['uid', 'UID', 'player_id', 'playerId', 'id', 'ID']) || uid,
+                        '👤 الاسم': findValue(['name', 'username', 'nickname', 'displayName', 'player_name', 'fullName']) || 'غير معروف',
+                        '⭐ المستوى': findValue(['level', 'lv', 'Level', 'LV', 'player_level', 'rank_level']) || 'N/A',
+                        '📊 الخبرة': findValue(['exp', 'experience', 'Exp', 'EXp', 'XP', 'xp', 'player_exp']) || 'N/A',
+                        '🏆 الرتبة': findValue(['rank', 'tier', 'Rank', 'Tier', 'division', 'player_rank']) || 'غير محدد',
+                        '🌍 السيرفر': findValue(['server', 'region', 'Server', 'Region', 'area', 'zone']) || 'N/A',
+                        '🏴 العشيرة': findValue(['clan', 'guild', 'team', 'Clan', 'Guild', 'Team', 'clan_name']) || 'لا يوجد',
+                        '💀 القتلى': findValue(['kills', 'Kills', 'total_kills', 'kill_count']) || 0,
+                        '🏅 الانتصارات': findValue(['wins', 'Wins', 'total_wins', 'win_count', 'victories']) || 0,
+                        '💔 الخسائر': findValue(['losses', 'Losses', 'total_losses', 'loss_count', 'defeats']) || 0,
+                        '🎯 الدقة': findValue(['accuracy', 'Accuracy', 'acc', 'hit_rate', 'precision']) || 'N/A',
+                        '🕒 آخر ظهور': findValue(['last_seen', 'lastSeen', 'LastSeen', 'lastActive', 'last_active', 'last_online']) || 'N/A',
+                        '📅 تاريخ التسجيل': findValue(['registered', 'created_at', 'CreatedAt', 'join_date', 'registration_date', 'created']) || 'N/A',
+                        '📱 الجهاز': findValue(['device', 'Device', 'platform', 'os', 'mobile']) || 'N/A',
+                        '🌐 البلد': findValue(['country', 'Country', 'nation', 'location', 'region_code']) || 'N/A',
                     };
                     
-                    // عرض فقط الحقول التي لها قيمة
-                    for (var key in fields) {
-                        if (fields[key] !== undefined && fields[key] !== null && fields[key] !== '') {
-                            var value = fields[key];
+                    var html = '<div class="info-card">';
+                    var hasData = false;
+                    
+                    for (var key in playerData) {
+                        var value = playerData[key];
+                        if (value !== undefined && value !== null && value !== '' && value !== 'N/A' && value !== 'غير معروف' && value !== 'غير محدد' && value !== 'لا يوجد') {
                             var cls = 'info-value';
                             if (key.includes('UID') || key.includes('السيرفر')) cls += ' highlight';
                             if (key.includes('المستوى') || key.includes('الرتبة')) cls += ' gold';
@@ -774,6 +811,20 @@
                             html += '<span class="info-label">' + key + '</span>';
                             html += '<span class="' + cls + '">' + value + '</span>';
                             html += '</div>';
+                            hasData = true;
+                        }
+                    }
+                    
+                    // إذا لم يتم العثور على بيانات، عرض البيانات الخام
+                    if (!hasData) {
+                        html += '<div class="info-row"><span class="info-label">📦 البيانات الخام</span></div>';
+                        for (var k in d) {
+                            if (d[k] !== null && d[k] !== undefined && d[k] !== '') {
+                                html += '<div class="info-row">';
+                                html += '<span class="info-label" style="font-size:10px;">' + k + '</span>';
+                                html += '<span class="info-value" style="font-size:11px;">' + JSON.stringify(d[k]) + '</span>';
+                                html += '</div>';
+                            }
                         }
                     }
                     

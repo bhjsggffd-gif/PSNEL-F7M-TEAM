@@ -16,29 +16,28 @@
             background: #0a0a12;
             overflow: hidden;
         }
-        /* Floating Orbs */
-        .login-orb {
+        .orb {
             position: fixed;
             border-radius: 50%;
             filter: blur(80px);
             pointer-events: none;
             z-index: 0;
         }
-        .login-orb-1 {
+        .orb-1 {
             width: 400px; height: 400px;
             background: rgba(0, 240, 255, 0.08);
             top: -100px; left: -100px;
             animation: orbFloat 20s ease-in-out infinite alternate;
         }
-        .login-orb-2 {
+        .orb-2 {
             width: 500px; height: 500px;
-            background: rgba(255, 34, 255, 0.06);
+            background: rgba(0, 150, 255, 0.05);
             bottom: -150px; right: -150px;
             animation: orbFloat 25s ease-in-out infinite alternate-reverse;
         }
-        .login-orb-3 {
+        .orb-3 {
             width: 300px; height: 300px;
-            background: rgba(0, 255, 136, 0.05);
+            background: rgba(0, 100, 255, 0.04);
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             animation: orbFloat 30s ease-in-out infinite alternate;
@@ -47,7 +46,6 @@
             0% { transform: translate(0, 0) scale(1); }
             100% { transform: translate(60px, -40px) scale(1.2); }
         }
-        /* Particles Canvas */
         #bg-canvas {
             position: fixed;
             top: 0; left: 0;
@@ -63,7 +61,7 @@
             z-index: 1;
         }
         .login-box {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(0, 240, 255, 0.08);
             border-radius: 24px;
             padding: 45px 40px;
@@ -100,10 +98,11 @@
         .form-group label {
             display: block;
             font-size: 11px;
-            color: rgba(0, 240, 255, 0.2);
+            color: rgba(0, 240, 255, 0.25);
             letter-spacing: 2px;
             margin-bottom: 8px;
             text-transform: uppercase;
+            text-shadow: 0 0 20px rgba(0, 240, 255, 0.04);
         }
         .form-group input {
             width: 100%;
@@ -116,19 +115,20 @@
             font-size: 14px;
             transition: all 0.4s ease;
             outline: none;
+            text-shadow: 0 0 20px rgba(0, 240, 255, 0.04);
         }
         .form-group input:focus {
             border-color: rgba(0, 240, 255, 0.2);
             box-shadow: 0 0 60px rgba(0, 240, 255, 0.03);
         }
         .form-group input::placeholder {
-            color: rgba(0, 240, 255, 0.08);
+            color: rgba(0, 240, 255, 0.06);
             font-size: 12px;
         }
         .login-btn {
             width: 100%;
             padding: 16px;
-            background: linear-gradient(135deg, rgba(0, 240, 255, 0.12), rgba(0, 102, 255, 0.06));
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.10), rgba(0, 102, 255, 0.05));
             border: 1px solid rgba(0, 240, 255, 0.12);
             border-radius: 14px;
             color: #00f0ff;
@@ -142,7 +142,7 @@
             text-shadow: 0 0 30px rgba(0, 240, 255, 0.06);
         }
         .login-btn:hover {
-            background: rgba(0, 240, 255, 0.18);
+            background: rgba(0, 240, 255, 0.16);
             box-shadow: 0 0 60px rgba(0, 240, 255, 0.05);
             transform: translateY(-2px);
         }
@@ -192,7 +192,7 @@
             color: #4fc3f7;
         }
 
-        /* ===== LARGE TOAST ===== */
+        /* ===== TOAST ===== */
         .toast-overlay {
             position: fixed;
             top: 0;
@@ -206,13 +206,8 @@
             display: none;
             justify-content: center;
             align-items: center;
-            animation: fadeInOverlay 0.3s ease;
         }
         .toast-overlay.show { display: flex; }
-        @keyframes fadeInOverlay {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
         .toast-box {
             background: rgba(10, 22, 40, 0.95);
             border: 1px solid rgba(0, 240, 255, 0.10);
@@ -289,20 +284,15 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        .toast-box.success .toast-title { color: #6ee7b7; text-shadow: 0 0 40px rgba(0, 255, 180, 0.06); }
-        .toast-box.success .toast-icon { filter: drop-shadow(0 0 30px rgba(0, 255, 180, 0.10)); }
-        .toast-box.error .toast-title { color: #f472b6; text-shadow: 0 0 40px rgba(255, 0, 80, 0.06); }
-        .toast-box.error .toast-icon { filter: drop-shadow(0 0 30px rgba(255, 0, 80, 0.10)); }
-        .toast-box.info .toast-title { color: #00f0ff; text-shadow: 0 0 40px rgba(0, 240, 255, 0.06); }
-        .toast-box.info .toast-icon { filter: drop-shadow(0 0 30px rgba(0, 240, 255, 0.10)); }
+        .toast-box.success .toast-title { color: #6ee7b7; }
+        .toast-box.error .toast-title { color: #f472b6; }
+        .toast-box.info .toast-title { color: #00f0ff; }
     </style>
 </head>
 <body>
-    <!-- Floating Orbs -->
-    <div class="login-orb login-orb-1"></div>
-    <div class="login-orb login-orb-2"></div>
-    <div class="login-orb login-orb-3"></div>
-    <!-- Particles Canvas -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
     <canvas id="bg-canvas"></canvas>
 
     <div class="login-wrapper">
@@ -341,7 +331,6 @@
         </div>
     </div>
 
-    <!-- TOAST OVERLAY -->
     <div class="toast-overlay" id="toastOverlay">
         <div class="toast-box" id="toastBox">
             <span class="toast-icon" id="toastIcon">ℹ️</span>
@@ -407,8 +396,11 @@
             draw();
         })();
 
-        // ===== LARGE TOAST =====
-        function showToast(message, type = 'info', title = '', showOk = true) {
+        // ===== TOAST =====
+        function showToast(message, type, title, showOk) {
+            type = type || 'info';
+            title = title || '';
+            showOk = (showOk !== undefined) ? showOk : true;
             var overlay = document.getElementById('toastOverlay');
             var icon = document.getElementById('toastIcon');
             var titleEl = document.getElementById('toastTitle');

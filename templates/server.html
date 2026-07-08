@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>{{ server.name }} - S1X TEAM HOST</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body { 
+        background: #060809; 
+        font-family: 'Inter', sans-serif; 
+        color: #e0e0e0; 
+        min-height: 100vh;
+        overflow-x: hidden;
+    }
+    
+    .app {
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .bg { 
+        position: fixed; 
+        top: 0; 
+        left: 0; 
+        width: 100%; 
+        height: 100%; 
+        background: radial-gradient(ellipse at 20% 30%, #0a2a1a, #050505); 
+        z-index: -3; 
+    }
+    .particles { 
+        position: fixed; 
+        top: 0; 
+        left: 0; 
+        width: 100%; 
+        height: 100%; 
+        z-index: -2; 
+        pointer-events: none; 
+    }
+    .particle { 
+        position: absolute; 
+        background: rgba(0,255,136,0.1); 
+        border-radius: 50%; 
+        animation: float 15s infinite linear; 
+    }
+    @keyframes float { 
+        0% { transform: translateY(100vh); opacity: 0; } 
+        15% { opacity: 0.4; } 
+        85% { opacity: 0.4; } 
+        100% { transform: translateY(-100vh); opacity: 0; } 
+    }
+    
+    .header { 
+        background: rgba(6,8,9,0.95); 
+        backdrop-filter: blur(20px); 
+        border-bottom: 1px solid rgba(0,255,136,0.2); 
+        padding: 12px 16px; 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+        flex-wrap: wrap;
+        gap: 10px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+    .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, #00ff88, #00994d); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1rem; color: #000; }
+    .logo-text { font-size: 1rem; font-weight: 700; color: #fff; }
+    .logo-text span { color: #00ff88; }
+    .server-name-badge { background: rgba(0,255,136,0.1); padding: 4px 10px; border-radius: 30px; font-size: 0.65rem; display: flex; align-items: center; gap: 5px; }
+    .server-type-icon { font-size: 0.7rem; }
+    .server-status { padding: 4px 10px; border-radius: 30px; font-size: 0.6rem; font-weight: 600; }
+    .status-running { background: rgba(0,255,136,0.15); color: #00ff88; }
+    .status-stopped { background: rgba(255,107,0,0.12); color: #ff6d00; }
+    .url-badge { background: rgba(0,255,136,0.05); border: 1px solid rgba(0,255,136,0.2); padding: 4px 10px; border-radius: 30px; font-size: 0.6rem; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+    .nav-back { color: #6c757d; text-decoration: none; font-size: 0.7rem; }
+    
+    .control-bar { 
+        background: rgba(10,12,16,0.5); 
+        padding: 12px 16px; 
+        display: flex; 
+        gap: 12px; 
+        justify-content: center; 
+        flex-wrap: wrap; 
+        border-bottom: 1px solid rgba(0,255,136,0.08);
+        position: sticky;
+        top: 60px;
+        z-index: 99;
+    }
+    .ctrl-btn { 
+        padding: 8px 18px; 
+        border-radius: 40px; 
+        font-weight: 600; 
+        font-size: 0.7rem; 
+        cursor: pointer; 
+        border: none; 
+        display: flex; 
+        align-items: center; 
+        gap: 6px; 
+        transition: all 0.2s;
+    }
+    .ctrl-btn:active { transform: scale(0.96); }
+    .ctrl-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .btn-start { background: linear-gradient(135deg, #00ff88, #00994d); color: #000; }
+    .btn-stop { background: rgba(255,59,92,0.15); color: #ff6b8a; border: 1px solid rgba(255,59,92,0.3); }
+    .btn-restart { background: rgba(255,107,0,0.12); color: #ff8f00; border: 1px solid rgba(255,107,0,0.2); }
+    .btn-open { background: rgba(0,255,136,0.1); color: #00ff88; border: 1px solid rgba(0,255,136,0.2); display: none; }
+    .btn-open.show { display: flex; }
+    
+    .main-content {
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        padding-bottom: 80px;
+    }
+    
+    .console-panel { 
+        background: rgba(10,12,16,0.85); 
+        backdrop-filter: blur(10px); 
+        border-radius: 20px; 
+        border: 1px solid rgba(0,255,136,0.15); 
+        overflow: hidden;
+        width: 100%;
+    }
+    .console-header { 
+        background: rgba(0,0,0,0.4); 
+        padding: 12px 16px; 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+        border-bottom: 1px solid rgba(0,255,136,0.1); 
+    }
+    .console-header h3 { 
+        font-size: 0.85rem; 
+        color: #00ff88; 
+        display: flex; 
+        align-items: center; 
+        gap: 8px; 
+    }
+    .console-dot { 
+        width: 10px; 
+        height: 10px; 
+        border-radius: 50%; 
+        background: #ff6d00; 
+        display: inline-block; 
+    }
+    .console-dot.live { background: #00ff88; animation: pulse 1s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    
+    .console-actions { display: flex; gap: 8px; }
+    .icon-btn { 
+        background: rgba(255,255,255,0.05); 
+        border: none; 
+        padding: 6px 12px; 
+        border-radius: 8px; 
+        color: #6c757d; 
+        cursor: pointer; 
+        font-size: 0.7rem; 
+    }
+    .icon-btn:active { background: rgba(0,255,136,0.1); }
+    
+    .console-output { 
+        height: 400px;
+        overflow-y: auto; 
+        padding: 16px; 
+        font-family: 'JetBrains Mono', monospace; 
+        font-size: 0.7rem; 
+        background: rgba(0,0,0,0.5); 
+        line-height: 1.6; 
+    }
+    .console-output .stdout { color: #c0d0e8; white-space: pre-wrap; }
+    .console-output .stderr { color: #ff6b8a; white-space: pre-wrap; }
+    .console-output .system { color: #00ff88; white-space: pre-wrap; }
+    .console-output .timestamp { color: #4a5568; margin-right: 10px; }
+    
+    .console-input { 
+        display: flex; 
+        border-top: 1px solid rgba(0,255,136,0.1); 
+    }
+    .console-input input { 
+        flex: 1; 
+        padding: 12px 16px; 
+        background: rgba(0,0,0,0.5); 
+        border: none; 
+        color: #fff; 
+        font-family: 'JetBrains Mono', monospace; 
+        font-size: 0.75rem; 
+        outline: none; 
+    }
+    .console-input button { 
+        padding: 12px 20px; 
+        background: rgba(0,255,136,0.1); 
+        border: none; 
+        color: #00ff88; 
+        cursor: pointer; 
+        font-weight: 600; 
+        font-size: 0.7rem;
+    }
+    
+    .resources-card { 
+        background: rgba(10,12,16,0.85); 
+        backdrop-filter: blur(10px); 
+        border-radius: 20px; 
+        border: 1px solid rgba(0,255,136,0.1); 
+        overflow: hidden;
+        width: 100%;
+    }
+    .card-header { 
+        padding: 12px 16px; 
+        background: rgba(0,0,0,0.3); 
+        border-bottom: 1px solid rgba(0,255,136,0.08); 
+        display: flex; 
+        align-items: center; 
+        gap: 8px; 
+    }
+    .card-header h4 { 
+        font-size: 0.8rem; 
+        color: #00ff88; 
+        text-transform: uppercase; 
+        letter-spacing: 1px; 
+    }
+    .card-body { padding: 14px; }
+    
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+    .stat-item { 
+        background: rgba(0,0,0,0.3);
+        border-radius: 12px;
+        padding: 10px;
+        text-align: center;
+    }
+    .stat-label { color: #6c757d; font-size: 0.6rem; text-transform: uppercase; }
+    .stat-value { font-weight: 700; font-size: 1rem; color: #00ff88; font-family: monospace; }
+    .progress-bar { 
+        width: 100%; 
+        height: 4px; 
+        background: rgba(255,255,255,0.05); 
+        border-radius: 10px; 
+        margin-top: 6px; 
+        overflow: hidden; 
+    }
+    .progress-fill { 
+        height: 100%; 
+        background: linear-gradient(90deg, #00ff88, #00994d); 
+        border-radius: 10px; 
+        transition: width 0.3s; 
+    }
+    
+    .files-card { 
+        background: rgba(10,12,16,0.85); 
+        backdrop-filter: blur(10px); 
+        border-radius: 20px; 
+        border: 1px solid rgba(0,255,136,0.1); 
+        overflow: hidden;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    
+    .file-actions { 
+        display: flex; 
+        gap: 8px; 
+        flex-wrap: wrap; 
+        margin-bottom: 16px; 
+    }
+    .file-btn { 
+        padding: 8px 14px; 
+        border-radius: 25px; 
+        font-size: 0.65rem; 
+        background: rgba(0,255,136,0.08); 
+        border: 1px solid rgba(0,255,136,0.15); 
+        color: #8b9bb0; 
+        cursor: pointer; 
+        display: flex; 
+        align-items: center; 
+        gap: 6px; 
+    }
+    .file-btn:active { background: rgba(0,255,136,0.15); color: #00ff88; }
+    
+    .file-list { 
+        max-height: 350px;
+        min-height: 200px;
+        overflow-y: auto; 
+    }
+    .file-item { 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+        padding: 12px 10px; 
+        border-bottom: 1px solid rgba(255,255,255,0.03); 
+        font-size: 0.75rem; 
+    }
+    .file-info { 
+        display: flex; 
+        align-items: center; 
+        gap: 12px; 
+        cursor: pointer; 
+        flex: 1; 
+        overflow: hidden;
+    }
+    .file-info i.fa-folder { color: #ffd700; font-size: 1rem; }
+    .file-info i.fa-file-code { color: #00ff88; font-size: 0.9rem; }
+    .file-name { 
+        overflow: hidden; 
+        text-overflow: ellipsis; 
+        white-space: nowrap; 
+        flex: 1;
+    }
+    .file-size { color: #4a5568; font-size: 0.6rem; margin-left: 8px; }
+    
+    .file-actions-dropdown { position: relative; }
+    .dots-btn { 
+        background: none; 
+        border: none; 
+        color: #4a5568; 
+        cursor: pointer; 
+        padding: 8px 12px; 
+        font-size: 1rem;
+    }
+    .dropdown { 
+        position: absolute; 
+        right: 0; 
+        top: 30px; 
+        background: #0d1117; 
+        border: 1px solid rgba(0,255,136,0.2); 
+        border-radius: 12px; 
+        padding: 6px 0; 
+        min-width: 130px; 
+        z-index: 50; 
+        display: none; 
+        box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    }
+    .dropdown.show { display: block; }
+    .dropdown button { 
+        display: block; 
+        width: 100%; 
+        text-align: left; 
+        padding: 8px 14px; 
+        background: none; 
+        border: none; 
+        color: #8b9bb0; 
+        font-size: 0.7rem; 
+        cursor: pointer; 
+    }
+    .dropdown button:hover { background: rgba(0,255,136,0.1); color: #00ff88; }
+    .dropdown .delete:hover { color: #ff6b8a; }
+    
+    .empty-files {
+        text-align: center;
+        padding: 40px 20px;
+        color: #4a5568;
+    }
+    .empty-files i {
+        font-size: 2rem;
+        margin-bottom: 10px;
+        opacity: 0.3;
+    }
+    
+    .bottom-nav { 
+        display: flex; 
+        justify-content: space-around; 
+        background: rgba(6,8,9,0.98); 
+        backdrop-filter: blur(20px); 
+        border-top: 1px solid rgba(0,255,136,0.12); 
+        padding: 10px 16px; 
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+    }
+    .bottom-nav a { 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        gap: 3px; 
+        text-decoration: none; 
+        color: #6c757d; 
+        font-size: 0.55rem; 
+        padding: 6px 12px; 
+        border-radius: 30px; 
+    }
+    .bottom-nav a i { font-size: 1.1rem; }
+    .bottom-nav a.active { color: #00ff88; background: rgba(0,255,136,0.1); }
+    .bottom-nav a:active { transform: scale(0.95); }
+    
+    .modal-overlay { 
+        display: none; 
+        position: fixed; 
+        top: 0; 
+        left: 0; 
+        right: 0; 
+        bottom: 0; 
+        background: rgba(0,0,0,0.98); 
+        backdrop-filter: blur(16px); 
+        z-index: 1000; 
+        justify-content: center; 
+        align-items: center; 
+        padding: 16px; 
+    }
+    .modal-overlay.show { display: flex; animation: fadeIn 0.2s ease; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    
+    .modal { 
+        background: #0d1117; 
+        border-radius: 28px; 
+        width: 100%; 
+        max-width: 500px; 
+        max-height: 85vh; 
+        overflow-y: auto; 
+        padding: 24px; 
+        border: 1px solid rgba(0,255,136,0.25); 
+    }
+    .modal h3 { color: #00ff88; font-size: 1.1rem; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; color: #6c757d; font-size: 0.65rem; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+    .form-group input, .form-group textarea { 
+        width: 100%; 
+        padding: 12px 14px; 
+        background: rgba(0,0,0,0.6); 
+        border: 1px solid rgba(0,255,136,0.2); 
+        border-radius: 12px; 
+        color: #fff; 
+        font-size: 0.85rem; 
+    }
+    .code-editor { 
+        width: 100%; 
+        min-height: 250px; 
+        background: #0a0c10; 
+        border: 1px solid rgba(0,255,136,0.2); 
+        border-radius: 12px; 
+        padding: 12px; 
+        font-family: 'JetBrains Mono', monospace; 
+        font-size: 0.7rem; 
+        color: #c0d0e8; 
+        resize: vertical; 
+    }
+    .modal-actions { display: flex; gap: 12px; margin-top: 24px; }
+    .modal-btn { 
+        flex: 1; 
+        padding: 12px; 
+        border-radius: 14px; 
+        font-weight: 600; 
+        font-size: 0.8rem; 
+        cursor: pointer; 
+        border: none; 
+    }
+    .modal-btn-primary { background: linear-gradient(135deg, #00ff88, #00994d); color: #000; }
+    .modal-btn-cancel { background: rgba(255,255,255,0.05); color: #6c757d; border: 1px solid rgba(255,255,255,0.05); }
+    .modal-btn-danger { background: linear-gradient(135deg, #ff3b5c, #c00000); color: #fff; }
+    
+    .toast { 
+        position: fixed; 
+        bottom: 80px; 
+        left: 16px; 
+        right: 16px; 
+        background: #0d1117; 
+        border-left: 4px solid #00ff88; 
+        border-radius: 14px; 
+        padding: 12px 16px; 
+        font-size: 0.75rem; 
+        z-index: 1100; 
+        display: none; 
+        max-width: 400px; 
+        margin: 0 auto; 
+    }
+    .toast.show { display: block; animation: slideUp 0.3s ease; }
+    .toast.success { border-left-color: #00ff88; }
+    .toast.error { border-left-color: #ff3b5c; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    
+    .console-output::-webkit-scrollbar, 
+    .file-list::-webkit-scrollbar { width: 4px; }
+    .console-output::-webkit-scrollbar-track, 
+    .file-list::-webkit-scrollbar-track { background: #1a1c22; }
+    .console-output::-webkit-scrollbar-thumb, 
+    .file-list::-webkit-scrollbar-thumb { background: #00ff88; border-radius: 10px; }
+    
+    ::selection { background: rgba(0,255,136,0.3); color: #fff; }
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<div class="particles" id="particles"></div>
+
+<div class="app">
+    <div class="header">
+        <a href="/dashboard" class="logo">
+            <div class="logo-icon"><i class="fas fa-dragon"></i></div>
+            <div class="logo-text">S1X TEAM <span>HOST</span></div>
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <span class="server-name-badge">
+                {% if server.app_type == 'flask' or server.app_type == 'fastapi' %}
+                    <i class="fas fa-globe server-type-icon" style="color:#00ff88"></i>
+                {% else %}
+                    <i class="fab fa-python server-type-icon" style="color:#ffd700"></i>
+                {% endif %}
+                {{ server.name }}
+            </span>
+            <span class="server-status status-{{ server.status }}" id="headerStatus">{{ server.status|upper }}</span>
+            {% if server.is_web_app %}
+            <span class="url-badge" id="urlBadge" onclick="copyUrl()"><i class="fas fa-link"></i> <span id="urlText">Not running</span></span>
+            {% else %}
+            <span class="url-badge" style="opacity:0.5; cursor:default;"><i class="fas fa-terminal"></i> Python Script (No Web UI)</span>
+            {% endif %}
+            <a href="/dashboard" class="nav-back"><i class="fas fa-arrow-left"></i> Back</a>
+        </div>
+    </div>
+    
+    <div class="control-bar">
+        <button class="ctrl-btn btn-start" id="btnStart" onclick="controlServer('start')"><i class="fas fa-play"></i> Start</button>
+        <button class="ctrl-btn btn-stop" id="btnStop" onclick="controlServer('stop')" disabled><i class="fas fa-stop"></i> Stop</button>
+        <button class="ctrl-btn btn-restart" id="btnRestart" onclick="controlServer('restart')" disabled><i class="fas fa-sync-alt"></i> Restart</button>
+        {% if server.is_web_app %}
+        <button class="ctrl-btn btn-open" id="btnOpen" onclick="openProject()"><i class="fas fa-external-link-alt"></i> Open Project</button>
+        {% endif %}
+    </div>
+    
+    <div class="main-content">
+        <div class="console-panel">
+            <div class="console-header">
+                <h3><span class="console-dot" id="consoleDot"></span> Live Console Output</h3>
+                <div class="console-actions">
+                    <button class="icon-btn" onclick="clearConsole()"><i class="fas fa-eraser"></i> Clear</button>
+                    <button class="icon-btn" id="autoScrollBtn" onclick="toggleAutoScroll()"><i class="fas fa-arrow-down"></i> Auto</button>
+                </div>
+            </div>
+            <div class="console-output" id="consoleOutput">
+                <div class="system"><span class="timestamp">[S1X TEAM]</span> Console ready. Server: {{ server.name }}</div>
+                <div class="system"><span class="timestamp">[S1X TEAM]</span> Click Start to run your application</div>
+            </div>
+            <div class="console-input">
+                <input type="text" id="consoleInput" placeholder="Type input for your app..." onkeypress="if(event.key==='Enter') sendInput()"/>
+                <button onclick="sendInput()"><i class="fas fa-paper-plane"></i> Send</button>
+            </div>
+        </div>
+        
+        <div class="resources-card">
+            <div class="card-header"><i class="fas fa-chart-line"></i><h4>System Resources</h4></div>
+            <div class="card-body">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-label">CPU</div>
+                        <div class="stat-value" id="statCpu">0%</div>
+                        <div class="progress-bar"><div class="progress-fill" id="cpuBar" style="width:0%"></div></div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">RAM</div>
+                        <div class="stat-value" id="statRam">0 MB</div>
+                        <div class="progress-bar"><div class="progress-fill" id="ramBar" style="width:0%"></div></div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Uptime</div>
+                        <div class="stat-value" id="statUptime">0s</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Status</div>
+                        <div class="stat-value" id="statStatus">{{ server.status }}</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Port</div>
+                        <div class="stat-value" id="serverPort">{{ server.port }}</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Type</div>
+                        <div class="stat-value">{% if server.is_web_app %}🌐 Web App{% else %}🐍 Python Script{% endif %}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="files-card">
+            <div class="card-header"><i class="fas fa-folder-open"></i><h4>File Manager</h4></div>
+            <div class="card-body">
+                <div class="file-actions">
+                    <input type="file" id="singleFileUpload" style="display:none" onchange="uploadSingleFile()"/>
+                    <button class="file-btn" onclick="document.getElementById('singleFileUpload').click()"><i class="fas fa-cloud-upload-alt"></i> Upload</button>
+                    
+                    <input type="file" id="multiFileUpload" style="display:none" multiple onchange="uploadMultipleFiles()"/>
+                    <button class="file-btn" onclick="document.getElementById('multiFileUpload').click()"><i class="fas fa-layer-group"></i> Multi Upload</button>
+                    
+                    <button class="file-btn" onclick="openCreateFileModal()"><i class="fas fa-file"></i> New File</button>
+                    <button class="file-btn" onclick="openCreateFolderModal()"><i class="fas fa-folder-plus"></i> Folder</button>
+                    <button class="file-btn" onclick="downloadFolder()"><i class="fas fa-download"></i> ZIP All</button>
+                    <button class="file-btn" onclick="backupServer()"><i class="fas fa-shield-alt"></i> Backup</button>
+                </div>
+                <div class="file-list" id="fileList">
+                    <div class="empty-files"><i class="fas fa-spinner fa-pulse"></i><br/>Loading files...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bottom-nav">
+        <a href="/dashboard"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+        <a href="#" class="active"><i class="fas fa-terminal"></i><span>Console</span></a>
+        <a href="#" onclick="document.getElementById('multiFileUpload').click()"><i class="fas fa-upload"></i><span>Upload</span></a>
+        <a href="/"><i class="fas fa-globe"></i><span>Site</span></a>
+    </div>
+</div>
+
+<div class="modal-overlay" id="editorModal">
+    <div class="modal">
+        <h3><i class="fas fa-code"></i> Edit: <span id="editorFilename"></span></h3>
+        <textarea class="code-editor" id="codeEditor" spellcheck="false"></textarea>
+        <div class="modal-actions">
+            <button class="modal-btn modal-btn-cancel" onclick="closeModal('editorModal')">Cancel</button>
+            <button class="modal-btn modal-btn-primary" onclick="saveFile()"><i class="fas fa-save"></i> Save</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="createFileModal">
+    <div class="modal">
+        <h3><i class="fas fa-file"></i> New File</h3>
+        <div class="form-group"><label>Filename</label><input type="text" id="newFileName" placeholder="script.py"/></div>
+        <div class="form-group"><label>Content</label><textarea class="code-editor" id="newFileContent" rows="8" placeholder="print('Hello S1X TEAM!')"></textarea></div>
+        <div class="modal-actions">
+            <button class="modal-btn modal-btn-cancel" onclick="closeModal('createFileModal')">Cancel</button>
+            <button class="modal-btn modal-btn-primary" onclick="createFile()">Create</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="createFolderModal">
+    <div class="modal">
+        <h3><i class="fas fa-folder-plus"></i> New Folder</h3>
+        <div class="form-group"><label>Folder Name</label><input type="text" id="newFolderName" placeholder="my_folder"/></div>
+        <div class="modal-actions">
+            <button class="modal-btn modal-btn-cancel" onclick="closeModal('createFolderModal')">Cancel</button>
+            <button class="modal-btn modal-btn-primary" onclick="createFolder()">Create</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="renameModal">
+    <div class="modal">
+        <h3><i class="fas fa-tag"></i> Rename: <span id="renameTargetName"></span></h3>
+        <div class="form-group"><label>New Name</label><input type="text" id="newRenameName"/></div>
+        <div class="modal-actions">
+            <button class="modal-btn modal-btn-cancel" onclick="closeModal('renameModal')">Cancel</button>
+            <button class="modal-btn modal-btn-primary" onclick="confirmRename()">Rename</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="deleteConfirmModal">
+    <div class="modal">
+        <h3><i class="fas fa-exclamation-triangle"></i> Confirm Delete</h3>
+        <p id="deleteTargetText" style="color: #6c757d; margin-bottom: 20px;"></p>
+        <div class="modal-actions">
+            <button class="modal-btn modal-btn-cancel" onclick="closeModal('deleteConfirmModal')">Cancel</button>
+            <button class="modal-btn modal-btn-danger" id="confirmDeleteBtn">Delete</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<script>
+const serverId = "{{ server.id }}";
+const isWebApp = {{ 'true' if server.is_web_app else 'false' }};
+let autoScroll = true;
+let currentEditFile = null;
+let renameTarget = null;
+let renameIsDir = false;
+let deleteTarget = null;
+let deleteIsDir = false;
+let openDropdown = null;
+
+// Socket.IO Connection
+const socket = io();
+socket.on('connect', () => { 
+    console.log('Socket connected');
+    socket.emit('join_server', { server_id: serverId }); 
+});
+socket.on('console_output', (data) => { 
+    if(data.server_id === serverId) {
+        const type = data.is_error ? 'stderr' : 'stdout';
+        appendConsole(data.output, type);
+    } 
+});
+socket.on('server_stats', (data) => { 
+    if(data.server_id === serverId) updateStats(data.stats); 
+});
+
+function appendConsole(text, type) {
+    const output = document.getElementById('consoleOutput');
+    const line = document.createElement('div');
+    line.className = type || 'system';
+    const ts = new Date();
+    const timeStr = ts.getHours().toString().padStart(2,'0') + ':' + ts.getMinutes().toString().padStart(2,'0') + ':' + ts.getSeconds().toString().padStart(2,'0');
+    line.innerHTML = '<span class="timestamp">[' + timeStr + ']</span> ' + escapeHtml(text);
+    output.appendChild(line);
+    if(autoScroll) output.scrollTop = output.scrollHeight;
+}
+
+function escapeHtml(text) { 
+    return text.replace(/[&<>]/g, function(m) { 
+        if(m === '&') return '&amp;'; 
+        if(m === '<') return '&lt;'; 
+        if(m === '>') return '&gt;'; 
+        return m; 
+    }); 
+}
+
+function clearConsole() { 
+    document.getElementById('consoleOutput').innerHTML = '<div class="system"><span class="timestamp">[S1X TEAM]</span> Console cleared.</div>'; 
+}
+
+function toggleAutoScroll() { 
+    autoScroll = !autoScroll; 
+    document.getElementById('autoScrollBtn').style.color = autoScroll ? '#00ff88' : '#4a5568'; 
+}
+
+function sendInput() { 
+    const inp = document.getElementById('consoleInput'); 
+    if(inp.value.trim()) { 
+        socket.emit('console_input', { server_id: serverId, input: inp.value }); 
+        appendConsole('> ' + inp.value, 'system'); 
+        inp.value = ''; 
+    } 
+}
+
+function updateStats(stats) {
+    document.getElementById('statCpu').innerText = (stats.cpu || 0).toFixed(1) + '%';
+    document.getElementById('statRam').innerText = (stats.ram || 0).toFixed(1) + ' MB';
+    document.getElementById('statUptime').innerText = stats.uptime || '0s';
+    document.getElementById('statStatus').innerText = stats.status || 'unknown';
+    document.getElementById('headerStatus').innerHTML = (stats.status || 'unknown').toUpperCase();
+    document.getElementById('headerStatus').className = 'server-status status-' + (stats.status || 'stopped');
+    const cpu = Math.min(stats.cpu || 0, 100);
+    const ram = Math.min(((stats.ram || 0) / 512) * 100, 100);
+    document.getElementById('cpuBar').style.width = cpu + '%';
+    document.getElementById('ramBar').style.width = ram + '%';
+    const running = stats.status === 'running';
+    document.getElementById('btnStart').disabled = running;
+    document.getElementById('btnStop').disabled = !running;
+    document.getElementById('btnRestart').disabled = !running;
+    document.getElementById('consoleDot').className = 'console-dot' + (running ? ' live' : '');
+    
+    // فقط إذا كان تطبيق ويب، نجلب الرابط
+    if(isWebApp && running) { 
+        fetchUrl();
+    } else if(!isWebApp && running) {
+        document.getElementById('urlText').innerText = 'No web UI';
+    } else if(!isWebApp) {
+        document.getElementById('urlText').innerText = 'Python Script';
+    } else {
+        document.getElementById('urlText').innerText = 'Not running';
+    }
+}
+
+function fetchUrl() {
+    fetch('/api/server/' + serverId + '/public-url')
+        .then(r=>r.json())
+        .then(data=>{ 
+            if(data.running && data.url){ 
+                document.getElementById('urlText').innerText = data.url; 
+                if(isWebApp) document.getElementById('btnOpen').classList.add('show'); 
+            } 
+        })
+        .catch(err => console.error('Error fetching URL:', err));
+}
+
+function controlServer(action) {
+    const btn = document.getElementById('btn' + action.charAt(0).toUpperCase() + action.slice(1));
+    if(btn) btn.disabled = true;
+    
+    appendConsole(`Sending ${action} command...`, 'system');
+    
+    fetch('/api/server/' + serverId + '/' + action, { 
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+    })
+    .then(response => response.json())
+    .then(data => { 
+        if(data.success) {
+            appendConsole(`Server ${action} command executed successfully`, 'stdout');
+            showToast(`Server ${action}ed`, 'success');
+            if(action === 'start' && isWebApp) {
+                fetchUrl();
+            }
+        } else {
+            appendConsole(`Failed to ${action}: ${data.error || 'Unknown error'}`, 'stderr');
+            showToast(data.error || `Failed to ${action}`, 'error');
+        }
+    })
+    .catch(err => {
+        appendConsole(`Network error: ${err.message}`, 'stderr');
+        showToast(`Network error: ${err.message}`, 'error');
+    })
+    .finally(() => { 
+        if(btn) setTimeout(() => { btn.disabled = false; }, 1000);
+    });
+}
+
+function openProject() { 
+    if(!isWebApp) {
+        showToast('This is a Python script, not a web application', 'error');
+        return;
+    }
+    
+    fetch('/api/server/' + serverId + '/public-url')
+        .then(response => response.json())
+        .then(data => { 
+            if(data.running && data.url) { 
+                appendConsole(`Opening project at: ${data.url}`, 'system');
+                window.open(data.url, '_blank');
+            } else { 
+                appendConsole(`Server is not running. Start the server first.`, 'stderr');
+                showToast('Server is not running. Start the server first.', 'error');
+            } 
+        })
+        .catch(error => {
+            appendConsole(`Error getting URL: ${error.message}`, 'stderr');
+            showToast('Error getting server URL', 'error');
+        });
+}
+
+function copyUrl() { 
+    if(!isWebApp) {
+        showToast('This is a Python script, not a web application', 'error');
+        return;
+    }
+    
+    fetch('/api/server/' + serverId + '/public-url')
+        .then(r=>r.json())
+        .then(data=>{ 
+            if(data.running && data.url) { 
+                navigator.clipboard.writeText(data.url); 
+                showToast('URL copied!', 'success');
+                appendConsole(`URL copied: ${data.url}`, 'system');
+            } else {
+                showToast('Server is not running', 'error');
+            } 
+        }); 
+}
+
+function uploadSingleFile() {
+    const file = document.getElementById('singleFileUpload').files[0];
+    if(!file) return;
+    
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    showToast('Uploading ' + file.name + '...', '');
+    appendConsole(`Uploading: ${file.name}`, 'system');
+    
+    fetch('/api/server/' + serverId + '/upload', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.success) {
+            showToast('Uploaded: ' + file.name, 'success');
+            appendConsole(`Uploaded: ${file.name}`, 'stdout');
+            reloadFiles();
+        } else {
+            showToast(data.error || 'Upload failed', 'error');
+            appendConsole(`Upload failed: ${data.error || 'Unknown error'}`, 'stderr');
+        }
+    })
+    .catch(err => {
+        showToast('Network error', 'error');
+        appendConsole(`Network error: ${err.message}`, 'stderr');
+    });
+    
+    document.getElementById('singleFileUpload').value = '';
+}
+
+function uploadMultipleFiles() {
+    const files = document.getElementById('multiFileUpload').files;
+    if(!files.length) {
+        showToast('No files selected', 'error');
+        return;
+    }
+    
+    const formData = new FormData();
+    for(let i = 0; i < files.length; i++) {
+        formData.append('files[]', files[i]);
+    }
+    
+    showToast(`Uploading ${files.length} file(s)...`, '');
+    appendConsole(`Uploading ${files.length} file(s)...`, 'system');
+    
+    fetch('/api/server/' + serverId + '/upload-multiple', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.success_count > 0) {
+            showToast(`✅ ${data.success_count} uploaded, ${data.failed_count} failed`, 'success');
+            appendConsole(`${data.success_count} files uploaded successfully (${data.total_mb} MB)`, 'stdout');
+            if(data.failed_count > 0) {
+                appendConsole(`${data.failed_count} files failed`, 'stderr');
+            }
+            reloadFiles();
+        } else {
+            showToast(`Upload failed`, 'error');
+            appendConsole(`Upload failed`, 'stderr');
+        }
+    })
+    .catch(err => {
+        showToast('Network error', 'error');
+        appendConsole(`Network error: ${err.message}`, 'stderr');
+    });
+    
+    document.getElementById('multiFileUpload').value = '';
+}
+
+function reloadFiles() {
+    fetch('/api/server/' + serverId + '/files')
+        .then(r => r.json())
+        .then(data => {
+            const container = document.getElementById('fileList');
+            if(!data.files || !data.files.length) { 
+                container.innerHTML = '<div class="empty-files"><i class="fas fa-folder-open"></i><br/>No files yet<br/><small>Upload files or create new ones</small></div>'; 
+                return; 
+            }
+            container.innerHTML = data.files.map(f => {
+                const enc = btoa(unescape(encodeURIComponent(f.name)));
+                const esc = f.name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                return `<div class="file-item">
+                    <div class="file-info" onclick="openFileEditor('${esc}')">
+                        <i class="fas fa-${f.is_dir ? 'folder' : 'file-code'}"></i>
+                        <span class="file-name">${escapeHtml(f.name)}</span>
+                        ${!f.is_dir ? '<span class="file-size">' + (f.size_display || '') + '</span>' : ''}
+                    </div>
+                    <div class="file-actions-dropdown">
+                        <button class="dots-btn" onclick="toggleDropdown(event, \'${esc}\', ${f.is_dir})"><i class="fas fa-ellipsis-v"></i></button>
+                        <div class="dropdown" id="dd-${enc}">
+                            <button onclick="openRenameModal(\'${esc}\', ${f.is_dir})"><i class="fas fa-tag"></i> Rename</button>
+                            ${!f.is_dir ? '<button onclick="downloadFile(\'' + esc + '\')"><i class="fas fa-download"></i> Download</button>' : ''}
+                            <button class="delete" onclick="confirmDelete(\'${esc}\', ${f.is_dir})"><i class="fas fa-trash"></i> Delete</button>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        })
+        .catch(err => {
+            document.getElementById('fileList').innerHTML = '<div class="empty-files"><i class="fas fa-exclamation-triangle"></i><br/>Error loading files</div>';
+        });
+}
+
+function openFileEditor(filename) { 
+    currentEditFile = filename; 
+    document.getElementById('editorFilename').innerText = filename; 
+    fetch('/api/server/' + serverId + '/file/read?filename=' + encodeURIComponent(filename))
+        .then(r=>r.json())
+        .then(data=>{ 
+            document.getElementById('codeEditor').value = data.content || ''; 
+            document.getElementById('editorModal').classList.add('show'); 
+        });
+}
+
+function saveFile() { 
+    if(!currentEditFile) return; 
+    const fd = new FormData(); 
+    fd.append('filename', currentEditFile); 
+    fd.append('content', document.getElementById('codeEditor').value); 
+    fetch('/api/server/' + serverId + '/file/write', { method: 'POST', body: fd })
+        .then(r=>r.json())
+        .then(d=>{ 
+            if(d.success) { 
+                showToast('File saved!', 'success'); 
+                closeModal('editorModal'); 
+                reloadFiles(); 
+            } else { 
+                showToast(d.error, 'error'); 
+            } 
+        });
+}
+
+function downloadFile(filename) { 
+    window.open('/api/server/' + serverId + '/download/' + encodeURIComponent(filename), '_blank'); 
+}
+
+function downloadFolder() { 
+    window.open('/api/server/' + serverId + '/download-folder', '_blank'); 
+}
+
+function backupServer() { 
+    fetch('/api/server/' + serverId + '/backup', { method: 'POST' })
+        .then(r=>r.json())
+        .then(d=>showToast(d.success ? 'Backup created!' : 'Backup failed', d.success ? 'success' : 'error')); 
+}
+
+function openCreateFileModal() { 
+    document.getElementById('newFileName').value = '';
+    document.getElementById('newFileContent').value = '';
+    document.getElementById('createFileModal').classList.add('show'); 
+}
+
+function openCreateFolderModal() { 
+    document.getElementById('newFolderName').value = '';
+    document.getElementById('createFolderModal').classList.add('show'); 
+}
+
+function createFile() { 
+    const name = document.getElementById('newFileName').value.trim(); 
+    const content = document.getElementById('newFileContent').value; 
+    if(!name) { showToast('Filename required', 'error'); return; }
+    const fd = new FormData(); 
+    fd.append('filename', name); 
+    fd.append('content', content); 
+    fetch('/api/server/' + serverId + '/file/create', { method: 'POST', body: fd })
+        .then(r=>r.json())
+        .then(d=>{ 
+            if(d.success) { 
+                showToast('File created', 'success'); 
+                closeModal('createFileModal'); 
+                reloadFiles(); 
+            } else { 
+                showToast(d.error, 'error'); 
+            } 
+        });
+}
+
+function createFolder() { 
+    const name = document.getElementById('newFolderName').value.trim(); 
+    if(!name) { showToast('Folder name required', 'error'); return; }
+    const fd = new FormData(); 
+    fd.append('foldername', name); 
+    fetch('/api/server/' + serverId + '/folder/create', { method: 'POST', body: fd })
+        .then(r=>r.json())
+        .then(d=>{ 
+            if(d.success) { 
+                showToast('Folder created', 'success'); 
+                closeModal('createFolderModal'); 
+                reloadFiles(); 
+            } else { 
+                showToast(d.error, 'error'); 
+            } 
+        });
+}
+
+function openRenameModal(name, isDir) { 
+    renameTarget = name; 
+    renameIsDir = isDir; 
+    document.getElementById('renameTargetName').innerText = name; 
+    document.getElementById('newRenameName').value = name; 
+    document.getElementById('renameModal').classList.add('show'); 
+    closeAllDropdowns(); 
+}
+
+function confirmRename() { 
+    if(!renameTarget) return; 
+    const newName = document.getElementById('newRenameName').value.trim(); 
+    if(!newName || newName === renameTarget) { closeModal('renameModal'); return; }
+    const fd = new FormData(); 
+    fd.append('oldname', renameTarget); 
+    fd.append('newname', newName); 
+    fetch('/api/server/' + serverId + '/file/rename', { method: 'POST', body: fd })
+        .then(r=>r.json())
+        .then(d=>{ 
+            if(d.success) { 
+                showToast('Renamed', 'success'); 
+                closeModal('renameModal'); 
+                reloadFiles(); 
+            } else { 
+                showToast(d.error, 'error'); 
+            } 
+        }); 
+    renameTarget = null; 
+}
+
+function confirmDelete(name, isDir) { 
+    deleteTarget = name; 
+    deleteIsDir = isDir; 
+    document.getElementById('deleteTargetText').innerHTML = 'Delete <strong style="color:#ff6b8a;">' + name + '</strong> permanently?'; 
+    document.getElementById('deleteConfirmModal').classList.add('show'); 
+    closeAllDropdowns(); 
+}
+
+document.getElementById('confirmDeleteBtn').onclick = function() { 
+    if(!deleteTarget) return; 
+    const url = deleteIsDir ? '/api/server/' + serverId + '/folder/delete' : '/api/server/' + serverId + '/file/delete'; 
+    const fd = new FormData(); 
+    fd.append(deleteIsDir ? 'foldername' : 'filename', deleteTarget); 
+    fetch(url, { method: 'POST', body: fd })
+        .then(r=>r.json())
+        .then(d=>{ 
+            if(d.success) { 
+                showToast('Deleted', 'success'); 
+                closeModal('deleteConfirmModal'); 
+                reloadFiles(); 
+            } else { 
+                showToast(d.error, 'error'); 
+            } 
+        }); 
+    deleteTarget = null; 
+};
+
+function toggleDropdown(event, name, isDir) { 
+    event.stopPropagation(); 
+    closeAllDropdowns(); 
+    const dd = document.getElementById('dd-' + btoa(unescape(encodeURIComponent(name)))); 
+    if(dd) { 
+        dd.classList.toggle('show'); 
+        openDropdown = dd.classList.contains('show') ? dd : null; 
+    } 
+}
+
+function closeAllDropdowns() { 
+    if(openDropdown) { 
+        openDropdown.classList.remove('show'); 
+        openDropdown = null; 
+    } 
+}
+
+function closeModal(id) { 
+    document.getElementById(id).classList.remove('show'); 
+}
+
+function showToast(msg, type) { 
+    const t = document.getElementById('toast'); 
+    t.textContent = msg; 
+    t.className = 'toast show ' + (type || ''); 
+    setTimeout(() => t.classList.remove('show'), 3000); 
+}
+
+document.addEventListener('click', function(e) { 
+    if(!e.target.closest('.dots-btn') && !e.target.closest('.dropdown')) closeAllDropdowns(); 
+});
+
+document.querySelectorAll('.modal-overlay').forEach(o => { 
+    o.addEventListener('click', function(e) { 
+        if(e.target === this) this.classList.remove('show'); 
+    }); 
+});
+
+function createParticles() { 
+    const c = document.getElementById('particles'); 
+    const count = window.innerWidth < 768 ? 30 : 50;
+    for(let i = 0; i < count; i++) { 
+        const p = document.createElement('div'); 
+        p.className = 'particle'; 
+        const s = Math.random() * 3 + 1; 
+        p.style.width = s + 'px'; 
+        p.style.height = s + 'px'; 
+        p.style.left = Math.random() * 100 + '%'; 
+        p.style.animationDelay = Math.random() * 15 + 's'; 
+        p.style.animationDuration = (Math.random() * 15 + 10) + 's'; 
+        c.appendChild(p); 
+    } 
+}
+
+createParticles();
+reloadFiles();
+setInterval(reloadFiles, 30000);
+
+{% if server.status == 'running' and server.is_web_app %}
+document.getElementById('consoleDot').classList.add('live');
+fetchUrl();
+{% elif server.status == 'running' and not server.is_web_app %}
+document.getElementById('consoleDot').classList.add('live');
+document.getElementById('urlText').innerText = 'Python Script (No Web UI)';
+{% endif %}
+</script>
+</body>
+</html>

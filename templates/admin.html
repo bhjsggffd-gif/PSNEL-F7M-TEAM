@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>Admin Panel - S1X TEAM HOST</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #060809; font-family: 'Inter', sans-serif; color: #e0e0e0; height: 100vh; overflow: hidden; }
+    
+    .app { height: 100%; display: flex; flex-direction: column; }
+    .bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(ellipse at 20% 30%, #0a2a1a, #050505); z-index: -3; }
+    .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; pointer-events: none; }
+    .particle { position: absolute; background: rgba(0,255,136,0.1); border-radius: 50%; animation: float 15s infinite linear; }
+    @keyframes float { 0% { transform: translateY(100vh); opacity: 0; } 15% { opacity: 0.4; } 85% { opacity: 0.4; } 100% { transform: translateY(-100vh); opacity: 0; } }
+    
+    .header { background: rgba(6,8,9,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,255,136,0.15); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, #00ff88, #00994d); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-text { font-size: 1rem; font-weight: 700; color: #fff; }
+    .logo-text span { color: #00ff88; }
+    .admin-badge { background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.3); padding: 5px 12px; border-radius: 30px; font-size: 0.7rem; }
+    .nav-btn { padding: 6px 16px; border-radius: 30px; font-size: 0.7rem; text-decoration: none; background: transparent; border: 1px solid rgba(255,255,255,0.1); color: #6c757d; margin-left: 8px; }
+    
+    .content { flex: 1; overflow-y: auto; padding: 16px; -webkit-overflow-scrolling: touch; }
+    
+    .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
+    .stat-card { background: rgba(10,12,16,0.7); backdrop-filter: blur(10px); border-radius: 16px; padding: 14px; text-align: center; border: 1px solid rgba(0,255,136,0.08); }
+    .stat-number { font-size: 1.4rem; font-weight: 800; color: #00ff88; }
+    .stat-label { font-size: 0.6rem; color: #6c757d; }
+    
+    .tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+    .tab { padding: 8px 20px; border-radius: 30px; font-size: 0.7rem; font-weight: 600; cursor: pointer; background: rgba(10,12,16,0.6); color: #6c757d; border: none; }
+    .tab.active { background: rgba(0,255,136,0.15); color: #00ff88; border: 1px solid rgba(0,255,136,0.3); }
+    
+    .card { background: rgba(10,12,16,0.7); backdrop-filter: blur(10px); border-radius: 20px; padding: 16px; margin-bottom: 20px; border: 1px solid rgba(0,255,136,0.08); }
+    .card h3 { color: #00ff88; font-size: 0.9rem; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+    
+    .table-wrapper { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.7rem; }
+    th { text-align: left; padding: 10px 8px; background: rgba(0,255,136,0.05); color: #00ff88; }
+    td { padding: 10px 8px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    
+    .badge { padding: 2px 8px; border-radius: 12px; font-size: 0.6rem; }
+    .badge-premium { background: rgba(255,215,0,0.15); color: #ffd700; }
+    .badge-free { background: rgba(100,100,100,0.15); color: #8b9bb0; }
+    .badge-running { background: rgba(0,255,136,0.12); color: #00ff88; }
+    
+    .btn-sm { padding: 4px 10px; border-radius: 8px; font-size: 0.6rem; cursor: pointer; border: none; }
+    .btn-green { background: rgba(0,255,136,0.15); color: #00ff88; }
+    .btn-danger { background: rgba(255,59,92,0.12); color: #ff6b8a; }
+    
+    .inline-form { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    .form-group label { font-size: 0.6rem; color: #6c757d; }
+    .form-group input { padding: 8px 12px; background: rgba(0,0,0,0.6); border: 1px solid rgba(0,255,136,0.2); border-radius: 10px; color: #fff; font-size: 0.75rem; }
+    
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.98); backdrop-filter: blur(16px); z-index: 1000; justify-content: center; align-items: center; }
+    .modal-overlay.show { display: flex; }
+    .modal { background: #0d1117; border-radius: 24px; padding: 24px; width: 90%; max-width: 350px; border: 1px solid rgba(0,255,136,0.2); }
+    .modal h3 { color: #00ff88; margin-bottom: 16px; }
+    .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+    .modal-btn { flex: 1; padding: 10px; border-radius: 12px; font-weight: 600; cursor: pointer; border: none; }
+    .modal-btn-danger { background: linear-gradient(135deg, #ff3b5c, #c00000); color: #fff; }
+    .modal-btn-cancel { background: rgba(255,255,255,0.05); color: #6c757d; }
+    
+    .toast { position: fixed; bottom: 20px; left: 16px; right: 16px; background: #0d1117; border-left: 4px solid #00ff88; border-radius: 12px; padding: 12px; font-size: 0.75rem; z-index: 1100; display: none; }
+    .toast.show { display: block; animation: slideUp 0.3s ease; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    
+    .bottom-nav { display: flex; justify-content: space-around; background: rgba(6,8,9,0.98); backdrop-filter: blur(20px); border-top: 1px solid rgba(0,255,136,0.1); padding: 8px 16px; flex-shrink: 0; }
+    .bottom-nav a { display: flex; flex-direction: column; align-items: center; gap: 2px; text-decoration: none; color: #6c757d; font-size: 0.55rem; padding: 6px; border-radius: 30px; }
+    .bottom-nav a.active { color: #00ff88; }
+    
+    @media (min-width: 768px) {
+        .content { max-width: 1200px; margin: 0 auto; width: 100%; }
+        .stats { grid-template-columns: repeat(4, 1fr); }
+        .bottom-nav { display: none; }
+    }
+    
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-thumb { background: #00ff88; border-radius: 10px; }
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<div class="particles" id="particles"></div>
+
+<div class="app">
+    <div class="header">
+        <a href="/" class="logo"><div class="logo-icon"><i class="fas fa-dragon"></i></div><div class="logo-text">S1X TEAM <span>ADMIN</span></div></a>
+        <div><span class="admin-badge"><i class="fas fa-crown"></i> SUPER ADMIN</span><a href="/dashboard" class="nav-btn">Dashboard</a><a href="/logout" class="nav-btn">Logout</a></div>
+    </div>
+    
+    <div class="content">
+        <div class="stats">
+            <div class="stat-card"><div class="stat-number">{{ users|length }}</div><div class="stat-label">Users</div></div>
+            <div class="stat-card"><div class="stat-number">{{ servers|length }}</div><div class="stat-label">Servers</div></div>
+            <div class="stat-card"><div class="stat-number">{{ login_attempts|length }}</div><div class="stat-label">Login Attempts</div></div>
+            <div class="stat-card"><div class="stat-number">{{ servers|selectattr('status','equalto','running')|list|length }}</div><div class="stat-label">Running</div></div>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('users')"><i class="fas fa-users"></i> Users</button>
+            <button class="tab" onclick="switchTab('servers')"><i class="fas fa-server"></i> Servers</button>
+            <button class="tab" onclick="switchTab('logs')"><i class="fas fa-history"></i> Logs</button>
+            <button class="tab" onclick="switchTab('create')"><i class="fas fa-user-plus"></i> Create</button>
+        </div>
+        
+        <div id="tab-users" class="tab-content active">
+            <div class="card">
+                <h3><i class="fas fa-users"></i> Registered Users</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead><tr><th>Username</th><th>Plan</th><th>Servers</th><th>Status</th><th>Actions</th></tr></thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr>
+                                <td><strong>{{ user.username }}</strong></td>
+                                <td><span class="badge {% if user.is_premium %}badge-premium{% else %}badge-free{% endif %}">{% if user.is_premium %}PREMIUM{% else %}FREE{% endif %}</span></td>
+                                <td>{{ user.total_servers_created or 0 }}</td>
+                                <td>{{ user.status }}</td>
+                                <td>{% if not user.is_premium %}<button class="btn-sm btn-green" onclick="makePremium('{{ user.username }}')">Upgrade</button>{% endif %}<button class="btn-sm btn-danger" onclick="confirmDeleteUser('{{ user.username }}')">Delete</button></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div id="tab-servers" class="tab-content">
+            <div class="card">
+                <h3><i class="fas fa-server"></i> All Servers</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead><tr><th>ID</th><th>Name</th><th>Owner</th><th>Port</th><th>Status</th><th>CPU</th><th>RAM</th></tr></thead>
+                        <tbody>
+                            {% for server in servers %}
+                            <tr><td><small>{{ server.id }}</small></td><td>{{ server.name }}</td><td>{{ server.owner }}</td><td>{{ server.port }}</td><td><span class="badge badge-running">{{ server.status }}</span></td><td>{{ server.cpu_usage }}%</td><td>{{ server.ram_usage }}MB</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div id="tab-logs" class="tab-content">
+            <div class="card">
+                <h3><i class="fas fa-history"></i> Login Attempts</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead><tr><th>Time</th><th>Username</th><th>IP</th><th>Result</th></tr></thead>
+                        <tbody>
+                            {% for attempt in login_attempts %}
+                            <tr><td><small>{{ attempt.timestamp[:19] }}</small></td><td>{{ attempt.username }}</td><td>{{ attempt.ip }}</td><td style="color: {% if attempt.success %}#00ff88{% else %}#ff3b5c{% endif %}">{% if attempt.success %}SUCCESS{% else %}FAILED{% endif %}</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div id="tab-create" class="tab-content">
+            <div class="card">
+                <h3><i class="fas fa-user-plus"></i> Create New User</h3>
+                <div class="inline-form">
+                    <div class="form-group"><label>Username</label><input type="text" id="newUsername" placeholder="username"/></div>
+                    <div class="form-group"><label>Password</label><input type="password" id="newPassword" placeholder="password"/></div>
+                    <button class="btn-sm btn-green" onclick="createUser()">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bottom-nav">
+        <a href="/admin" class="active"><i class="fas fa-shield-alt"></i><span>Admin</span></a>
+        <a href="/dashboard"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+        <a href="/"><i class="fas fa-globe"></i><span>Site</span></a>
+        <a href="/logout"><i class="fas fa-sign-out-alt"></i><span>Exit</span></a>
+    </div>
+</div>
+
+<div class="modal-overlay" id="confirmModal"><div class="modal"><h3>Confirm Action</h3><p id="confirmText"></p><div class="modal-actions"><button class="modal-btn modal-btn-cancel" onclick="closeConfirmModal()">Cancel</button><button class="modal-btn modal-btn-danger" id="confirmBtn">Confirm</button></div></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+function createParticles(){ const c=document.getElementById('particles'); for(let i=0;i<40;i++){ const p=document.createElement('div'); p.className='particle'; p.style.width=(Math.random()*3+1)+'px'; p.style.height=p.style.width; p.style.left=Math.random()*100+'%'; p.style.animationDelay=Math.random()*15+'s'; p.style.animationDuration=(Math.random()*15+10)+'s'; c.appendChild(p); } }
+createParticles();
+
+function showToast(msg,type){ const t=document.getElementById('toast'); t.textContent=msg; t.className='toast show '+(type||''); setTimeout(()=>t.classList.remove('show'),3000); }
+function switchTab(tab){ document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active')); document.querySelectorAll('.tab').forEach(c=>c.classList.remove('active')); document.getElementById('tab-'+tab).classList.add('active'); event.target.classList.add('active'); }
+
+let confirmCallback=null;
+function showConfirm(text,cb){ document.getElementById('confirmText').innerHTML=text; confirmCallback=cb; document.getElementById('confirmModal').classList.add('show'); }
+function closeConfirmModal(){ document.getElementById('confirmModal').classList.remove('show'); confirmCallback=null; }
+document.getElementById('confirmBtn').onclick=function(){ if(confirmCallback){ confirmCallback(); closeConfirmModal(); } };
+
+function createUser(){ const u=document.getElementById('newUsername').value.trim(), p=document.getElementById('newPassword').value; if(!u||!p){ showToast('Fill all fields','error'); return; } const fd=new FormData(); fd.append('username',u); fd.append('password',p); fetch('/api/admin/create_user',{method:'POST',body:fd}).then(r=>r.json()).then(d=>{ if(d.success){ showToast('User created','success'); setTimeout(()=>location.reload(),800); }else showToast(d.error,'error'); }); }
+function makePremium(u){ showConfirm('Make <strong>'+u+'</strong> Premium?',()=>{ const fd=new FormData(); fd.append('username',u); fetch('/api/admin/make_premium',{method:'POST',body:fd}).then(r=>r.json()).then(d=>{ if(d.success){ showToast(u+' is now Premium','success'); setTimeout(()=>location.reload(),800); }else showToast(d.error,'error'); }); }); }
+function confirmDeleteUser(u){ showConfirm('Delete user <strong>'+u+'</strong> permanently?',()=>{ const fd=new FormData(); fd.append('username',u); fetch('/api/admin/delete_user',{method:'POST',body:fd}).then(r=>r.json()).then(d=>{ if(d.success){ showToast('User deleted','success'); setTimeout(()=>location.reload(),800); }else showToast(d.error,'error'); }); }); }
+document.querySelectorAll('.modal-overlay').forEach(o=>{o.addEventListener('click',function(e){if(e.target===this)this.classList.remove('show');});});
+</script>
+</body>
+</html>

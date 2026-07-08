@@ -1,1 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>S1X TEAM HOST - Python Cloud Platform</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #060809; font-family: 'Inter', -apple-system, sans-serif; height: 100vh; overflow: hidden; color: #e0e0e0; }
+    
+    .app { height: 100%; display: flex; flex-direction: column; }
+    
+    /* Background */
+    .bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(ellipse at 20% 30%, #0a2a1a, #050505); z-index: -3; }
+    .bg::after { content: ''; position: absolute; width: 100%; height: 100%; background-image: repeating-linear-gradient(45deg, rgba(0,255,136,0.02) 0px, rgba(0,255,136,0.02) 2px, transparent 2px, transparent 8px); pointer-events: none; }
+    
+    /* Particles */
+    .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; pointer-events: none; }
+    .particle { position: absolute; background: rgba(0,255,136,0.15); border-radius: 50%; animation: float 15s infinite linear; }
+    @keyframes float { 0% { transform: translateY(100vh) translateX(0); opacity: 0; } 15% { opacity: 0.6; } 85% { opacity: 0.6; } 100% { transform: translateY(-100vh) translateX(80px); opacity: 0; } }
+    
+    /* Header */
+    .header { background: rgba(6,8,9,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,255,136,0.15); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 38px; height: 38px; background: linear-gradient(135deg, #00ff88, #00994d); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+    .logo-text { font-size: 1rem; font-weight: 700; color: #fff; }
+    .logo-text span { color: #00ff88; }
+    .nav-btn { padding: 8px 20px; border-radius: 30px; font-weight: 600; font-size: 0.75rem; text-decoration: none; background: linear-gradient(135deg, #00ff88, #00994d); color: #000; }
+    
+    /* Content */
+    .content { flex: 1; overflow-y: auto; padding: 20px; -webkit-overflow-scrolling: touch; }
+    
+    /* Hero */
+    .hero { text-align: center; padding: 40px 0 30px; }
+    .badge { display: inline-block; background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.3); padding: 5px 14px; border-radius: 20px; font-size: 0.65rem; color: #00ff88; margin-bottom: 20px; }
+    .hero h1 { font-size: 2rem; font-weight: 800; background: linear-gradient(135deg, #fff, #00ff88); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 12px; }
+    .hero p { color: #8b9bb0; font-size: 0.85rem; max-width: 500px; margin: 0 auto; line-height: 1.5; }
+    
+    /* Stats */
+    .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 30px 0; }
+    .stat-card { background: rgba(10,12,16,0.7); backdrop-filter: blur(10px); border-radius: 20px; padding: 16px; text-align: center; border: 1px solid rgba(0,255,136,0.08); }
+    .stat-number { font-size: 1.6rem; font-weight: 800; color: #00ff88; }
+    .stat-label { color: #6c757d; font-size: 0.6rem; margin-top: 4px; text-transform: uppercase; }
+    
+    /* Features */
+    .features { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 30px 0; }
+    .feature-chip { background: rgba(13,15,20,0.7); backdrop-filter: blur(10px); border: 1px solid rgba(0,255,136,0.15); padding: 8px 18px; border-radius: 40px; font-size: 0.7rem; display: flex; align-items: center; gap: 6px; }
+    .feature-chip i { color: #00ff88; }
+    
+    /* CTA */
+    .cta { display: flex; gap: 12px; justify-content: center; margin: 30px 0; flex-wrap: wrap; }
+    .cta-btn { padding: 12px 28px; border-radius: 30px; font-weight: 700; font-size: 0.8rem; text-decoration: none; }
+    .btn-primary { background: linear-gradient(135deg, #00ff88, #00994d); color: #000; }
+    .btn-secondary { background: transparent; border: 1px solid #00ff88; color: #00ff88; }
+    
+    /* Footer */
+    .footer { text-align: center; padding: 20px; border-top: 1px solid rgba(0,255,136,0.1); font-size: 0.6rem; color: #6c757d; flex-shrink: 0; }
+    
+    /* Modal */
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.98); backdrop-filter: blur(16px); z-index: 1000; justify-content: center; align-items: center; padding: 20px; }
+    .modal-overlay.show { display: flex; animation: fadeIn 0.2s ease; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .modal { background: #0d1117; border-radius: 28px; width: 100%; max-width: 380px; padding: 28px; border: 1px solid rgba(0,255,136,0.2); }
+    .modal h3 { color: #00ff88; font-size: 1.1rem; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+    .modal p { color: #6c757d; font-size: 0.8rem; margin-bottom: 20px; }
+    .modal-actions { display: flex; gap: 12px; }
+    .modal-btn { flex: 1; padding: 12px; border-radius: 14px; font-weight: 600; cursor: pointer; border: none; }
+    .modal-btn-primary { background: linear-gradient(135deg, #00ff88, #00994d); color: #000; }
+    .close-modal { float: right; cursor: pointer; color: #6c757d; font-size: 1.1rem; }
+    
+    @media (min-width: 768px) { 
+        .stats { grid-template-columns: repeat(4, 1fr); max-width: 800px; margin: 30px auto; }
+        .hero h1 { font-size: 2.5rem; }
+        .content { max-width: 1200px; margin: 0 auto; width: 100%; left: 0; right: 0; position: relative; }
+    }
+    
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-thumb { background: #00ff88; border-radius: 10px; }
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<div class="particles" id="particles"></div>
 
+<div class="app">
+    <div class="header">
+        <a href="/" class="logo">
+            <div class="logo-icon"><i class="fas fa-dragon"></i></div>
+            <div class="logo-text">S1X TEAM <span>HOST</span></div>
+        </a>
+        <a href="/login" class="nav-btn"><i class="fas fa-sign-in-alt"></i> Login</a>
+    </div>
+    
+    <div class="content">
+        <div class="hero">
+            <div class="badge"><i class="fas fa-bolt"></i> PYTHON CLOUD PLATFORM</div>
+            <h1>Deploy Python Apps<br/>Instantly</h1>
+            <p>Fully isolated environments with real-time console, Flask support, and enterprise security</p>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card"><div class="stat-number">{{ stats.uptime }}</div><div class="stat-label">Uptime</div></div>
+            <div class="stat-card"><div class="stat-number">{{ stats.support }}</div><div class="stat-label">Support</div></div>
+            <div class="stat-card"><div class="stat-number">{{ stats.total_servers }}+</div><div class="stat-label">Servers</div></div>
+            <div class="stat-card"><div class="stat-number">{{ stats.total_users }}+</div><div class="stat-label">Users</div></div>
+        </div>
+        
+        <div class="features">
+            <div class="feature-chip"><i class="fas fa-shield-alt"></i> Sandbox</div>
+            <div class="feature-chip"><i class="fas fa-terminal"></i> Live Console</div>
+            <div class="feature-chip"><i class="fas fa-globe"></i> Public URLs</div>
+            <div class="feature-chip"><i class="fas fa-chart-line"></i> Real-time Monitor</div>
+            <div class="feature-chip"><i class="fas fa-folder-tree"></i> File Manager</div>
+            <div class="feature-chip"><i class="fab fa-python"></i> Auto VENV</div>
+        </div>
+        
+        <div class="cta">
+            <a href="/login" class="cta-btn btn-primary"><i class="fas fa-rocket"></i> Get Started</a>
+            <a href="#" class="cta-btn btn-secondary" onclick="showContactModal()"><i class="fas fa-headset"></i> Contact Admin</a>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>&copy; S1X TEAM HOST 2026 - Python Cloud Platform</p>
+    </div>
+</div>
+
+<div class="modal-overlay" id="contactModal">
+    <div class="modal">
+        <span class="close-modal" onclick="closeModal('contactModal')">✕</span>
+        <h3><i class="fas fa-headset"></i> Contact Admin</h3>
+        <p>Email: <strong>admin@S1X TEAM.host</strong><br/>WhatsApp: <strong>+213 541700591</strong></p>
+        <div class="modal-actions"><button class="modal-btn modal-btn-primary" onclick="closeModal('contactModal')">Close</button></div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function createParticles() { 
+        const c=document.getElementById('particles'); 
+        for(let i=0;i<40;i++){ 
+            const p=document.createElement('div'); 
+            p.className='particle'; 
+            p.style.width=(Math.random()*3+1)+'px'; 
+            p.style.height=p.style.width;
+            p.style.left=Math.random()*100+'%'; 
+            p.style.animationDelay=Math.random()*15+'s'; 
+            p.style.animationDuration=(Math.random()*15+10)+'s'; 
+            c.appendChild(p); 
+        } 
+    }
+    createParticles();
+    
+    function showContactModal() { document.getElementById('contactModal').classList.add('show'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+    window.onclick = function(e) { if(e.target.classList.contains('modal-overlay')) e.target.classList.remove('show'); }
+</script>
+</body>
+</html>

@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="theme-color" content="#00ff88"/>
+<title>Dashboard - S1X TEAM HOST</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body { 
+        background: #060809; 
+        font-family: 'Inter', sans-serif; 
+        color: #e0e0e0; 
+        height: 100vh;
+        overflow: hidden;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+    
+    .app {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .bg { 
+        position: fixed; 
+        top: 0; 
+        left: 0; 
+        width: 100%; 
+        height: 100%; 
+        background: radial-gradient(ellipse at 20% 30%, #0a2a1a, #050505); 
+        z-index: -3; 
+    }
+    
+    .particles { 
+        position: fixed; 
+        top: 0; 
+        left: 0; 
+        width: 100%; 
+        height: 100%; 
+        z-index: -2; 
+        pointer-events: none; 
+    }
+    .particle { 
+        position: absolute; 
+        background: rgba(0,255,136,0.15); 
+        border-radius: 50%; 
+        animation: float 15s infinite linear; 
+    }
+    @keyframes float { 
+        0% { transform: translateY(100vh) translateX(0); opacity: 0; } 
+        15% { opacity: 0.6; } 
+        85% { opacity: 0.6; } 
+        100% { transform: translateY(-100vh) translateX(80px); opacity: 0; } 
+    }
+    
+    .header { 
+        background: rgba(6,8,9,0.95); 
+        backdrop-filter: blur(20px); 
+        border-bottom: 1px solid rgba(0,255,136,0.2); 
+        padding: 12px 20px; 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+        flex-shrink: 0;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 38px; height: 38px; background: linear-gradient(135deg, #00ff88, #00994d); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: #000; }
+    .logo-text { font-size: 1rem; font-weight: 700; color: #fff; }
+    .logo-text span { color: #00ff88; }
+    
+    .user-info { display: flex; align-items: center; gap: 12px; }
+    .user-badge { display: flex; align-items: center; gap: 8px; background: rgba(0,255,136,0.08); padding: 6px 14px; border-radius: 40px; font-size: 0.75rem; border: 1px solid rgba(0,255,136,0.15); }
+    .user-badge i { color: #00ff88; }
+    .premium-badge { background: linear-gradient(135deg, #ffd700, #ff8f00); color: #000; padding: 2px 10px; border-radius: 20px; font-size: 0.55rem; font-weight: 800; margin-left: 6px; }
+    .logout-btn { background: transparent; border: none; color: #6c757d; font-size: 1rem; cursor: pointer; padding: 8px; transition: color 0.2s; }
+    .logout-btn:active { color: #ff3b5c; }
+    
+    .content {
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 16px 20px;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .welcome { 
+        background: linear-gradient(135deg, rgba(0,255,136,0.08), rgba(0,0,0,0.4)); 
+        border-radius: 24px; 
+        padding: 20px; 
+        margin-bottom: 20px; 
+        border: 1px solid rgba(0,255,136,0.12); 
+    }
+    .welcome h1 { font-size: 1.3rem; font-weight: 700; margin-bottom: 4px; }
+    .welcome h1 i { color: #00ff88; margin-right: 8px; }
+    .welcome p { color: #6c757d; font-size: 0.75rem; }
+    
+    .stats-grid { 
+        display: grid; 
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 12px; 
+        margin-bottom: 24px; 
+    }
+    .stat-card { 
+        background: rgba(10,12,16,0.7); 
+        backdrop-filter: blur(10px); 
+        border-radius: 20px; 
+        padding: 16px; 
+        text-align: center; 
+        border: 1px solid rgba(0,255,136,0.08); 
+        transition: all 0.2s;
+    }
+    .stat-card:active { transform: scale(0.97); }
+    .stat-number { font-size: 1.6rem; font-weight: 800; color: #00ff88; }
+    .stat-label { color: #6c757d; font-size: 0.6rem; margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+    
+    .section-header { 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+        margin-bottom: 14px; 
+    }
+    .section-header h2 { font-size: 1rem; font-weight: 600; }
+    .section-header h2 i { color: #00ff88; margin-right: 6px; }
+    .create-btn { 
+        background: linear-gradient(135deg, #00ff88, #00994d); 
+        border: none; 
+        padding: 8px 18px; 
+        border-radius: 30px; 
+        color: #000; 
+        font-weight: 700; 
+        font-size: 0.7rem; 
+        cursor: pointer; 
+        display: flex; 
+        align-items: center; 
+        gap: 6px; 
+        transition: all 0.2s;
+    }
+    .create-btn:active { transform: scale(0.96); }
+    
+    .servers-list { display: flex; flex-direction: column; gap: 14px; }
+    .server-card { 
+        background: rgba(10,12,16,0.7); 
+        backdrop-filter: blur(10px); 
+        border-radius: 20px; 
+        padding: 16px; 
+        border: 1px solid rgba(0,255,136,0.08); 
+        transition: all 0.2s;
+    }
+    .server-card:active { transform: scale(0.98); }
+    
+    .server-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+    .server-name { font-size: 0.9rem; font-weight: 700; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .server-badge { 
+        font-size: 0.5rem; 
+        padding: 2px 8px; 
+        border-radius: 20px; 
+        font-weight: 600; 
+    }
+    .badge-web { background: rgba(0,255,136,0.12); color: #00ff88; }
+    .badge-script { background: rgba(255,215,0,0.12); color: #ffd700; }
+    .server-id { font-size: 0.55rem; color: #4a5568; margin-top: 3px; font-family: monospace; }
+    
+    .status { padding: 3px 10px; border-radius: 20px; font-size: 0.6rem; font-weight: 600; }
+    .status-running { background: rgba(0,255,136,0.12); color: #00ff88; border: 1px solid rgba(0,255,136,0.2); }
+    .status-stopped { background: rgba(255,107,0,0.1); color: #ff6d00; border: 1px solid rgba(255,107,0,0.15); }
+    .status-crashed { background: rgba(255,59,92,0.1); color: #ff3b5c; border: 1px solid rgba(255,59,92,0.15); }
+    
+    .server-stats { 
+        display: grid; 
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 8px; 
+        margin: 12px 0; 
+        background: rgba(0,0,0,0.3); 
+        border-radius: 14px; 
+        padding: 10px; 
+    }
+    .stat-row { display: flex; justify-content: space-between; align-items: center; }
+    .stat-label-sm { font-size: 0.6rem; color: #6c757d; }
+    .stat-value-sm { font-size: 0.65rem; font-weight: 600; font-family: monospace; color: #00ff88; }
+    
+    .progress { width: 100%; height: 3px; background: rgba(255,255,255,0.05); border-radius: 10px; margin: 8px 0; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, #00ff88, #00cc66); border-radius: 10px; transition: width 0.3s; }
+    
+    .server-actions { display: flex; gap: 10px; margin-top: 12px; }
+    .action-btn { 
+        flex: 1; 
+        padding: 10px; 
+        border-radius: 12px; 
+        font-size: 0.65rem; 
+        font-weight: 600; 
+        text-align: center; 
+        text-decoration: none; 
+        cursor: pointer; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        gap: 5px; 
+        transition: all 0.2s; 
+        border: none; 
+    }
+    .action-btn:active { transform: scale(0.97); }
+    .action-primary { background: rgba(0,255,136,0.1); color: #00ff88; border: 1px solid rgba(0,255,136,0.2); }
+    .action-danger { background: rgba(255,59,92,0.08); color: #ff6b8a; border: 1px solid rgba(255,59,92,0.15); }
+    
+    .empty-state { text-align: center; padding: 50px 20px; background: rgba(10,12,16,0.5); border-radius: 24px; border: 1px dashed rgba(0,255,136,0.15); }
+    .empty-state i { font-size: 3rem; color: #00ff88; opacity: 0.3; margin-bottom: 12px; }
+    .empty-state h3 { font-size: 0.9rem; margin-bottom: 4px; }
+    .empty-state p { color: #6c757d; font-size: 0.7rem; }
+    
+    .modal-overlay { 
+        display: none; 
+        position: fixed; 
+        top: 0; 
+        left: 0; 
+        right: 0; 
+        bottom: 0; 
+        background: rgba(0,0,0,0.98); 
+        backdrop-filter: blur(16px); 
+        z-index: 1000; 
+        justify-content: center; 
+        align-items: center; 
+        padding: 20px; 
+    }
+    .modal-overlay.show { display: flex; animation: fadeIn 0.2s ease; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    
+    .modal { 
+        background: #0d1117; 
+        border-radius: 28px; 
+        width: 100%; 
+        max-width: 400px; 
+        padding: 28px; 
+        border: 1px solid rgba(0,255,136,0.25); 
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+    .modal h3 { color: #00ff88; font-size: 1.1rem; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; color: #6c757d; font-size: 0.65rem; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+    .form-group input, .form-group textarea, .form-group select { 
+        width: 100%; padding: 10px 12px; background: rgba(0,0,0,0.6); border: 1px solid rgba(0,255,136,0.2); border-radius: 12px; color: #fff; font-size: 0.85rem; font-family: inherit; 
+    }
+    .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #00ff88; }
+    
+    .radio-group { display: flex; gap: 10px; }
+    .radio-option { flex: 1; }
+    .radio-option input { display: none; }
+    .radio-option label { 
+        display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px; background: rgba(0,255,136,0.05); border: 1px solid rgba(0,255,136,0.15); border-radius: 12px; cursor: pointer; text-align: center; 
+    }
+    .radio-option input:checked + label { border-color: #00ff88; background: rgba(0,255,136,0.1); box-shadow: 0 0 10px rgba(0,255,136,0.2); }
+    .radio-option i { font-size: 1rem; color: #00ff88; }
+    .radio-info { font-size: 0.7rem; font-weight: 600; }
+    .radio-sub { font-size: 0.55rem; color: #6c757d; }
+    
+    .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+    .modal-btn { flex: 1; padding: 10px; border-radius: 12px; font-weight: 600; font-size: 0.8rem; cursor: pointer; border: none; }
+    .modal-btn-primary { background: linear-gradient(135deg, #00ff88, #00994d); color: #000; }
+    .modal-btn-cancel { background: rgba(255,255,255,0.05); color: #6c757d; border: 1px solid rgba(255,255,255,0.05); }
+    .modal-btn-danger { background: linear-gradient(135deg, #ff3b5c, #c00000); color: #fff; }
+    
+    .bottom-nav { 
+        display: flex; 
+        justify-content: space-around; 
+        background: rgba(6,8,9,0.98); 
+        backdrop-filter: blur(20px); 
+        border-top: 1px solid rgba(0,255,136,0.12); 
+        padding: 8px 16px; 
+        flex-shrink: 0;
+    }
+    .bottom-nav a { 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        gap: 3px; 
+        text-decoration: none; 
+        color: #6c757d; 
+        font-size: 0.55rem; 
+        padding: 6px 12px; 
+        border-radius: 30px; 
+        transition: all 0.2s; 
+    }
+    .bottom-nav a i { font-size: 1rem; }
+    .bottom-nav a.active { color: #00ff88; background: rgba(0,255,136,0.1); }
+    .bottom-nav a:active { transform: scale(0.95); }
+    
+    .toast { 
+        position: fixed; 
+        bottom: 70px; 
+        left: 16px; 
+        right: 16px; 
+        background: #0d1117; 
+        border-left: 4px solid #00ff88; 
+        border-radius: 14px; 
+        padding: 12px 16px; 
+        font-size: 0.75rem; 
+        z-index: 1100; 
+        display: none; 
+        max-width: 400px; 
+        margin: 0 auto; 
+    }
+    .toast.show { display: block; animation: slideUp 0.3s ease; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    
+    @media (min-width: 768px) {
+        .stats-grid { grid-template-columns: repeat(4, 1fr); gap: 16px; }
+        .servers-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        .content { max-width: 1200px; margin: 0 auto; width: 100%; left: 0; right: 0; position: relative; }
+        .bottom-nav { display: none; }
+    }
+    
+    @media (min-width: 1024px) {
+        .servers-list { grid-template-columns: repeat(3, 1fr); }
+    }
+    
+    .content::-webkit-scrollbar { width: 4px; }
+    .content::-webkit-scrollbar-track { background: #1a1c22; }
+    .content::-webkit-scrollbar-thumb { background: #00ff88; border-radius: 10px; }
+    
+    ::selection { background: rgba(0,255,136,0.3); color: #fff; }
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<div class="particles" id="particles"></div>
+
+<div class="app">
+    <div class="header">
+        <a href="/" class="logo">
+            <div class="logo-icon"><i class="fas fa-dragon"></i></div>
+            <div class="logo-text">S1X TEAM <span>HOST</span></div>
+        </a>
+        <div class="user-info">
+            <div class="user-badge">
+                <i class="fas fa-user-astronaut"></i>
+                <span>{{ user.username }}</span>
+                {% if user.is_premium %}<span class="premium-badge">PREMIUM</span>{% endif %}
+            </div>
+            <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
+    </div>
+    
+    <div class="content">
+        <div class="welcome">
+            <h1><i class="fas fa-leaf"></i> Welcome back, {{ user.username }}!</h1>
+            <p>Your cloud platform is ready. Deploy, monitor, and scale your Python applications.</p>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">{{ servers|length }}</div>
+                <div class="stat-label">Total Servers</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ servers|selectattr('status','equalto','running')|list|length }}</div>
+                <div class="stat-label">Running</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{% if user.is_premium %}10{% else %}2{% endif %}</div>
+                <div class="stat-label">Server Limit</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{% if user.is_premium %}💎{% else %}🌱{% endif %}</div>
+                <div class="stat-label">Your Plan</div>
+            </div>
+        </div>
+        
+        <div class="section-header">
+            <h2><i class="fas fa-server"></i> My Servers</h2>
+            <button class="create-btn" onclick="openCreateModal()"><i class="fas fa-plus"></i> New Server</button>
+        </div>
+        
+        {% if servers %}
+        <div class="servers-list">
+            {% for server in servers %}
+            <div class="server-card">
+                <div class="server-header">
+                    <div>
+                        <div class="server-name">
+                            {% if server.is_web_app %}
+                                <i class="fas fa-globe" style="color:#00ff88; font-size:0.8rem;"></i>
+                            {% else %}
+                                <i class="fab fa-python" style="color:#ffd700; font-size:0.8rem;"></i>
+                            {% endif %}
+                            {{ server.name }}
+                            <span class="server-badge {% if server.is_web_app %}badge-web{% else %}badge-script{% endif %}">
+                                {% if server.is_web_app %}🌐 Web App{% else %}🐍 Script{% endif %}
+                            </span>
+                        </div>
+                        <div class="server-id">ID: {{ server.id }}</div>
+                    </div>
+                    <span class="status status-{{ server.status }}">{{ server.status|upper }}</span>
+                </div>
+                
+                <div class="server-stats">
+                    <div class="stat-row">
+                        <span class="stat-label-sm"><i class="fas fa-plug"></i> Port</span>
+                        <span class="stat-value-sm">{{ server.port }}</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label-sm"><i class="fas fa-microchip"></i> CPU</span>
+                        <span class="stat-value-sm">{{ server.cpu_usage }}%</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label-sm"><i class="fas fa-memory"></i> RAM</span>
+                        <span class="stat-value-sm">{{ server.ram_usage }}MB</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label-sm"><i class="fas fa-clock"></i> Uptime</span>
+                        <span class="stat-value-sm">{{ server.uptime }}</span>
+                    </div>
+                </div>
+                
+                <div class="progress">
+                    <div class="progress-fill" style="width: {{ server.cpu_usage }}%"></div>
+                </div>
+                
+                <div class="server-actions">
+                    <a href="/server/{{ server.id }}" class="action-btn action-primary">
+                        <i class="fas fa-terminal"></i> Console
+                    </a>
+                    <button class="action-btn action-danger" onclick="confirmDelete('{{ server.id }}','{{ server.name }}')">
+                        <i class="fas fa-trash-alt"></i> Delete
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-cube"></i>
+            <h3>No servers yet</h3>
+            <p>Click the "New Server" button to create your first server</p>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="bottom-nav">
+        <a href="/dashboard" class="active"><i class="fas fa-tachometer-alt"></i><span>Home</span></a>
+        <a href="#" onclick="openCreateModal()"><i class="fas fa-plus-circle"></i><span>Create</span></a>
+        <a href="/"><i class="fas fa-globe"></i><span>Website</span></a>
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>Exit</span></a>
+    </div>
+</div>
+
+<div class="modal-overlay" id="createModal">
+    <div class="modal">
+        <h3><i class="fas fa-plus-circle"></i> Create New Server</h3>
+        <form id="createForm" onsubmit="createServer(event)">
+            <div class="form-group">
+                <label>Server Name</label>
+                <input type="text" name="name" placeholder="my-awesome-app" required maxlength="30"/>
+            </div>
+            <div class="form-group">
+                <label>Application Type</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" name="app_type" value="python" id="typePython" checked/>
+                        <label for="typePython">
+                            <i class="fab fa-python"></i>
+                            <span class="radio-info">Python Script</span>
+                            <span class="radio-sub">No Web UI</span>
+                        </label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="app_type" value="flask" id="typeFlask"/>
+                        <label for="typeFlask">
+                            <i class="fas fa-globe"></i>
+                            <span class="radio-info">Flask</span>
+                            <span class="radio-sub">Web App</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Description (optional)</label>
+                <textarea name="description" placeholder="What does this server do?" rows="2" maxlength="200"></textarea>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="modal-btn modal-btn-cancel" onclick="closeCreateModal()">Cancel</button>
+                <button type="submit" class="modal-btn modal-btn-primary"><i class="fas fa-rocket"></i> Create</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal-overlay" id="deleteModal">
+    <div class="modal">
+        <h3><i class="fas fa-exclamation-triangle"></i> Delete Server</h3>
+        <p style="color: #6c757d; margin-bottom: 20px;">Delete "<strong style="color: #ff6b8a;" id="deleteServerName"></strong>" permanently? All files will be destroyed.</p>
+        <div class="modal-actions">
+            <button class="modal-btn modal-btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+            <button class="modal-btn modal-btn-danger" id="confirmDeleteBtn"><i class="fas fa-trash-alt"></i> Delete Forever</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+function createParticles() { 
+    const container = document.getElementById('particles'); 
+    const count = window.innerWidth < 768 ? 30 : 50;
+    for(let i = 0; i < count; i++) { 
+        const p = document.createElement('div'); 
+        p.className = 'particle'; 
+        const size = Math.random() * 3 + 1; 
+        p.style.width = size + 'px'; 
+        p.style.height = size + 'px'; 
+        p.style.left = Math.random() * 100 + '%'; 
+        p.style.animationDelay = Math.random() * 15 + 's'; 
+        p.style.animationDuration = (Math.random() * 15 + 10) + 's'; 
+        container.appendChild(p); 
+    } 
+}
+createParticles();
+
+function showToast(message, type) { 
+    const toast = document.getElementById('toast'); 
+    toast.textContent = message; 
+    toast.className = 'toast show ' + (type || ''); 
+    setTimeout(() => toast.classList.remove('show'), 3000); 
+}
+
+function openCreateModal() { document.getElementById('createModal').classList.add('show'); }
+function closeCreateModal() { document.getElementById('createModal').classList.remove('show'); }
+
+let deleteServerId = null;
+function confirmDelete(id, name) { 
+    deleteServerId = id; 
+    document.getElementById('deleteServerName').textContent = name; 
+    document.getElementById('deleteModal').classList.add('show'); 
+}
+function closeDeleteModal() { 
+    deleteServerId = null; 
+    document.getElementById('deleteModal').classList.remove('show'); 
+}
+
+function createServer(e) { 
+    e.preventDefault(); 
+    const formData = new FormData(document.getElementById('createForm')); 
+    
+    fetch('/api/create_server', { 
+        method: 'POST', 
+        body: formData 
+    })
+    .then(response => response.json())
+    .then(data => { 
+        if(data.success) { 
+            showToast('Server created successfully!', 'success'); 
+            setTimeout(() => location.reload(), 800); 
+        } else { 
+            showToast(data.error || 'Failed to create server', 'error'); 
+        } 
+    })
+    .catch(() => showToast('Network error', 'error')); 
+}
+
+document.getElementById('confirmDeleteBtn').addEventListener('click', function() { 
+    if(!deleteServerId) return; 
+    
+    fetch('/api/server/' + deleteServerId + '/delete', { method: 'POST' })
+    .then(response => response.json())
+    .then(data => { 
+        if(data.success) { 
+            showToast('Server deleted successfully', 'success'); 
+            setTimeout(() => location.reload(), 800); 
+        } else { 
+            showToast(data.error || 'Failed to delete', 'error'); 
+        } 
+        closeDeleteModal(); 
+    })
+    .catch(() => { 
+        showToast('Network error', 'error'); 
+        closeDeleteModal(); 
+    }); 
+});
+
+function logout() { window.location.href = '/logout'; }
+
+document.querySelectorAll('.modal-overlay').forEach(overlay => { 
+    overlay.addEventListener('click', function(e) { 
+        if(e.target === this) this.classList.remove('show'); 
+    }); 
+});
+
+window.addEventListener('resize', () => { 
+    const container = document.getElementById('particles'); 
+    if(container) { 
+        container.innerHTML = ''; 
+        createParticles(); 
+    } 
+});
+</script>
+</body>
+</html>

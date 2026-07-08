@@ -1,4 +1,4 @@
 flask
-requests
-aiohttp
-asyncio
+flask-socketio
+psutil
+python-socketio

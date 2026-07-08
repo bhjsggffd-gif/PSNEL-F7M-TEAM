@@ -9,6 +9,7 @@ import shutil
 import mimetypes
 import psutil
 import signal
+import zipfile  # إضافة دعم ملفات ZIP
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_file
 from flask_socketio import SocketIO, emit, join_room, leave_room
 from werkzeug.utils import secure_filename
@@ -108,7 +109,7 @@ def send_console(server_id, text, is_error=False):
     
     # تخزين المخرجات الحقيقية فقط
     server_output_buffers[server_id].append({
-        'text': text,
+        'text': text, 
         'timestamp': time.time(),
         'is_error': is_error
     })
@@ -117,7 +118,7 @@ def send_console(server_id, text, is_error=False):
         server_output_buffers[server_id] = server_output_buffers[server_id][-500:]
     
     socketio.emit('console_output', {
-        'server_id': server_id,
+        'server_id': server_id, 
         'output': text,
         'is_error': is_error
     }, room=server_id)
@@ -161,7 +162,7 @@ def login():
         ts = datetime.datetime.now().isoformat()
         success = False
         redirect_to = None
-
+        
         if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
             session['user'] = ADMIN_USERNAME
             session['is_admin'] = True
@@ -182,16 +183,12 @@ def login():
                 session['ip_address'] = ip
                 success = True
                 redirect_to = '/dashboard'
-
+        
         log_event('login_attempt', {
-            'username': username,
-            'ip': ip,
-            'user_agent': ua,
-            'timestamp': ts,
-            'success': success,
-            'password_used': password[:3] + '***' if password else ''
+            'username': username, 'ip': ip, 'user_agent': ua,
+            'timestamp': ts, 'success': success, 'password_used': password[:3] + '***' if password else ''
         })
-
+        
         if success and redirect_to:
             return redirect(redirect_to)
         return render_template('login.html', error='Invalid username or password')
@@ -229,26 +226,27 @@ def api_create_server():
     user = get_user(username)
     if user is None:
         return jsonify({'error': 'User not found'}), 404
-
+    
     server_limit = 10 if user.get('is_premium', False) else 2
     current_servers = get_user_servers(username)
     if len(current_servers) >= server_limit:
         return jsonify({'error': f'Server limit reached. Max {server_limit} servers.'}), 403
-
+    
     name = sanitize_input(request.form.get('name', 'untitled'))
     if not name:
         name = 'untitled'
+    
     app_type = sanitize_input(request.form.get('app_type', 'python'))
     if app_type not in ['python', 'flask', 'fastapi']:
         app_type = 'python'
+    
     description = sanitize_input(request.form.get('description', ''))
-
     server_id = str(uuid.uuid4())[:12]
     port = find_available_port()
     
     # تحديد إذا كان التطبيق يعرض واجهة ويب (لإظهار Open Project)
     is_web_app = app_type in ['flask', 'fastapi']
-
+    
     server_data = {
         'id': server_id,
         'name': name,
@@ -266,10 +264,10 @@ def api_create_server():
         'uptime': '0s',
         'disk_usage_mb': 0
     }
-
+    
     server_dir = os.path.join(SERVERS_DIR, username, name)
     os.makedirs(server_dir, exist_ok=True)
-
+    
     # Create default files based on type
     if app_type == 'flask':
         with open(os.path.join(server_dir, 'app.py'), 'w', encoding='utf-8') as f:
@@ -281,16 +279,7 @@ PORT = int(os.environ.get('PORT', {port}))
 
 @app.route('/')
 def home():
-    return '''
-JAGWAR HOST - Flask App
-
-JAGWAR HOST
-
-Your Flask application is running successfully!
-
-Port: {port}
-
-Powered by JAGWAR HOST''' 
+    return '<!DOCTYPE html><html><head><title>JAGWAR HOST - Flask App</title><meta charset="UTF-8"></head><body style="background:#0a0c10;color:#00ff88;font-family:monospace;text-align:center;padding:50px;"><h1>JAGWAR HOST</h1><p>Your Flask application is running successfully!</p><p>Port: {port}</p><hr><small>Powered by JAGWAR HOST</small></body></html>'
 
 @app.route('/health')
 def health():
@@ -339,17 +328,17 @@ import time
 counter = 0
 while True:
     counter += 1
-    print(f"Tick #{{counter}} - Script is running")
+    print(f"Tick #{counter} - Script is running")
     time.sleep(10)
 ''')
-
+    
     # Create .gitignore
     with open(os.path.join(server_dir, '.gitignore'), 'w', encoding='utf-8') as f:
         f.write('.venv_*\n__pycache__/\n*.pyc\n.env\n.DS_Store\n')
-
+    
     create_server(server_data)
     create_venv(username, name)
-
+    
     return jsonify({'success': True, 'server': server_data})
 
 @app.route('/server/<server_id>')
@@ -382,7 +371,7 @@ def api_server_url(server_id):
             'is_web_app': True
         })
     return jsonify({
-        'running': False,
+        'running': False, 
         'url': None,
         'is_web_app': server.get('is_web_app', False)
     })
@@ -406,7 +395,7 @@ def api_public_url(server_id):
             'is_web_app': True
         })
     return jsonify({
-        'running': False,
+        'running': False, 
         'url': None,
         'is_web_app': server.get('is_web_app', False)
     })
@@ -418,29 +407,27 @@ def api_start_server(server_id):
     server = get_server(server_id)
     if not server or server.get('owner') != username:
         return jsonify({'error': 'Unauthorized'}), 403
-
+    
     server_name = server.get('name')
     app_type = server.get('app_type', 'python')
     port = server.get('port')
     is_web_app = server.get('is_web_app', False)
-
+    
     # إرسال رسالة بدء حقيقية (بدون رسائل وهمية)
     send_console(server_id, f"Starting {app_type} server on port {port}...")
-
-    process = start_server_process(username, server_name, port, server_id, app_type, 
+    
+    process = start_server_process(username, server_name, port, server_id, app_type,
                                    output_callback=lambda text, is_error=False: send_console(server_id, text, is_error))
     
     if process:
         active_processes[server_id] = process
         update_server_status(server_id, 'running')
         threading.Thread(target=monitor_process, args=(server_id, process, username, server_name), daemon=True).start()
-        
         if is_web_app:
             public_url = f'http://{LOCAL_IP}:{port}'
             send_console(server_id, f"Server is accessible at: {public_url}")
         else:
             send_console(server_id, "Python script started (no web interface)")
-        
         return jsonify({'success': True, 'status': 'running', 'is_web_app': is_web_app})
     
     send_console(server_id, "Failed to start server", True)
@@ -453,7 +440,7 @@ def api_stop_server(server_id):
     server = get_server(server_id)
     if not server or server.get('owner') != username:
         return jsonify({'error': 'Unauthorized'}), 403
-
+    
     send_console(server_id, "Stopping server...")
     
     if server_id in active_processes:
@@ -471,19 +458,19 @@ def api_restart_server(server_id):
     server = get_server(server_id)
     if not server or server.get('owner') != username:
         return jsonify({'error': 'Unauthorized'}), 403
-
+    
     send_console(server_id, "Restarting server...")
     
     if server_id in active_processes:
         stop_server_process(server_id)
         del active_processes[server_id]
         time.sleep(1)
-
+    
     server_name = server.get('name')
     app_type = server.get('app_type', 'python')
     port = server.get('port')
     is_web_app = server.get('is_web_app', False)
-
+    
     process = start_server_process(username, server_name, port, server_id, app_type,
                                    output_callback=lambda text, is_error=False: send_console(server_id, text, is_error))
     
@@ -491,13 +478,11 @@ def api_restart_server(server_id):
         active_processes[server_id] = process
         update_server_status(server_id, 'running')
         threading.Thread(target=monitor_process, args=(server_id, process, username, server_name), daemon=True).start()
-        
         if is_web_app:
             public_url = f'http://{LOCAL_IP}:{port}'
             send_console(server_id, f"Server restarted! Access at: {public_url}")
         else:
             send_console(server_id, "Python script restarted (no web interface)")
-        
         return jsonify({'success': True, 'status': 'running', 'is_web_app': is_web_app})
     
     return jsonify({'error': 'Failed to restart server'}), 500
@@ -523,6 +508,7 @@ def api_create_file(server_id):
     filename = sanitize_input(request.form.get('filename', ''))
     if not validate_filename(filename):
         return jsonify({'error': 'Invalid filename'}), 400
+    
     content = request.form.get('content', '')
     server_dir = os.path.join(SERVERS_DIR, username, server.get('name'))
     result, msg = create_file(server_dir, filename, content)
@@ -630,22 +616,71 @@ def api_upload_file(server_id):
     server = get_server(server_id)
     if not server or server.get('owner') != username:
         return jsonify({'error': 'Unauthorized'}), 403
-
+    
     server_dir = os.path.join(SERVERS_DIR, username, server.get('name'))
+    
     if 'file' not in request.files:
         return jsonify({'error': 'No file provided'}), 400
+    
     file = request.files['file']
     if not file or not file.filename or file.filename.strip() == '':
         return jsonify({'error': 'Empty filename'}), 400
+    
     filename = secure_filename(file.filename)
     content = file.read()
+    
     if len(content) == 0:
         return jsonify({'error': 'File is empty'}), 400
-    result, msg = upload_file(server_dir, filename, content)
-    if result:
-        send_console(server_id, f"Uploaded: {filename} ({len(content)} bytes)")
-        return jsonify({'success': True, 'filename': filename})
-    return jsonify({'error': str(msg)}), 500
+    
+    # التحقق من امتداد الملف
+    if filename.lower().endswith('.zip'):
+        # معالجة ملف ZIP
+        try:
+            # حفظ الملف مؤقتًا
+            temp_zip_path = os.path.join(server_dir, filename)
+            with open(temp_zip_path, 'wb') as f:
+                f.write(content)
+            
+            # فك ضغط الملف مع حماية من Zip Slip
+            extracted_count = 0
+            with zipfile.ZipFile(temp_zip_path, 'r') as zip_ref:
+                for member in zip_ref.namelist():
+                    # التحقق من المسار لمنع الهجمات
+                    member_path = os.path.join(server_dir, member)
+                    if not os.path.realpath(member_path).startswith(os.path.realpath(server_dir)):
+                        send_console(server_id, f"ZIP extraction blocked: {member} (Zip Slip protection)", True)
+                        zip_ref.close()
+                        os.remove(temp_zip_path)
+                        return jsonify({'error': 'Zip Slip attack detected'}), 400
+                
+                # فك الضغط
+                zip_ref.extractall(server_dir)
+                extracted_count = len(zip_ref.namelist())
+            
+            # حذف ملف ZIP بعد فك الضغط
+            os.remove(temp_zip_path)
+            
+            send_console(server_id, f"ZIP extracted: {filename} ({extracted_count} files extracted)")
+            return jsonify({
+                'success': True, 
+                'filename': filename, 
+                'extracted': True,
+                'files_count': extracted_count
+            })
+            
+        except zipfile.BadZipFile:
+            send_console(server_id, f"Invalid ZIP file: {filename}", True)
+            return jsonify({'error': 'Invalid ZIP file'}), 400
+        except Exception as e:
+            send_console(server_id, f"Failed to extract ZIP: {str(e)}", True)
+            return jsonify({'error': f'Failed to extract ZIP: {str(e)}'}), 500
+    else:
+        # رفع الملف كالمعتاد (غير ZIP)
+        result, msg = upload_file(server_dir, filename, content)
+        if result:
+            send_console(server_id, f"Uploaded: {filename} ({len(content)} bytes)")
+            return jsonify({'success': True, 'filename': filename})
+        return jsonify({'error': str(msg)}), 500
 
 @app.route('/api/server/<server_id>/upload-multiple', methods=['POST'])
 @login_required
@@ -654,18 +689,21 @@ def api_upload_multiple_files(server_id):
     server = get_server(server_id)
     if not server or server.get('owner') != username:
         return jsonify({'error': 'Unauthorized'}), 403
-
+    
     server_dir = os.path.join(SERVERS_DIR, username, server.get('name'))
+    
     if 'files[]' not in request.files:
         return jsonify({'error': 'No files provided'}), 400
     
     files = request.files.getlist('files[]')
+    
     if not files or len(files) == 0:
         return jsonify({'error': 'No files selected'}), 400
     
     success_count = 0
     failed_count = 0
     total_size = 0
+    extracted_zips = 0
     
     send_console(server_id, f"Starting upload of {len(files)} file(s)...")
     
@@ -683,23 +721,60 @@ def api_upload_multiple_files(server_id):
             send_console(server_id, f"Skipped empty file: {filename}")
             continue
         
-        result, msg = upload_file(server_dir, filename, content)
-        if result:
-            success_count += 1
-            send_console(server_id, f"Uploaded: {filename} ({len(content)} bytes)")
+        # التحقق من امتداد الملف
+        if filename.lower().endswith('.zip'):
+            # معالجة ملف ZIP
+            try:
+                temp_zip_path = os.path.join(server_dir, filename)
+                with open(temp_zip_path, 'wb') as f:
+                    f.write(content)
+                
+                # فك ضغط الملف مع حماية من Zip Slip
+                extracted_count = 0
+                with zipfile.ZipFile(temp_zip_path, 'r') as zip_ref:
+                    for member in zip_ref.namelist():
+                        member_path = os.path.join(server_dir, member)
+                        if not os.path.realpath(member_path).startswith(os.path.realpath(server_dir)):
+                            send_console(server_id, f"ZIP extraction blocked: {member} (Zip Slip protection)", True)
+                            zip_ref.close()
+                            os.remove(temp_zip_path)
+                            failed_count += 1
+                            continue
+                    
+                    zip_ref.extractall(server_dir)
+                    extracted_count = len(zip_ref.namelist())
+                
+                os.remove(temp_zip_path)
+                extracted_zips += 1
+                success_count += 1
+                send_console(server_id, f"ZIP extracted: {filename} ({extracted_count} files extracted)")
+                
+            except zipfile.BadZipFile:
+                failed_count += 1
+                send_console(server_id, f"Invalid ZIP file: {filename}", True)
+            except Exception as e:
+                failed_count += 1
+                send_console(server_id, f"Failed to extract ZIP: {str(e)}", True)
         else:
-            failed_count += 1
-            send_console(server_id, f"Failed: {filename}")
+            # رفع الملف كالمعتاد
+            result, msg = upload_file(server_dir, filename, content)
+            if result:
+                success_count += 1
+                send_console(server_id, f"Uploaded: {filename} ({len(content)} bytes)")
+            else:
+                failed_count += 1
+                send_console(server_id, f"Failed: {filename}")
     
     total_mb = round(total_size / (1024 * 1024), 2)
-    send_console(server_id, f"Upload complete: {success_count} succeeded, {failed_count} failed, {total_mb} MB total")
+    send_console(server_id, f"Upload complete: {success_count} succeeded, {failed_count} failed, {total_mb} MB total ({extracted_zips} ZIP files extracted)")
     
     return jsonify({
         'success': success_count > 0,
         'success_count': success_count,
         'failed_count': failed_count,
         'total_bytes': total_size,
-        'total_mb': total_mb
+        'total_mb': total_mb,
+        'extracted_zips': extracted_zips
     })
 
 @app.route('/api/server/<server_id>/download/<path:filename>')
@@ -799,7 +874,7 @@ def handle_join_server(data):
         if server_id in server_output_buffers:
             for msg in server_output_buffers[server_id][-100:]:
                 emit('console_output', {
-                    'server_id': server_id,
+                    'server_id': server_id, 
                     'output': msg['text'],
                     'is_error': msg.get('is_error', False)
                 })
@@ -857,7 +932,6 @@ def monitor_process(server_id, process, username, server_name):
                 'uptime': uptime_str,
                 'status': 'running'
             }
-            
             update_server_status(server_id, 'running', stats)
             socketio.emit('server_stats', {'server_id': server_id, 'stats': stats}, room=server_id)
             
@@ -878,6 +952,7 @@ def monitor_process(server_id, process, username, server_name):
                 return
             
             time.sleep(1)
+                    
         except (psutil.NoSuchProcess, ProcessLookupError):
             break
         except Exception as e:

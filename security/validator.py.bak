@@ -1,0 +1,139 @@
+import re
+import os
+from config import ALLOWED_EXTENSIONS, MAX_FILE_SIZE, SENSITIVE_KEYWORDS
+
+MAX_FILENAME_LENGTH = 255
+FORBIDDEN_CHARS = r'[<>:"/\\|?*\x00-\x1f]'
+FORBIDDEN_NAMES = {
+    'CON', 'PRN', 'AUX', 'NUL', 'COM1', 'COM2', 'COM3', 'COM4',
+    'COM5', 'COM6', 'COM7', 'COM8', 'COM9', 'LPT1', 'LPT2', 'LPT3',
+    'LPT4', 'LPT5', 'LPT6', 'LPT7', 'LPT8', 'LPT9'
+}
+
+def validate_filename(filename):
+    if not filename or len(filename) > MAX_FILENAME_LENGTH:
+        return False
+    if re.search(FORBIDDEN_CHARS, filename):
+        return False
+    name_without_ext = os.path.splitext(filename)[0].upper()
+    if name_without_ext in FORBIDDEN_NAMES:
+        return False
+    if filename.startswith('.') and filename not in ['.env', '.gitignore', '.htaccess']:
+        return True
+    if filename.startswith('-') or filename.startswith('~'):
+        return False
+    double_extensions = filename.count('.')
+    if double_extensions > 2:
+        return False
+    dangerous_patterns = [
+        r'\.php', r'\.asp', r'\.aspx', r'\.jsp', r'\.cgi',
+        r'\.pl', r'\.sh', r'\.bash', r'\.zsh', r'\.fish',
+        r'\.exe', r'\.dll', r'\.so', r'\.dylib', r'\.bat',
+        r'\.cmd', r'\.ps1', r'\.vbs', r'\.vbe', r'\.js',
+        r'\.jar', r'\.war', r'\.ear', r'\.class'
+    ]
+    ext = os.path.splitext(filename)[1].lower()
+    if ext and ext not in ALLOWED_EXTENSIONS:
+        return False
+    return True
+
+def validate_file_size(size_bytes, max_mb=MAX_FILE_SIZE):
+    if size_bytes <= 0:
+        return False
+    max_bytes = max_mb * 1024 * 1024
+    if size_bytes > max_bytes:
+        return False
+    if size_bytes > 500 * 1024 * 1024:
+        return False
+    return True
+
+def validate_mime_type(filename):
+    ext = os.path.splitext(filename)[1].lower()
+    if not ext:
+        return False
+    text_extensions = {
+        '.py', '.txt', '.json', '.yaml', '.yml', '.md', '.cfg',
+        '.ini', '.env', '.html', '.css', '.js', '.csv', '.log',
+        '.xml', '.toml', '.req', '.requirements'
+    }
+    if ext in text_extensions:
+        return True
+    return False
+
+def sanitize_input(value, max_length=500):
+    if not value:
+        return ''
+    value = value.strip()
+    if len(value) > max_length:
+        value = value[:max_length]
+    value = re.sub(r'<script[^>]*>.*?</script>', '', value, flags=re.IGNORECASE | re.DOTALL)
+    value = re.sub(r'<[^>]*on\w+\s*=\s*"[^"]*"[^>]*>', '', value, flags=re.IGNORECASE)
+    value = re.sub(r'<[^>]*on\w+\s*=\s*\'[^\']*\'[^>]*>', '', value, flags=re.IGNORECASE)
+    value = re.sub(r'javascript\s*:', '', value, flags=re.IGNORECASE)
+    value = re.sub(r'<[^>]*>', '', value)
+    dangerous_entities = ['&lt;script', '&#x3C;script', '&#60;script', '&lt;iframe']
+    for entity in dangerous_entities:
+        value = value.replace(entity, '')
+    value = value.replace('\x00', '')
+    control_chars = ''.join(chr(i) for i in range(0, 32) if i not in [9, 10, 13])
+    value = value.translate(str.maketrans('', '', control_chars))
+    value = value.replace('../', '').replace('..\\', '')
+    return value
+
+def validate_path_safety(path, base_dir):
+    real_path = os.path.realpath(os.path.join(base_dir, path))
+    real_base = os.path.realpath(base_dir)
+    if not real_path.startswith(real_base):
+        return False
+    path_parts = os.path.normpath(path).split(os.sep)
+    for part in path_parts:
+        if part == '..' or part.startswith('.'):
+            return False
+    for keyword in SENSITIVE_KEYWORDS:
+        if keyword.lower() in path.lower():
+            return False
+    return True
+
+def validate_json_structure(data, required_keys=None):
+    if required_keys is None:
+        return True
+    if not isinstance(data, dict):
+        return False
+    for key in required_keys:
+        if key not in data:
+            return False
+    return True
+
+def validate_port(port):
+    try:
+        port = int(port)
+        if 1024 <= port <= 65535:
+            return True
+        return False
+    except:
+        return False
+
+def validate_username(username):
+    if not username or len(username) < 3 or len(username) > 32:
+        return False
+    pattern = r'^[a-zA-Z0-9][a-zA-Z0-9_-]{1,30}[a-zA-Z0-9]$'
+    if not re.match(pattern, username):
+        return False
+    reserved_names = {'admin', 'root', 'system', 'server', 'host', 'support',
+                      'null', 'undefined', 'none', 'true', 'false'}
+    if username.lower() in reserved_names:
+        return False
+    return True
+
+def validate_password_strength(password):
+    if len(password) < 8:
+        return False, 'Password must be at least 8 characters'
+    if len(password) > 128:
+        return False, 'Password must not exceed 128 characters'
+    if not re.search(r'[A-Z]', password):
+        return False, 'Password must contain at least one uppercase letter'
+    if not re.search(r'[a-z]', password):
+        return False, 'Password must contain at least one lowercase letter'
+    if not re.search(r'\d', password):
+        return False, 'Password must contain at least one digit'
+    return True, 'Password is valid'

@@ -2,3 +2,14 @@ flask
 flask-socketio
 psutil
 python-socketio
+eventlet
+werkzeug
+uuid
+datetime
+threading
+socket
+json
+os
+shutil
+mimetypes
+signal

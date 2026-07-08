@@ -1,9 +1,0 @@
-requests
-psutil
-pyjwt
-protobuf==5.27.2
-protobuf-decoder
-cfonts
-flask
-urllib3
-pycryptodome

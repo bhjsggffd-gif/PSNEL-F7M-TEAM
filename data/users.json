@@ -1,0 +1,14 @@
+[
+  {
+    "username": "JAGWARGG",
+    "password": "pbkdf2:sha256:200000$61dbc8649aa5f621b15779417ab700e9$f4a45a2196358be54edaa10370c3136217b9cf64ce3b66535705aae541455076",
+    "is_premium": true,
+    "created_at": "2026-05-29T18:28:50.154812",
+    "last_login": null,
+    "total_servers_created": 0,
+    "total_logins": 0,
+    "status": "active",
+    "storage_used_mb": 0,
+    "bandwidth_used_mb": 0
+  }
+]

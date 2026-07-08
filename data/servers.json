@@ -1,0 +1,36 @@
+[
+  {
+    "id": "7987a459-06c",
+    "name": "GUILD BOT",
+    "owner": "JAGWARGG",
+    "description": "",
+    "port": 5001,
+    "app_type": "flask",
+    "status": "running",
+    "created_at": "2026-05-29T20:40:12.541282",
+    "last_start": "2026-05-29T21:28:15.000530",
+    "last_stop": "2026-05-29T20:45:19.350161",
+    "cpu_usage": 0,
+    "ram_usage": 0,
+    "uptime": "0s",
+    "disk_usage_mb": 0,
+    "last_status_change": "2026-05-29T21:28:15.000277"
+  },
+  {
+    "id": "11f58eeb-d19",
+    "name": "Vv",
+    "owner": "JAGWARGG",
+    "description": "",
+    "port": 5002,
+    "app_type": "flask",
+    "status": "running",
+    "created_at": "2026-05-29T21:28:41.816523",
+    "last_start": "2026-05-29T21:31:00.716059",
+    "last_stop": "2026-05-29T21:30:51.954934",
+    "cpu_usage": 0,
+    "ram_usage": 0,
+    "uptime": "0s",
+    "disk_usage_mb": 0,
+    "last_status_change": "2026-05-29T21:31:00.715965"
+  }
+]

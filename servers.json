@@ -1,0 +1,18 @@
+{
+    "66f32117-2bf7-4d14-96ec-6a9528fc8e30": {
+        "id": "66f32117-2bf7-4d14-96ec-6a9528fc8e30",
+        "name": "\u0639\u0627\u0644\u0645\u064a\u0629",
+        "user_id": "e77f506f-dc1e-466e-a724-023d512983ed",
+        "expiry_date": "2026-03-16",
+        "path": "servers/66f32117-2bf7-4d14-96ec-6a9528fc8e30",
+        "log_path": "logs/66f32117-2bf7-4d14-96ec-6a9528fc8e30",
+        "main_file": "xBeTa.py",
+        "status": "stopped",
+        "port": 50010,
+        "created_at": "2026-02-14T22:37:54.229145",
+        "install_success": true,
+        "install_message": "No requirements.txt found. Skipping dependency installation.",
+        "install_log_path": "logs/66f32117-2bf7-4d14-96ec-6a9528fc8e30/install_manual.log",
+        "started_at": "2026-02-14T22:44:01.778990"
+    }
+}

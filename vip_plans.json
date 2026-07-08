@@ -1,0 +1,53 @@
+{
+    "free": {
+        "name": "Free",
+        "max_servers": 0,
+        "price": 0,
+        "features": [
+            "1 Server",
+            "Basic Support",
+            "30 Days Expiry",
+            "File Editor",
+            "Terminal Access"
+        ]
+    },
+    "basic": {
+        "name": "Basic VIP",
+        "max_servers": 10,
+        "price": 5.99,
+        "duration_days": 30,
+        "features": [
+            "10 Servers",
+            "Priority Support",
+            "30 Days VIP",
+            "Auto Install System",
+            "Faster Support"
+        ]
+    },
+    "pro": {
+        "name": "Pro VIP",
+        "max_servers": 25,
+        "price": 12.99,
+        "duration_days": 30,
+        "features": [
+            "25 Servers",
+            "24/7 Support",
+            "Auto Install System",
+            "30 Days VIP",
+            "Priority Processing"
+        ]
+    },
+    "enterprise": {
+        "name": "Enterprise VIP",
+        "max_servers": 100,
+        "price": 29.99,
+        "duration_days": 30,
+        "features": [
+            "100 Servers",
+            "24/7 Priority Support",
+            "Auto Install System",
+            "Backup System",
+            "30 Days VIP"
+        ]
+    }
+}
